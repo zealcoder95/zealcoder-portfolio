@@ -8,7 +8,7 @@ import {
 } from "@/lib/ai/search";
 import { buildGeminiPrompt } from "@/lib/ai/prompt";
 
-const ROUTE_VERSION = "zealcoder-ai-v5";
+const ROUTE_VERSION = "zealcoder-ai-v5.1";
 
 export async function POST(request) {
   try {
@@ -73,12 +73,32 @@ export async function POST(request) {
     });
 
     try {
-      const answer =
-        await generateGeminiAnswer(prompt);
+      const result = await generateGeminiAnswer(prompt);
+
+      if (result?.answer) {
+        console.log("ZEALCODER AI PROVIDER", {
+          provider: result.provider,
+          model: result.model,
+        });
+
+        return NextResponse.json({
+          answer: result.answer,
+          mode: "ai",
+          provider: result.provider,
+          model: result.model,
+          version: ROUTE_VERSION,
+        });
+      }
+
+      console.warn(
+        "All Gemini models failed. Local fallback activated."
+      );
 
       return NextResponse.json({
-        answer: answer || fallbackAnswer,
-        mode: answer ? "gemini" : "local",
+        answer: fallbackAnswer,
+        mode: "local",
+        provider: "local",
+        model: null,
         version: ROUTE_VERSION,
       });
     } catch (error) {
@@ -90,6 +110,8 @@ export async function POST(request) {
       return NextResponse.json({
         answer: fallbackAnswer,
         mode: "local",
+        provider: "local",
+        model: null,
         version: ROUTE_VERSION,
       });
     }
