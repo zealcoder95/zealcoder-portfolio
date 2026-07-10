@@ -1,122 +1,198 @@
 "use client";
 
-import { useState } from "react";
-import { assistantKnowledge } from "@/data/assistantKnowledge";
+import { useRef, useState } from "react";
 
 export default function Terminal() {
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [history, setHistory] = useState([
-    "ZealCoder Assistant online.",
-    "Ask me about Gizem, projects, skills, AI path, or what to check first.",
+    {
+      role: "assistant",
+      text: "🤖 ZealCoder AI is online.",
+    },
+    {
+      role: "assistant",
+      text:
+        "Ask me anything about Gizem, Projects, GitHub, Kaggle, AI or Machine Learning.",
+    },
   ]);
 
-  function getAnswer(question) {
-    const q = question.toLowerCase();
+  const bottomRef = useRef(null);
 
-    if (q.includes("hire") || q.includes("recruiter") || q.includes("why gizem")) {
-      return [
-        `${assistantKnowledge.profile.name} combines an engineering mindset with data science and AI-focused learning.`,
-        `Key strengths: ${assistantKnowledge.strengths.join(", ")}.`,
-        assistantKnowledge.recommendations.recruiter,
-      ];
+  async function askAI(question, historySnapshot) {
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        cache: "no-store",
+
+        body: JSON.stringify({
+          message: question,
+
+          history: historySnapshot
+            .slice(-10)
+            .map((item) => ({
+              role: item.role,
+              text: item.text,
+            })),
+        }),
+      });
+
+      const data = await response.json();
+
+      console.log("ZEALCODER RESPONSE", data);
+
+      if (!response.ok) {
+        throw new Error(data.error || "Unknown error");
+      }
+
+      setHistory((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          text: data.answer,
+        },
+      ]);
+    } catch (error) {
+      console.error(error);
+
+      setHistory((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          text:
+            "⚠️ AI engine is temporarily unavailable.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({
+          behavior: "smooth",
+        });
+      }, 100);
     }
-
-    if (q.includes("who") || q.includes("about") || q.includes("gizem")) {
-      return [
-        `${assistantKnowledge.profile.name} is the creator of ${assistantKnowledge.profile.brand}.`,
-        assistantKnowledge.profile.summary,
-        `Current direction: ${assistantKnowledge.profile.role}.`,
-      ];
-    }
-
-    if (q.includes("project") || q.includes("case study")) {
-      return [
-        assistantKnowledge.recommendations.projects,
-        "Recommended order: Renewable Energy → Women Employment → NYC Schools.",
-      ];
-    }
-
-    if (q.includes("skill") || q.includes("tech") || q.includes("stack")) {
-      return [
-        "Core strengths:",
-        ...assistantKnowledge.strengths.map((item) => `• ${item}`),
-      ];
-    }
-
-    if (q.includes("ai") || q.includes("machine learning") || q.includes("llm")) {
-      return [
-        assistantKnowledge.recommendations.ai,
-        "Current AI direction: Machine Learning foundations → LLMs → RAG → AI Agents.",
-      ];
-    }
-
-    if (q.includes("cv") || q.includes("resume")) {
-      return [
-        "The CV can be linked from the Contact section once the PDF is added.",
-        "Recommended: add public/cv.pdf and connect it to the Download CV button.",
-      ];
-    }
-
-    return [
-      "I can currently answer about:",
-      "• Gizem's profile",
-      "• Projects",
-      "• Skills",
-      "• AI Engineering path",
-      "• Recruiter recommendations",
-      "Try: 'Why should I hire Gizem?'",
-    ];
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const question = input.trim();
-    if (!question) return;
 
-    if (question.toLowerCase() === "clear") {
+    if (!question || loading) return;
+
+    if (
+      question.toLowerCase() === "clear"
+    ) {
       setHistory([]);
+
       setInput("");
+
       return;
     }
 
-    const response = getAnswer(question);
-    setHistory((prev) => [...prev, `> ${question}`, ...response]);
+    const userMessage = {
+      role: "user",
+      text: question,
+    };
+
+    const nextHistory = [
+      ...history,
+      userMessage,
+    ];
+
+    setHistory(nextHistory);
+
     setInput("");
+
+    await askAI(question, nextHistory);
   }
 
   return (
-    <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-black/70 p-5 font-mono text-sm text-slate-300 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
+    <div className="w-full max-w-lg rounded-[32px] border border-white/10 bg-black/70 p-6 font-mono shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
+
       <div className="mb-4 flex items-center gap-2 border-b border-white/10 pb-3">
-        <span className="h-3 w-3 rounded-full bg-red-400" />
-        <span className="h-3 w-3 rounded-full bg-yellow-400" />
-        <span className="h-3 w-3 rounded-full bg-green-400" />
+
+        <span className="h-3 w-3 rounded-full bg-red-400"/>
+
+        <span className="h-3 w-3 rounded-full bg-yellow-400"/>
+
+        <span className="h-3 w-3 rounded-full bg-green-400"/>
+
         <span className="ml-3 text-xs text-slate-500">
-          zealcoder-ai-assistant
+          zealcoder-ai-v5
         </span>
+
       </div>
 
-      <div className="mb-4 max-h-64 space-y-1 overflow-y-auto">
-        {history.map((line, index) => (
-          <p
+      <div className="mb-5 h-80 space-y-5 overflow-y-auto">
+
+        {history.map((item,index)=>(
+          <div
             key={index}
-            className={line.startsWith(">") ? "text-cyan-300" : "text-slate-300"}
+            className={
+              item.role==="user"
+                ? "text-cyan-300"
+                : "text-slate-300"
+            }
           >
-            {line}
-          </p>
+
+            <span className="font-bold">
+              {item.role==="user"
+                ? "You"
+                : "AI"}
+            </span>
+
+            <p className="mt-1 whitespace-pre-wrap leading-7">
+              {item.text}
+            </p>
+
+          </div>
         ))}
+
+        {loading && (
+
+          <div className="animate-pulse text-purple-300">
+
+            🤖 Thinking...
+
+          </div>
+
+        )}
+
+        <div ref={bottomRef}/>
+
       </div>
 
-      <form onSubmit={handleSubmit} className="flex items-center gap-2">
-        <span className="text-purple-300">ask</span>
+      <form
+        onSubmit={handleSubmit}
+        className="flex items-center gap-3 border-t border-white/10 pt-4"
+      >
+
+        <span className="text-cyan-300">{">"}</span>
+
         <input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="w-full bg-transparent text-cyan-300 outline-none placeholder:text-slate-600"
-          placeholder="Why should I hire Gizem?"
+          onChange={(e)=>setInput(e.target.value)}
+          disabled={loading}
+          placeholder={
+            loading
+              ? "AI is thinking..."
+              : "Ask anything..."
+          }
+          className="w-full bg-transparent text-white outline-none placeholder:text-slate-600 disabled:opacity-50"
         />
-        <span className="animate-pulse text-cyan-300">|</span>
+
       </form>
+
     </div>
   );
 }

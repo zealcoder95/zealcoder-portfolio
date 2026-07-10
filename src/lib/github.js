@@ -50,15 +50,17 @@ function findKaggleUrl(markdown = "") {
 }
 
 function findFirstImage(markdown = "") {
-  // Markdown görseli: ![alt](images/cover.png)
-  const markdownImage = markdown.match(/!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/);
+  const markdownImage = markdown.match(
+    /!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/
+  );
 
   if (markdownImage?.[1]) {
     return markdownImage[1];
   }
 
-  // HTML görseli: <img src="images/cover.png" />
-  const htmlImage = markdown.match(/<img[^>]+src=["']([^"']+)["'][^>]*>/i);
+  const htmlImage = markdown.match(
+    /<img[^>]+src=["']([^"']+)["'][^>]*>/i
+  );
 
   return htmlImage?.[1] || null;
 }
@@ -161,7 +163,8 @@ export async function getGitHubProjects() {
 
   const projects = await Promise.all(
     usableRepositories.map(async (repo) => {
-      const { metadata, markdown } = await getRepositoryReadme(repo.name);
+      const { metadata, markdown } =
+        await getRepositoryReadme(repo.name);
 
       const defaultBranch = repo.default_branch || "main";
 
@@ -197,7 +200,9 @@ export async function getGitHubProjects() {
 
         tags: Array.isArray(metadata.tags)
           ? metadata.tags
-          : repo.topics.filter((topic) => topic !== "portfolio"),
+          : repo.topics.filter(
+              (topic) => topic !== "portfolio"
+            ),
 
         featured: metadata.featured === true,
 
@@ -218,9 +223,16 @@ export async function getGitHubProjects() {
           null,
 
         language: repo.language,
+
         stars: repo.stargazers_count,
         forks: repo.forks_count,
+        watchers: repo.watchers_count,
+        openIssues: repo.open_issues_count,
+
+        createdAt: repo.created_at,
         updatedAt: repo.updated_at,
+        pushedAt: repo.pushed_at,
+
         readme: markdown,
       };
     })
@@ -238,5 +250,8 @@ export async function getGitHubProjects() {
 export async function getGitHubProject(slug) {
   const projects = await getGitHubProjects();
 
-  return projects.find((project) => project.slug === slug) || null;
+  return (
+    projects.find((project) => project.slug === slug) ||
+    null
+  );
 }

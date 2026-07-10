@@ -1,21 +1,48 @@
-"use client";
+import { getGitHubProjects } from "@/lib/github";
+import HomePageContent from "@/components/HomePageContent";
 
-import { useLanguage } from "@/context/LanguageContext";
+export default async function Home() {
+  let projects = [];
 
-import Hero from "@/components/Hero";
-import CurrentFocus from "@/components/CurrentFocus";
-import HomePreview from "@/components/HomePreview";
-import Dashboard from "@/components/Dashboard";
+  try {
+    projects = await getGitHubProjects();
+  } catch (error) {
+    console.error("Dashboard data could not be loaded:", error);
+  }
 
-export default function Home() {
-  const { t, lang } = useLanguage();
+  const languageCounts = projects.reduce((acc, project) => {
+    if (!project.language) return acc;
 
-  return (
-    <main className="bg-slate-950 text-white">
-      <Hero t={t} />
-      <CurrentFocus />
-      <HomePreview />
-      <Dashboard lang={lang} />
-    </main>
+    acc[project.language] = (acc[project.language] || 0) + 1;
+    return acc;
+  }, {});
+
+  const totalLanguages = Object.values(languageCounts).reduce(
+    (total, count) => total + count,
+    0
   );
+
+  const languages = Object.entries(languageCounts)
+    .map(([name, count]) => ({
+      name,
+      count,
+      percentage:
+        totalLanguages === 0
+          ? 0
+          : Math.round((count / totalLanguages) * 100),
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  const dashboardData = {
+    repositories: projects.length,
+    portfolioProjects: projects.length,
+    featuredProjects: projects.filter((project) => project.featured).length,
+    totalStars: projects.reduce(
+      (total, project) => total + (project.stars || 0),
+      0
+    ),
+    languages,
+  };
+
+  return <HomePageContent dashboardData={dashboardData} />;
 }

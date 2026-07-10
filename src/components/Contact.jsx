@@ -63,6 +63,13 @@ export default function Contact() {
               </a>
 
               <a
+                href="/resume"
+                className="rounded-full border border-purple-300/40 bg-white/5 px-7 py-4 font-bold text-purple-300 transition hover:-translate-y-1 hover:bg-purple-300/10"
+              >
+                {lang === "en" ? "View Resume" : "Özgeçmişi Gör"}
+              </a>
+
+              <a
                 href="/cv.pdf"
                 download="Gizem-Gulcu-CV.pdf"
                 className="rounded-full border border-cyan-300/40 bg-white/5 px-7 py-4 font-bold text-cyan-300 transition hover:-translate-y-1 hover:bg-cyan-300/10"
