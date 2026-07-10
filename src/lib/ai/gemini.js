@@ -1,23 +1,53 @@
 import { GoogleGenAI } from "@google/genai";
 
 const GEMINI_MODELS = [
-  "gemini-flash-latest",
-  "gemini-3-flash-preview",
+  // Önce hızlı ve ekonomik modeli dene.
+  "gemini-3.1-flash-lite",
+
+  // Başarısız olursa daha güçlü modele geç.
   "gemini-3.5-flash",
 ];
 
+const MODEL_TIMEOUT_MS = 10000;
+
+function withTimeout(promise, timeoutMs, model) {
+  return Promise.race([
+    promise,
+
+    new Promise((_, reject) => {
+      const timeoutId = setTimeout(() => {
+        const error = new Error(
+          `${model} did not respond within ${timeoutMs} ms.`
+        );
+
+        error.status = 408;
+        reject(error);
+      }, timeoutMs);
+
+      promise.finally(() => {
+        clearTimeout(timeoutId);
+      });
+    }),
+  ]);
+}
+
 function shouldTryNextModel(error) {
-  const status = error?.status;
-  const message = String(error?.message || "").toLowerCase();
+  const status = Number(error?.status || 0);
+  const message = String(
+    error?.message || ""
+  ).toLocaleLowerCase("en");
 
   return (
     status === 404 ||
+    status === 408 ||
     status === 429 ||
     status >= 500 ||
-    message.includes("not found") ||
     message.includes("quota") ||
     message.includes("rate limit") ||
-    message.includes("resource_exhausted")
+    message.includes("resource_exhausted") ||
+    message.includes("not found") ||
+    message.includes("timed out") ||
+    message.includes("did not respond")
   );
 }
 
@@ -25,6 +55,7 @@ export async function generateGeminiAnswer(prompt) {
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
+    console.warn("GEMINI_API_KEY is missing.");
     return null;
   }
 
@@ -36,24 +67,36 @@ export async function generateGeminiAnswer(prompt) {
     try {
       console.log(`Trying Gemini model: ${model}`);
 
-      const response = await ai.models.generateContent({
+      const request = ai.models.generateContent({
         model,
         contents: prompt,
         config: {
-          temperature: 0.25,
-          maxOutputTokens: 600,
+          temperature: 0.2,
+          maxOutputTokens: 700,
         },
       });
 
+      const response = await withTimeout(
+        request,
+        MODEL_TIMEOUT_MS,
+        model
+      );
+
       const answer = response.text?.trim();
 
-      if (answer) {
-        return {
-          answer,
-          provider: "gemini",
-          model,
-        };
+      if (!answer) {
+        console.warn(
+          `Gemini returned an empty response: ${model}`
+        );
+
+        continue;
       }
+
+      return {
+        answer,
+        provider: "gemini",
+        model,
+      };
     } catch (error) {
       console.error(`Gemini model failed: ${model}`, {
         status: error?.status,
@@ -65,6 +108,10 @@ export async function generateGeminiAnswer(prompt) {
       }
     }
   }
+
+  console.warn(
+    "All configured Gemini models are unavailable."
+  );
 
   return null;
 }
