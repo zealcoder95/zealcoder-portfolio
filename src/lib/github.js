@@ -179,6 +179,24 @@ export async function getGitHubProjects() {
         defaultBranch,
       });
 
+      const repositoryTopics = repo.topics.filter(
+        (topic) => topic !== "portfolio"
+      );
+
+      const tags = Array.isArray(metadata.tags)
+        ? metadata.tags
+        : repositoryTopics;
+
+      const technologies = Array.isArray(metadata.technologies)
+        ? metadata.technologies
+        : Array.isArray(metadata.tags)
+          ? metadata.tags
+          : repositoryTopics;
+
+      const skills = Array.isArray(metadata.skills)
+        ? metadata.skills
+        : [];
+
       return {
         id: repo.id,
         slug: repo.name,
@@ -198,13 +216,18 @@ export async function getGitHubProjects() {
           repo.language ||
           "Project",
 
-        tags: Array.isArray(metadata.tags)
-          ? metadata.tags
-          : repo.topics.filter(
-              (topic) => topic !== "portfolio"
-            ),
+        tags,
 
-        featured: metadata.featured === true,
+        technologies,
+
+        skills,
+
+        difficulty:
+          metadata.difficulty ||
+          null,
+
+        featured:
+          metadata.featured === true,
 
         cover: coverUrl,
 
