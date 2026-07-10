@@ -8,7 +8,51 @@ import {
 } from "@/lib/ai/search";
 import { buildGeminiPrompt } from "@/lib/ai/prompt";
 
-const ROUTE_VERSION = "zealcoder-ai-v5.1";
+const ROUTE_VERSION = "zealcoder-ai-v5.2";
+
+function normalizeQuestion(value = "") {
+  return value
+    .toLocaleLowerCase("tr")
+    .replace(/[.,!?;:()[\]{}"'`]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isRecruiterQuestion(message = "") {
+  const question = normalizeQuestion(message);
+
+  return (
+    question.includes("why should i hire") ||
+    question.includes("why hire") ||
+    question.includes("hire gizem") ||
+    question.includes("fit a junior") ||
+    question.includes("fit this role") ||
+    question.includes("candidate") ||
+    question.includes("recruiter") ||
+    question.includes("evaluate gizem") ||
+    question.includes("review gizem") ||
+    question.includes("neden işe almal") ||
+    question.includes("gizemi neden") ||
+    question.includes("gizem i neden") ||
+    question.includes("bu role uygun") ||
+    question.includes("aday olarak") ||
+    question.includes("güçlü yönleri") ||
+    question.includes("geliştirmesi gereken")
+  );
+}
+
+function selectRecruiterProjects(projects = []) {
+  const featuredProjects = projects.filter(
+    (project) => project.featured
+  );
+
+  const selectedProjects =
+    featuredProjects.length >= 2
+      ? featuredProjects
+      : projects;
+
+  return selectedProjects.slice(0, 4);
+}
 
 export async function POST(request) {
   try {
@@ -43,11 +87,16 @@ export async function POST(request) {
     const projects =
       removeNonPortfolioProfiles(loadedProjects);
 
-    const relevantProjects = findRelevantProjects(
-      projects,
-      message,
-      history
-    );
+    const recruiterQuestion =
+      isRecruiterQuestion(message);
+
+    const relevantProjects = recruiterQuestion
+      ? selectRecruiterProjects(projects)
+      : findRelevantProjects(
+          projects,
+          message,
+          history
+        );
 
     const fallbackAnswer = buildFallbackAnswer({
       message,
@@ -58,6 +107,7 @@ export async function POST(request) {
     console.log("ZEALCODER CHAT", {
       version: ROUTE_VERSION,
       message,
+      recruiterQuestion,
       historyLength: history.length,
       loadedProjectCount: loadedProjects.length,
       filteredProjectCount: projects.length,
@@ -73,7 +123,8 @@ export async function POST(request) {
     });
 
     try {
-      const result = await generateGeminiAnswer(prompt);
+      const result =
+        await generateGeminiAnswer(prompt);
 
       if (result?.answer) {
         console.log("ZEALCODER AI PROVIDER", {
