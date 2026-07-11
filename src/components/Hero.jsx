@@ -14,7 +14,7 @@ export default function Hero({ t }) {
 
           <h1 className="mb-7 text-5xl font-black leading-tight md:text-7xl">
             Building{" "}
-            <span className="bg-gradient-to-r from-purple-400 via-fuchsia-300 to-cyan-300 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r/srgb from-purple-400 via-fuchsia-300 to-cyan-300 bg-clip-text text-transparent">
               intelligence
             </span>
             <br />
@@ -28,7 +28,7 @@ export default function Hero({ t }) {
           <div className="flex flex-wrap gap-4">
             <a
               href="/projects"
-              className="rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 px-7 py-4 font-bold text-white shadow-lg shadow-cyan-500/20 transition hover:-translate-y-1"
+              className="rounded-full bg-linear-to-r/srgb from-purple-600 to-cyan-500 px-7 py-4 font-bold text-white shadow-lg shadow-cyan-500/20 transition hover:-translate-y-1"
             >
               {t.hero.projectsButton}
             </a>
@@ -43,7 +43,7 @@ export default function Hero({ t }) {
         </div>
 
         <div className="relative flex flex-col items-center">
-          <div className="absolute h-[520px] w-[520px] animate-pulse rounded-full bg-gradient-to-r from-purple-600/25 to-cyan-400/25 blur-3xl" />
+          <div className="absolute h-[520px] w-[520px] animate-pulse rounded-full bg-linear-to-r/srgb from-purple-600/25 to-cyan-400/25 blur-3xl" />
 
           <div className="relative rounded-full border border-cyan-300/20 bg-white/5 p-6 shadow-2xl shadow-cyan-500/20 backdrop-blur-xl">
             <img
@@ -52,7 +52,6 @@ export default function Hero({ t }) {
               className="h-80 w-80 rounded-full object-cover drop-shadow-[0_0_45px_rgba(34,211,238,0.38)] transition duration-500 hover:scale-105 md:h-96 md:w-96"
             />
           </div>
-          
         </div>
       </div>
     </section>

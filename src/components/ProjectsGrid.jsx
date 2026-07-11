@@ -149,7 +149,7 @@ export default function ProjectsGrid({ projects }) {
                   </div>
                 )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-slate-950/70 via-transparent to-transparent" />
 
                 {project.featured && (
                   <span className="absolute right-4 top-4 rounded-full border border-cyan-300/30 bg-slate-950/80 px-3 py-1 text-xs font-bold text-cyan-300 backdrop-blur-xl">

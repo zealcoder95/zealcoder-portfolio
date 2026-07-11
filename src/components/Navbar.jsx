@@ -49,7 +49,7 @@ export default function Navbar() {
           />
 
           <div className="min-w-0">
-            <p className="truncate bg-gradient-to-r from-purple-400 to-cyan-300 bg-clip-text text-lg font-black tracking-[0.18em] text-transparent sm:text-2xl sm:tracking-[0.22em]">
+            <p className="truncate bg-linear-to-r from-purple-400 to-cyan-300 bg-clip-text text-lg font-black tracking-[0.18em] text-transparent sm:text-2xl sm:tracking-[0.22em]">
               ZEALCODER
             </p>
 
@@ -89,7 +89,7 @@ export default function Navbar() {
           <a
             href="/cv.pdf"
             download="Gizem-Gulcu-CV.pdf"
-            className="rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-0.5"
+            className="rounded-full bg-linear-to-r from-purple-600 to-cyan-500 px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-0.5"
           >
             CV ↓
           </a>

@@ -39,7 +39,7 @@ export default function About({ t }) {
           </div>
         </div>
 
-        <div className="mt-8 rounded-[32px] border border-cyan-300/20 bg-gradient-to-r from-purple-500/10 to-cyan-400/10 p-8 backdrop-blur-xl">
+        <div className="mt-8 rounded-[32px] border border-cyan-300/20 bg-linear-to-r from-purple-500/10 to-cyan-400/10 p-8 backdrop-blur-xl">
           <h2 className="mb-4 text-3xl font-black">
             Building Intelligence. One Project at a Time.
           </h2>

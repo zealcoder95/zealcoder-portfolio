@@ -76,7 +76,7 @@ export default function ProjectCard({
               href={githubUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-1"
+              className="rounded-full bg-linear-to-r from-purple-600 to-cyan-500 px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-1"
             >
               GitHub
             </a>

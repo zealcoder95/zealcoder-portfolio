@@ -1,7 +1,7 @@
 export default function CurrentFocus() {
   return (
     <section className="bg-slate-950 px-6 py-24 text-white">
-      <div className="mx-auto max-w-7xl rounded-[36px] border border-cyan-400/20 bg-gradient-to-r from-slate-900 to-slate-950 p-12">
+      <div className="mx-auto max-w-7xl rounded-[36px] border border-cyan-400/20 bg-linear-to-r from-slate-900 to-slate-950 p-12">
 
         <p className="mb-3 text-sm font-black uppercase tracking-[0.35em] text-cyan-300">
           CURRENT FOCUS

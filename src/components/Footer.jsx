@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl text-center">
-        <h2 className="mb-3 bg-gradient-to-r from-purple-400 to-cyan-300 bg-clip-text text-3xl font-black tracking-[0.2em] text-transparent">
+        <h2 className="mb-3 bg-linear-to-r from-purple-400 to-cyan-300 bg-clip-text text-3xl font-black tracking-[0.2em] text-transparent">
           ZEALCODER
         </h2>
 

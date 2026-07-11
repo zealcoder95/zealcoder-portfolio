@@ -77,7 +77,7 @@ export default function CareerTimeline() {
         </h2>
 
         <div className="relative">
-          <div className="absolute bottom-0 left-5 top-0 w-px bg-gradient-to-b from-purple-500 via-cyan-400 to-transparent md:left-1/2" />
+          <div className="absolute bottom-0 left-5 top-0 w-px bg-linear-to-b from-purple-500 via-cyan-400 to-transparent md:left-1/2" />
 
           <div className="space-y-10">
             {timeline.map((item, index) => (

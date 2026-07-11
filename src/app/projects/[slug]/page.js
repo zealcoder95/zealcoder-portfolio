@@ -64,7 +64,7 @@ export default async function ProjectDetailPage({ params }) {
             href={project.githubUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 px-6 py-3 font-bold text-white"
+            className="rounded-full bg-linear-to-r from-purple-600 to-cyan-500 px-6 py-3 font-bold text-white"
           >
             View on GitHub
           </a>

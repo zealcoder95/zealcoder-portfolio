@@ -86,7 +86,7 @@ export default function ResumePage() {
             <a
               href="/cv.pdf"
               download
-              className="inline-flex rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 px-8 py-4 font-bold"
+              className="inline-flex rounded-full bg-linear-to-r from-purple-600 to-cyan-500 px-8 py-4 font-bold"
             >
               Download CV
             </a>

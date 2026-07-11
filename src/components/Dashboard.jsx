@@ -39,7 +39,7 @@ export default function Dashboard({ lang, data }) {
 
         <h2 className="mb-14 max-w-3xl text-4xl font-black leading-tight md:text-6xl">
           {lang === "en" ? "Live data from my" : "Canlı veriler doğrudan"}{" "}
-          <span className="bg-gradient-to-r from-purple-400 to-cyan-300 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-purple-400 to-cyan-300 bg-clip-text text-transparent">
             {lang === "en"
               ? "GitHub portfolio."
               : "GitHub portfolyomdan."}
@@ -54,7 +54,7 @@ export default function Dashboard({ lang, data }) {
             >
               <div className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-purple-500/10 blur-3xl transition group-hover:bg-cyan-400/20" />
 
-              <p className="relative mb-3 bg-gradient-to-r from-purple-400 to-cyan-300 bg-clip-text text-5xl font-black text-transparent">
+              <p className="relative mb-3 bg-linear-to-r from-purple-400 to-cyan-300 bg-clip-text text-5xl font-black text-transparent">
                 {item.value}
               </p>
 
@@ -94,7 +94,7 @@ export default function Dashboard({ lang, data }) {
 
                   <div className="h-3 overflow-hidden rounded-full bg-slate-800">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-purple-500 to-cyan-400"
+                      className="h-full rounded-full bg-linear-to-r from-purple-500 to-cyan-400"
                       style={{ width: `${item.percentage}%` }}
                     />
                   </div>

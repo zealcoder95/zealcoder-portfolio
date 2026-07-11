@@ -57,7 +57,7 @@ export default function Contact() {
             <div className="mt-10 flex flex-wrap gap-4">
               <a
                 href="mailto:gizemgulcu95@gmail.com"
-                className="rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 px-7 py-4 font-bold text-white shadow-lg shadow-cyan-500/20 transition hover:-translate-y-1"
+                className="rounded-full bg-linear-to-r from-purple-600 to-cyan-500 px-7 py-4 font-bold text-white shadow-lg shadow-cyan-500/20 transition hover:-translate-y-1"
               >
                 {lang === "en" ? "Send an Email" : "E-posta Gönder"}
               </a>
