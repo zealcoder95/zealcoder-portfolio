@@ -1,9 +1,12 @@
-import Parser from "rss-parser";
+import { XMLParser } from "fast-xml-parser";
 
 const GITHUB_USERNAME = "zealcoder95";
 const MEDIUM_USERNAME = "zealcoder";
 
-const parser = new Parser();
+const xmlParser = new XMLParser({
+  ignoreAttributes: true,
+  trimValues: true,
+});
 
 function createUpdate({
   id,
@@ -25,6 +28,24 @@ function createUpdate({
   };
 }
 
+function cleanText(value = "") {
+  return String(value)
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function createReadableRepositoryName(name = "") {
+  return name
+    .replaceAll("-", " ")
+    .replaceAll("_", " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 async function getGitHubUpdates() {
   try {
     const response = await fetch(
@@ -41,7 +62,7 @@ async function getGitHubUpdates() {
     );
 
     if (!response.ok) {
-      console.error(
+      console.warn(
         "GitHub updates could not be loaded:",
         response.status
       );
@@ -53,65 +74,98 @@ async function getGitHubUpdates() {
 
     return repositories
       .filter(
-        (repo) =>
-          !repo.fork &&
-          !repo.archived &&
-          repo.name !== GITHUB_USERNAME
+        (repository) =>
+          !repository.fork &&
+          !repository.archived &&
+          repository.name !== GITHUB_USERNAME
       )
-      .map((repo) =>
+      .map((repository) =>
         createUpdate({
-          id: `github-${repo.id}-${repo.pushed_at}`,
+          id: `github-${repository.id}-${repository.pushed_at}`,
           platform: "github",
           action: "updated",
-          title: repo.name
-            .replaceAll("-", " ")
-            .replaceAll("_", " ")
-            .replace(/\b\w/g, (letter) =>
-              letter.toUpperCase()
-            ),
+          title: createReadableRepositoryName(
+            repository.name
+          ),
           description:
-            repo.description ||
+            repository.description ||
             "GitHub projesinde yeni bir güncelleme yayımlandı.",
-          date: repo.pushed_at || repo.updated_at,
-          url: repo.html_url,
+          date:
+            repository.pushed_at ||
+            repository.updated_at,
+          url: repository.html_url,
         })
       );
   } catch (error) {
-    console.error("GitHub updates error:", error);
+    console.warn("GitHub updates could not be loaded:", error);
     return [];
   }
 }
 
 async function getMediumUpdates() {
   try {
-    const feed = await parser.parseURL(
-      `https://medium.com/feed/@${MEDIUM_USERNAME}`
+    const response = await fetch(
+      `https://medium.com/feed/@${MEDIUM_USERNAME}`,
+      {
+        headers: {
+          Accept:
+            "application/rss+xml, application/xml, text/xml",
+          "User-Agent": "ZealCoder Portfolio",
+        },
+        next: {
+          revalidate: 1800,
+        },
+      }
     );
 
-    return (feed.items || [])
-      .slice(0, 10)
-      .map((item) =>
-        createUpdate({
-          id:
-            item.guid ||
-            `medium-${item.link}-${item.isoDate}`,
-          platform: "medium",
-          action: "published",
-          title: item.title || "Yeni Medium yazısı",
-          description:
-            item.contentSnippet ||
-            "Medium hesabında yeni bir yazı yayımlandı.",
-          date:
-            item.isoDate ||
-            item.pubDate ||
-            new Date().toISOString(),
-          url:
-            item.link ||
-            `https://medium.com/@${MEDIUM_USERNAME}`,
-        })
+    if (!response.ok) {
+      console.warn(
+        "Medium updates could not be loaded:",
+        response.status
       );
+
+      return [];
+    }
+
+    const xml = await response.text();
+    const parsedFeed = xmlParser.parse(xml);
+
+    const rawItems =
+      parsedFeed?.rss?.channel?.item || [];
+
+    const items = Array.isArray(rawItems)
+      ? rawItems
+      : [rawItems];
+
+    return items.slice(0, 10).map((item, index) => {
+      const rawDescription =
+        item.description ||
+        item["content:encoded"] ||
+        "";
+
+      const description = cleanText(rawDescription);
+
+      return createUpdate({
+        id:
+          item.guid ||
+          `medium-${index}-${item.pubDate || item.link}`,
+        platform: "medium",
+        action: "published",
+        title: item.title || "Yeni Medium yazısı",
+        description:
+          description.slice(0, 220) ||
+          "Medium hesabında yeni bir yazı yayımlandı.",
+        date:
+          item.pubDate ||
+          item.isoDate ||
+          new Date().toISOString(),
+        url:
+          item.link ||
+          `https://medium.com/@${MEDIUM_USERNAME}`,
+      });
+    });
   } catch (error) {
-    console.error("Medium updates error:", error);
+    console.warn("Medium updates could not be loaded:", error);
     return [];
   }
 }
@@ -125,15 +179,15 @@ export async function getAutomaticUpdates({
       getMediumUpdates(),
     ]);
 
-  return [
-    ...githubUpdates,
-    ...mediumUpdates,
-  ]
-    .filter((update) => update.date)
+  return [...githubUpdates, ...mediumUpdates]
+    .filter((update) => {
+      const date = new Date(update.date);
+      return !Number.isNaN(date.getTime());
+    })
     .sort(
-      (a, b) =>
-        new Date(b.date).getTime() -
-        new Date(a.date).getTime()
+      (firstUpdate, secondUpdate) =>
+        new Date(secondUpdate.date).getTime() -
+        new Date(firstUpdate.date).getTime()
     )
     .slice(0, limit);
 }

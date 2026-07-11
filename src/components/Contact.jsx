@@ -22,6 +22,11 @@ export default function Contact() {
       href: "https://www.kaggle.com/gizemglc",
     },
     {
+      label: "Medium",
+      value: "medium.com/@zealcoder",
+      href: "https://medium.com/@zealcoder",
+    },
+    {
       label: "Email",
       value: "gizemgulcu95@gmail.com",
       href: "mailto:gizemgulcu95@gmail.com",
@@ -85,23 +90,27 @@ export default function Contact() {
             </p>
 
             <div className="space-y-4">
-              {contactItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target={item.label === "Email" ? undefined : "_blank"}
-                  rel={item.label === "Email" ? undefined : "noreferrer"}
-                  className="group block rounded-2xl border border-white/10 bg-black/20 p-5 transition hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-cyan-400/5"
-                >
-                  <p className="font-bold text-cyan-300 transition group-hover:text-white">
-                    {item.label}
-                  </p>
+              {contactItems.map((item) => {
+                const isEmail = item.label === "Email";
 
-                  <p className="mt-1 break-all text-sm text-slate-400">
-                    {item.value}
-                  </p>
-                </a>
-              ))}
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target={isEmail ? undefined : "_blank"}
+                    rel={isEmail ? undefined : "noreferrer"}
+                    className="group block rounded-2xl border border-white/10 bg-black/20 p-5 transition hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-cyan-400/5"
+                  >
+                    <p className="font-bold text-cyan-300 transition group-hover:text-white">
+                      {item.label}
+                    </p>
+
+                    <p className="mt-1 break-all text-sm text-slate-400">
+                      {item.value}
+                    </p>
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>
