@@ -8,6 +8,7 @@ import {
 } from "@/lib/ai/search";
 import { buildGeminiPrompt } from "@/lib/ai/prompt";
 import { retrieveProjectEvidence } from "@/lib/ai/retrieval";
+import { buildProjectPrompt } from "@/lib/ai/projectPrompt";
 
 const ROUTE_VERSION = "zealcoder-ai-v5.4-cards";
 
@@ -39,6 +40,29 @@ function isRecruiterQuestion(message = "") {
     question.includes("aday olarak") ||
     question.includes("güçlü yönleri") ||
     question.includes("geliştirmesi gereken")
+  );
+}
+
+function isProjectQuestion(message = "") {
+  const question = normalizeQuestion(message);
+
+  return (
+    question.includes("project") ||
+    question.includes("projects") ||
+    question.includes("proje") ||
+    question.includes("projeler") ||
+    question.includes("sql") ||
+    question.includes("python") ||
+    question.includes("power bi") ||
+    question.includes("machine learning") ||
+    question.includes("github") ||
+    question.includes("kaggle") ||
+    question.includes("newest") ||
+    question.includes("latest") ||
+    question.includes("en güncel") ||
+    question.includes("en yeni") ||
+    question.includes("which one") ||
+    question.includes("hangisi")
   );
 }
 
@@ -140,6 +164,7 @@ export async function POST(request) {
       version: ROUTE_VERSION,
       message,
       recruiterQuestion,
+      projectQuestion,
       historyLength: history.length,
       loadedProjectCount: loadedProjects.length,
       filteredProjectCount: projects.length,
@@ -157,7 +182,17 @@ export async function POST(request) {
       ),
     });
 
-    const prompt = buildGeminiPrompt({
+    const projectQuestion =
+  !recruiterQuestion &&
+  isProjectQuestion(message);
+
+const prompt = projectQuestion
+  ? buildProjectPrompt({
+      message,
+      history,
+      projects: evidenceProjects,
+    })
+  : buildGeminiPrompt({
       message,
       history,
       projects: evidenceProjects,
