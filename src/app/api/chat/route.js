@@ -159,32 +159,23 @@ export async function POST(request) {
       projects,
       history,
     });
-
-    console.log("ZEALCODER CHAT", {
-      version: ROUTE_VERSION,
-      message,
-      recruiterQuestion,
-      projectQuestion,
-      historyLength: history.length,
-      loadedProjectCount: loadedProjects.length,
-      filteredProjectCount: projects.length,
-      relevantSlugs: relevantProjects.map(
-        (project) => project.slug
-      ),
-      evidenceProjects: evidenceProjects.map(
-        (project) => ({
-          slug: project.slug,
-          retrievalScore: project.retrievalScore,
-          headings: (project.evidence || []).map(
-            (item) => item.heading
-          ),
-        })
-      ),
-    });
-
+    
     const projectQuestion =
   !recruiterQuestion &&
   isProjectQuestion(message);
+
+console.log("ZEALCODER CHAT", {
+  version: ROUTE_VERSION,
+  message,
+  recruiterQuestion,
+  projectQuestion,
+  historyLength: history.length,
+  loadedProjectCount: loadedProjects.length,
+  filteredProjectCount: projects.length,
+  relevantSlugs: relevantProjects.map(
+    (project) => project.slug
+  ),
+});
 
 const prompt = projectQuestion
   ? buildProjectPrompt({
