@@ -7,8 +7,9 @@ import {
   removeNonPortfolioProfiles,
 } from "@/lib/ai/search";
 import { buildGeminiPrompt } from "@/lib/ai/prompt";
+import { retrieveProjectEvidence } from "@/lib/ai/retrieval";
 
-const ROUTE_VERSION = "zealcoder-ai-v5.2";
+const ROUTE_VERSION = "zealcoder-ai-v5.3-rag";
 
 function normalizeQuestion(value = "") {
   return value
@@ -98,6 +99,15 @@ export async function POST(request) {
           history
         );
 
+    const evidenceProjects =
+      retrieveProjectEvidence({
+        projects: relevantProjects,
+        message,
+        history,
+        maxProjects: recruiterQuestion ? 4 : 3,
+        chunksPerProject: 2,
+      });
+
     const fallbackAnswer = buildFallbackAnswer({
       message,
       projects,
@@ -114,12 +124,21 @@ export async function POST(request) {
       relevantSlugs: relevantProjects.map(
         (project) => project.slug
       ),
+      evidenceProjects: evidenceProjects.map(
+        (project) => ({
+          slug: project.slug,
+          retrievalScore: project.retrievalScore,
+          headings: (project.evidence || []).map(
+            (item) => item.heading
+          ),
+        })
+      ),
     });
 
     const prompt = buildGeminiPrompt({
       message,
       history,
-      projects: relevantProjects,
+      projects: evidenceProjects,
     });
 
     try {
