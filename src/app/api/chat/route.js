@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+
 import { getGitHubProjects } from "@/lib/github";
 import { buildFallbackAnswer } from "@/lib/ai/fallback";
 import { generateGeminiAnswer } from "@/lib/ai/gemini";
@@ -94,7 +95,10 @@ function serializeProjects(projects = []) {
     kaggleUrl: project.kaggleUrl || null,
     homepage: project.homepage || null,
     stars: project.stars || 0,
-    updatedAt: project.pushedAt || project.updatedAt || null,
+    updatedAt:
+      project.pushedAt ||
+      project.updatedAt ||
+      null,
   }));
 }
 
@@ -126,21 +130,29 @@ export async function POST(request) {
       );
     }
 
-    const loadedProjects = await getGitHubProjects();
+    const loadedProjects =
+      await getGitHubProjects();
 
     const projects =
-      removeNonPortfolioProfiles(loadedProjects);
+      removeNonPortfolioProfiles(
+        loadedProjects
+      );
 
     const recruiterQuestion =
       isRecruiterQuestion(message);
 
-    const relevantProjects = recruiterQuestion
-      ? selectRecruiterProjects(projects)
-      : findRelevantProjects(
-          projects,
-          message,
-          history
-        );
+    const projectQuestion =
+      !recruiterQuestion &&
+      isProjectQuestion(message);
+
+    const relevantProjects =
+      recruiterQuestion
+        ? selectRecruiterProjects(projects)
+        : findRelevantProjects(
+            projects,
+            message,
+            history
+          );
 
     const evidenceProjects =
       retrieveProjectEvidence({
@@ -154,50 +166,69 @@ export async function POST(request) {
     const projectCards =
       serializeProjects(evidenceProjects);
 
-    const fallbackAnswer = buildFallbackAnswer({
-      message,
-      projects,
-      history,
-    });
-    
-    const projectQuestion =
-  !recruiterQuestion &&
-  isProjectQuestion(message);
+    const fallbackAnswer =
+      buildFallbackAnswer({
+        message,
+        projects,
+        history,
+      });
 
-console.log("ZEALCODER CHAT", {
-  version: ROUTE_VERSION,
-  message,
-  recruiterQuestion,
-  projectQuestion,
-  historyLength: history.length,
-  loadedProjectCount: loadedProjects.length,
-  filteredProjectCount: projects.length,
-  relevantSlugs: relevantProjects.map(
-    (project) => project.slug
-  ),
-});
-
-const prompt = projectQuestion
-  ? buildProjectPrompt({
+    console.log("ZEALCODER CHAT", {
+      version: ROUTE_VERSION,
       message,
-      history,
-      projects: evidenceProjects,
-    })
-  : buildGeminiPrompt({
-      message,
-      history,
-      projects: evidenceProjects,
+      recruiterQuestion,
+      projectQuestion,
+      historyLength: history.length,
+      loadedProjectCount:
+        loadedProjects.length,
+      filteredProjectCount:
+        projects.length,
+      relevantSlugs:
+        relevantProjects.map(
+          (project) => project.slug
+        ),
+      evidenceProjects:
+        evidenceProjects.map(
+          (project) => ({
+            slug: project.slug,
+            retrievalScore:
+              project.retrievalScore,
+            headings:
+              (
+                project.evidence || []
+              ).map(
+                (item) => item.heading
+              ),
+          })
+        ),
     });
+
+    const prompt = projectQuestion
+      ? buildProjectPrompt({
+          message,
+          history,
+          projects: evidenceProjects,
+        })
+      : buildGeminiPrompt({
+          message,
+          history,
+          projects: evidenceProjects,
+        });
 
     try {
       const result =
-        await generateGeminiAnswer(prompt);
+        await generateGeminiAnswer(
+          prompt
+        );
 
       if (result?.answer) {
-        console.log("ZEALCODER AI PROVIDER", {
-          provider: result.provider,
-          model: result.model,
-        });
+        console.log(
+          "ZEALCODER AI PROVIDER",
+          {
+            provider: result.provider,
+            model: result.model,
+          }
+        );
 
         return NextResponse.json({
           answer: result.answer,
