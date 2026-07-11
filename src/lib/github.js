@@ -95,15 +95,16 @@ function titleFromRepoName(name = "") {
 }
 
 async function githubFetch(path) {
-  const response = await fetch(`${GITHUB_API}${path}`, {
+  const response = await fetch(
+  `${GITHUB_API}/repos/${GITHUB_USERNAME}/${repoName}/readme`,
+  {
     headers: {
-      Accept: "application/vnd.github+json",
+      Accept: "application/vnd.github.raw+json",
       "X-GitHub-Api-Version": "2022-11-28",
     },
-    next: {
-      revalidate: 3600,
-    },
-  });
+    cache: "no-store",
+  }
+);
 
   if (!response.ok) {
     return null;
@@ -120,9 +121,7 @@ async function getRepositoryReadme(repoName) {
         Accept: "application/vnd.github.raw+json",
         "X-GitHub-Api-Version": "2022-11-28",
       },
-      next: {
-        revalidate: 3600,
-      },
+      
     }
   );
 
