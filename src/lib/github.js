@@ -8,7 +8,10 @@ function removeHtml(markdown = "") {
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/<picture[\s\S]*?<\/picture>/gi, "")
-    .replace(/<p[^>]*align=["']?center["']?[^>]*>[\s\S]*?<\/p>/gi, "")
+    .replace(
+      /<p[^>]*align=["']?center["']?[^>]*>[\s\S]*?<\/p>/gi,
+      ""
+    )
     .replace(/<[^>]+>/g, " ");
 }
 
@@ -29,7 +32,10 @@ function createSummary(markdown = "", fallback = "") {
   const clean = cleanMarkdown(markdown);
 
   if (!clean) {
-    return fallback || "Project details are available on GitHub.";
+    return (
+      fallback ||
+      "Project details are available on GitHub."
+    );
   }
 
   const characters = Array.from(clean);
@@ -38,7 +44,10 @@ function createSummary(markdown = "", fallback = "") {
     return clean;
   }
 
-  return `${characters.slice(0, 240).join("").trim()}...`;
+  return `${characters
+    .slice(0, 240)
+    .join("")
+    .trim()}...`;
 }
 
 function findKaggleUrl(markdown = "") {
@@ -70,7 +79,9 @@ function resolveGitHubAssetUrl({
   repoName,
   defaultBranch,
 }) {
-  if (!source) return null;
+  if (!source) {
+    return null;
+  }
 
   if (
     source.startsWith("http://") ||
@@ -91,22 +102,34 @@ function titleFromRepoName(name = "") {
   return name
     .replaceAll("-", " ")
     .replaceAll("_", " ")
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+    .replace(
+      /\b\w/g,
+      (letter) => letter.toUpperCase()
+    );
 }
 
 async function githubFetch(path) {
   const response = await fetch(
-  `${GITHUB_API}/repos/${GITHUB_USERNAME}/${repoName}/readme`,
-  {
-    headers: {
-      Accept: "application/vnd.github.raw+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-    cache: "no-store",
-  }
-);
+    `${GITHUB_API}${path}`,
+    {
+      headers: {
+        Accept:
+          "application/vnd.github+json",
+        "X-GitHub-Api-Version":
+          "2022-11-28",
+      },
+
+      cache: "no-store",
+    }
+  );
 
   if (!response.ok) {
+    console.error("GitHub API error:", {
+      path,
+      status: response.status,
+      statusText: response.statusText,
+    });
+
     return null;
   }
 
@@ -118,10 +141,13 @@ async function getRepositoryReadme(repoName) {
     `${GITHUB_API}/repos/${GITHUB_USERNAME}/${repoName}/readme`,
     {
       headers: {
-        Accept: "application/vnd.github.raw+json",
-        "X-GitHub-Api-Version": "2022-11-28",
+        Accept:
+          "application/vnd.github.raw+json",
+        "X-GitHub-Api-Version":
+          "2022-11-28",
       },
-      
+
+      cache: "no-store",
     }
   );
 
@@ -132,7 +158,9 @@ async function getRepositoryReadme(repoName) {
     };
   }
 
-  const rawReadme = await response.text();
+  const rawReadme =
+    await response.text();
+
   const parsed = matter(rawReadme);
 
   return {
@@ -147,133 +175,191 @@ export async function getGitHubProjects() {
   );
 
   if (!response) {
-    throw new Error("GitHub repositories could not be loaded.");
+    throw new Error(
+      "GitHub repositories could not be loaded."
+    );
   }
 
-  const repositories = await response.json();
+  const repositories =
+    await response.json();
 
-  const usableRepositories = repositories.filter(
-    (repo) =>
-      !repo.fork &&
-      !repo.archived &&
-      Array.isArray(repo.topics) &&
-      repo.topics.includes("portfolio")
-  );
+  const usableRepositories =
+    repositories.filter(
+      (repo) =>
+        !repo.fork &&
+        !repo.archived &&
+        Array.isArray(repo.topics) &&
+        repo.topics.includes("portfolio")
+    );
 
   const projects = await Promise.all(
-    usableRepositories.map(async (repo) => {
-      const { metadata, markdown } =
-        await getRepositoryReadme(repo.name);
+    usableRepositories.map(
+      async (repo) => {
+        const {
+          metadata,
+          markdown,
+        } =
+          await getRepositoryReadme(
+            repo.name
+          );
 
-      const defaultBranch = repo.default_branch || "main";
+        const defaultBranch =
+          repo.default_branch || "main";
 
-      const coverSource =
-        metadata.cover ||
-        metadata.image ||
-        findFirstImage(markdown);
+        const coverSource =
+          metadata.cover ||
+          metadata.image ||
+          findFirstImage(markdown);
 
-      const coverUrl = resolveGitHubAssetUrl({
-        source: coverSource,
-        repoName: repo.name,
-        defaultBranch,
-      });
+        const coverUrl =
+          resolveGitHubAssetUrl({
+            source: coverSource,
+            repoName: repo.name,
+            defaultBranch,
+          });
 
-      const repositoryTopics = repo.topics.filter(
-        (topic) => topic !== "portfolio"
-      );
+        const repositoryTopics =
+          repo.topics.filter(
+            (topic) =>
+              topic !== "portfolio"
+          );
 
-      const tags = Array.isArray(metadata.tags)
-        ? metadata.tags
-        : repositoryTopics;
+        const tags =
+          Array.isArray(metadata.tags)
+            ? metadata.tags
+            : repositoryTopics;
 
-      const technologies = Array.isArray(metadata.technologies)
-        ? metadata.technologies
-        : Array.isArray(metadata.tags)
-          ? metadata.tags
-          : repositoryTopics;
+        const technologies =
+          Array.isArray(
+            metadata.technologies
+          )
+            ? metadata.technologies
+            : Array.isArray(
+                  metadata.tags
+                )
+              ? metadata.tags
+              : repositoryTopics;
 
-      const skills = Array.isArray(metadata.skills)
-        ? metadata.skills
-        : [];
+        const skills =
+          Array.isArray(
+            metadata.skills
+          )
+            ? metadata.skills
+            : [];
 
-      return {
-        id: repo.id,
-        slug: repo.name,
+        return {
+          id: repo.id,
+          slug: repo.name,
 
-        title:
-          metadata.title ||
-          titleFromRepoName(repo.name),
+          title:
+            metadata.title ||
+            titleFromRepoName(
+              repo.name
+            ),
 
-        summary:
-          metadata.summary ||
-          createSummary(markdown, repo.description),
+          summary:
+            metadata.summary ||
+            createSummary(
+              markdown,
+              repo.description
+            ),
 
-        description: repo.description || "",
+          description:
+            repo.description || "",
 
-        category:
-          metadata.category ||
-          repo.language ||
-          "Project",
+          category:
+            metadata.category ||
+            repo.language ||
+            "Project",
 
-        tags,
+          tags,
+          technologies,
+          skills,
 
-        technologies,
+          difficulty:
+            metadata.difficulty ||
+            null,
 
-        skills,
+          featured:
+            metadata.featured === true,
 
-        difficulty:
-          metadata.difficulty ||
-          null,
+          cover: coverUrl,
 
-        featured:
-          metadata.featured === true,
+          kaggleUrl:
+            metadata.kaggle ||
+            metadata.kaggleUrl ||
+            findKaggleUrl(
+              markdown
+            ),
 
-        cover: coverUrl,
+          githubUrl:
+            repo.html_url,
 
-        kaggleUrl:
-          metadata.kaggle ||
-          metadata.kaggleUrl ||
-          findKaggleUrl(markdown),
+          defaultBranch,
 
-        githubUrl: repo.html_url,
+          homepage:
+            metadata.demo ||
+            repo.homepage ||
+            null,
 
-        defaultBranch,
+          language:
+            repo.language,
 
-        homepage:
-          metadata.demo ||
-          repo.homepage ||
-          null,
+          stars:
+            repo.stargazers_count,
 
-        language: repo.language,
+          forks:
+            repo.forks_count,
 
-        stars: repo.stargazers_count,
-        forks: repo.forks_count,
-        watchers: repo.watchers_count,
-        openIssues: repo.open_issues_count,
+          watchers:
+            repo.watchers_count,
 
-        createdAt: repo.created_at,
-        updatedAt: repo.updated_at,
-        pushedAt: repo.pushed_at,
+          openIssues:
+            repo.open_issues_count,
 
-        readme: markdown,
-      };
-    })
+          createdAt:
+            repo.created_at,
+
+          updatedAt:
+            repo.updated_at,
+
+          pushedAt:
+            repo.pushed_at,
+
+          readme: markdown,
+        };
+      }
+    )
   );
 
-  return projects.sort((a, b) => {
-    if (a.featured !== b.featured) {
-      return a.featured ? -1 : 1;
-    }
+  return projects.sort(
+    (a, b) => {
+      if (
+        a.featured !== b.featured
+      ) {
+        return a.featured
+          ? -1
+          : 1;
+      }
 
-    return new Date(b.updatedAt) - new Date(a.updatedAt);
-  });
+      return (
+        new Date(b.updatedAt) -
+        new Date(a.updatedAt)
+      );
+    }
+  );
 }
 
-export async function getGitHubProject(slug) {
-  const projects = await getGitHubProjects();
+export async function getGitHubProject(
+  slug
+) {
+  const projects =
+    await getGitHubProjects();
 
   return (
-    projects.find((project) => project.slug === slug) ||
-    null
+    projects.find(
+      (project) =>
+        project.slug === slug
+    ) || null
   );
 }
