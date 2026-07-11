@@ -17,13 +17,21 @@ export default function ProjectCard({
   const isTurkish = lang === "tr";
 
   const labels = {
-    project: isTurkish ? "Proje" : "Project",
+    fallbackCategory: isTurkish ? "Proje" : "Project",
     featured: isTurkish ? "Öne Çıkan" : "Featured",
     technologies: isTurkish ? "Teknolojiler" : "Technologies",
-    skills: isTurkish ? "Gösterilen Beceriler" : "Demonstrated Skills",
-    github: isTurkish ? "GitHub’da Görüntüle" : "View on GitHub",
-    kaggle: isTurkish ? "Kaggle’da Aç" : "Open Kaggle",
-    demo: isTurkish ? "Canlı Demoyu Aç" : "Live Demo",
+    skills: isTurkish
+      ? "Gösterilen Beceriler"
+      : "Demonstrated Skills",
+    github: isTurkish
+      ? "GitHub’da Görüntüle"
+      : "View on GitHub",
+    kaggle: isTurkish
+      ? "Kaggle’da Görüntüle"
+      : "View on Kaggle",
+    demo: isTurkish
+      ? "Canlı Demoyu Aç"
+      : "Open Live Demo",
   };
 
   const visibleTechnologies = technologies.slice(0, 7);
@@ -43,7 +51,7 @@ export default function ProjectCard({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.24em] text-purple-300">
-              {category || labels.project}
+              {category || labels.fallbackCategory}
             </p>
 
             <h3 className="mt-2 text-xl font-black text-white">
@@ -99,8 +107,14 @@ export default function ProjectCard({
 
             <ul className="space-y-2 text-sm text-slate-300">
               {visibleSkills.map((skill) => (
-                <li key={skill} className="flex items-start gap-2">
-                  <span className="mt-0.5 text-cyan-300">✓</span>
+                <li
+                  key={skill}
+                  className="flex items-start gap-2"
+                >
+                  <span className="mt-0.5 text-cyan-300">
+                    ✓
+                  </span>
+
                   <span>{skill}</span>
                 </li>
               ))}
