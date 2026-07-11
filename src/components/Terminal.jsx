@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import MarkdownMessage from "./MarkdownMessage";
 
 export default function Terminal() {
   const [input, setInput] = useState("");
@@ -153,9 +154,13 @@ export default function Terminal() {
                 : "AI"}
             </span>
 
-            <p className="mt-1 whitespace-pre-wrap leading-7">
-              {item.text}
-            </p>
+            <div className="mt-2">
+              
+              <MarkdownMessage>
+                {item.text}
+              </MarkdownMessage>
+
+            </div>
           </div>
         ))}
 
