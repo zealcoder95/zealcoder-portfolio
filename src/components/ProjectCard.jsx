@@ -1,77 +1,68 @@
-import Link from "next/link";
+"use client";
 
-export default function ProjectCard({ project, lang, t }) {
+export default function ProjectCard({
+  title,
+  technologies = [],
+  githubUrl,
+  kaggleUrl,
+  featured = false,
+}) {
   return (
-    <article className="group relative overflow-hidden rounded-[34px] border border-white/10 bg-white/5 p-8 backdrop-blur-xl transition duration-500 hover:-translate-y-3 hover:border-cyan-400/40 hover:shadow-[0_0_45px_rgba(34,211,238,.18)]">
-      <div className="absolute -right-20 -top-20 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl transition group-hover:bg-purple-500/20" />
-
-      <div className="relative">
-        <p className="mb-4 text-sm font-black uppercase tracking-[0.3em] text-cyan-300">
-          {project.category[lang]}
-        </p>
-
-        <h3 className="mb-5 text-3xl font-black leading-tight">
-          {project.title[lang]}
-        </h3>
-
-        <p className="mb-8 leading-7 text-slate-300">
-          {project.description[lang]}
-        </p>
-
-        <div className="mb-6 rounded-2xl border border-white/10 bg-black/20 p-5">
-          <p className="mb-2 text-sm font-bold uppercase tracking-[0.25em] text-purple-300">
-            Problem
+    <div className="my-4 rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.25em] text-purple-300">
+            Project
           </p>
-          <p className="text-sm leading-6 text-slate-300">
-            {project.problem[lang]}
-          </p>
+
+          <h3 className="mt-2 text-xl font-black text-white">
+            {title}
+          </h3>
         </div>
 
-        <div className="mb-8 rounded-2xl border border-white/10 bg-black/20 p-5">
-          <p className="mb-2 text-sm font-bold uppercase tracking-[0.25em] text-cyan-300">
-            Outcome
-          </p>
-          <p className="text-sm leading-6 text-slate-300">
-            {project.outcome[lang]}
-          </p>
-        </div>
+        {featured && (
+          <span className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-1 text-xs font-bold text-cyan-300">
+            Featured
+          </span>
+        )}
+      </div>
 
-        <div className="mb-8 flex flex-wrap gap-2">
-          {project.tech.map((item) => (
+      {technologies.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {technologies.map((technology) => (
             <span
-              key={item}
-              className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300"
+              key={technology}
+              className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-slate-300"
             >
-              {item}
+              {technology}
             </span>
           ))}
         </div>
+      )}
 
-        <div className="flex flex-wrap gap-6">
+      <div className="mt-5 flex flex-wrap gap-3">
+        {githubUrl && (
           <a
-            href={project.links.github}
+            href={githubUrl}
             target="_blank"
-            className="font-semibold text-cyan-300 transition hover:text-white"
+            rel="noreferrer"
+            className="rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-1"
           >
-            {t.projects.github} →
+            GitHub
           </a>
+        )}
 
+        {kaggleUrl && (
           <a
-            href={project.links.kaggle}
+            href={kaggleUrl}
             target="_blank"
-            className="font-semibold text-purple-300 transition hover:text-white"
+            rel="noreferrer"
+            className="rounded-full border border-cyan-300/40 px-4 py-2 text-sm font-bold text-cyan-300 transition hover:-translate-y-1 hover:bg-cyan-300/10"
           >
-            {t.projects.kaggle} →
+            Kaggle
           </a>
-
-          <Link
-            href={`/projects/${project.id}`}
-            className="font-semibold text-white transition hover:text-cyan-300"
-          >
-            {lang === "en" ? "View Case Study →" : "Vaka Çalışmasını Gör →"}
-          </Link>
-        </div>
+        )}
       </div>
-    </article>
+    </div>
   );
 }
