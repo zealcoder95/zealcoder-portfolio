@@ -4,6 +4,24 @@ import { useRef, useState } from "react";
 import MarkdownMessage from "./MarkdownMessage";
 import ProjectCard from "./ProjectCard";
 
+function detectMessageLanguage(message = "") {
+  const normalized = String(message)
+    .toLocaleLowerCase("tr")
+    .replace(/[.,!?;:()[\]{}"'`]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const turkishWords =
+    /\b(göster|gösterir|proje|projeler|hangi|hangisi|neden|nedir|hakkında|işe|uygun|yetenek|beceri|güncel|yeni|teknoloji|teknolojiler|kullanılan|bunlar|bunlardan|bana|benim)\b/;
+
+  return (
+    /[çğıöşü]/i.test(message) ||
+    turkishWords.test(normalized)
+  )
+    ? "tr"
+    : "en";
+}
+
 export default function Terminal() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,16 +50,12 @@ export default function Terminal() {
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
         },
-
         cache: "no-store",
-
         body: JSON.stringify({
           message: question,
-
           history: historySnapshot
             .slice(-10)
             .map((item) => ({
@@ -61,12 +75,16 @@ export default function Terminal() {
         );
       }
 
+      const responseLanguage =
+        data.language ||
+        detectMessageLanguage(question);
+
       setHistory((prev) => [
         ...prev,
         {
           role: "assistant",
           text: data.answer,
-          language: data.language || "en",
+          language: responseLanguage,
           projects: Array.isArray(data.projects)
             ? data.projects
             : [],
@@ -78,13 +96,18 @@ export default function Terminal() {
         error
       );
 
+      const language =
+        detectMessageLanguage(question);
+
       setHistory((prev) => [
         ...prev,
         {
           role: "assistant",
           text:
-            "⚠️ AI engine is temporarily unavailable.",
-          language: "en",
+            language === "tr"
+              ? "⚠️ Yapay zekâ motoruna şu anda ulaşılamıyor."
+              : "⚠️ AI engine is temporarily unavailable.",
+          language,
           projects: [],
         },
       ]);
@@ -120,6 +143,8 @@ export default function Terminal() {
     const userMessage = {
       role: "user",
       text: question,
+      language:
+        detectMessageLanguage(question),
       projects: [],
     };
 
@@ -145,7 +170,7 @@ export default function Terminal() {
         <span className="h-3 w-3 rounded-full bg-green-400" />
 
         <span className="ml-3 text-xs text-slate-500">
-          zealcoder-ai-v5.5
+          zealcoder-ai-v5.6
         </span>
       </div>
 
@@ -188,7 +213,8 @@ export default function Terminal() {
                       }
                       {...project}
                       lang={
-                        item.language || "en"
+                        item.language ||
+                        "en"
                       }
                     />
                   )

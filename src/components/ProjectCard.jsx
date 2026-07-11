@@ -14,28 +14,49 @@ export default function ProjectCard({
   stars = 0,
   lang = "en",
 }) {
-  const isTurkish = lang === "tr";
+  const normalizedLanguage =
+    String(lang)
+      .toLocaleLowerCase("tr")
+      .trim();
+
+  const isTurkish =
+    normalizedLanguage.startsWith("tr");
 
   const labels = {
-    fallbackCategory: isTurkish ? "Proje" : "Project",
-    featured: isTurkish ? "Öne Çıkan" : "Featured",
-    technologies: isTurkish ? "Teknolojiler" : "Technologies",
+    fallbackCategory: isTurkish
+      ? "Proje"
+      : "Project",
+
+    featured: isTurkish
+      ? "Öne Çıkan"
+      : "Featured",
+
+    technologies: isTurkish
+      ? "Teknolojiler"
+      : "Technologies",
+
     skills: isTurkish
       ? "Gösterilen Beceriler"
       : "Demonstrated Skills",
+
     github: isTurkish
       ? "GitHub’da Görüntüle"
       : "View on GitHub",
+
     kaggle: isTurkish
       ? "Kaggle’da Görüntüle"
       : "View on Kaggle",
+
     demo: isTurkish
       ? "Canlı Demoyu Aç"
       : "Open Live Demo",
   };
 
-  const visibleTechnologies = technologies.slice(0, 7);
-  const visibleSkills = skills.slice(0, 4);
+  const visibleTechnologies =
+    technologies.slice(0, 7);
+
+  const visibleSkills =
+    skills.slice(0, 4);
 
   return (
     <article className="my-4 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] shadow-xl shadow-black/20 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-white/[0.06]">
@@ -51,7 +72,8 @@ export default function ProjectCard({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.24em] text-purple-300">
-              {category || labels.fallbackCategory}
+              {category ||
+                labels.fallbackCategory}
             </p>
 
             <h3 className="mt-2 text-xl font-black text-white">
@@ -80,21 +102,24 @@ export default function ProjectCard({
           </p>
         )}
 
-        {visibleTechnologies.length > 0 && (
+        {visibleTechnologies.length >
+          0 && (
           <div className="mt-4">
             <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">
               {labels.technologies}
             </p>
 
             <div className="flex flex-wrap gap-2">
-              {visibleTechnologies.map((technology) => (
-                <span
-                  key={technology}
-                  className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs text-slate-300"
-                >
-                  {technology}
-                </span>
-              ))}
+              {visibleTechnologies.map(
+                (technology) => (
+                  <span
+                    key={technology}
+                    className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs text-slate-300"
+                  >
+                    {technology}
+                  </span>
+                )
+              )}
             </div>
           </div>
         )}
@@ -106,18 +131,20 @@ export default function ProjectCard({
             </p>
 
             <ul className="space-y-2 text-sm text-slate-300">
-              {visibleSkills.map((skill) => (
-                <li
-                  key={skill}
-                  className="flex items-start gap-2"
-                >
-                  <span className="mt-0.5 text-cyan-300">
-                    ✓
-                  </span>
+              {visibleSkills.map(
+                (skill) => (
+                  <li
+                    key={skill}
+                    className="flex items-start gap-2"
+                  >
+                    <span className="mt-0.5 text-cyan-300">
+                      ✓
+                    </span>
 
-                  <span>{skill}</span>
-                </li>
-              ))}
+                    <span>{skill}</span>
+                  </li>
+                )
+              )}
             </ul>
           </div>
         )}
