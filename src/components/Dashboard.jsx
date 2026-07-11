@@ -1,31 +1,45 @@
-export default function Dashboard({ lang, data }) {
+export default function Dashboard({
+  lang = "en",
+  data = {},
+}) {
+  const language =
+    lang === "tr" ? "tr" : "en";
+
+  const {
+    totalProjects = 0,
+    featuredProjects = 0,
+    totalStars = 0,
+    languages = [],
+    latestProject = null,
+  } = data;
+
   const items = [
     {
-      value: data.repositories,
-      label: {
-        en: "GitHub Repositories",
-        tr: "GitHub Repoları",
-      },
-    },
-    {
-      value: data.portfolioProjects,
+      value: totalProjects,
       label: {
         en: "Portfolio Projects",
         tr: "Portfolyo Projeleri",
       },
     },
     {
-      value: data.featuredProjects,
+      value: featuredProjects,
       label: {
         en: "Featured Projects",
         tr: "Öne Çıkan Projeler",
       },
     },
     {
-      value: data.totalStars,
+      value: totalStars,
       label: {
         en: "Total GitHub Stars",
         tr: "Toplam GitHub Yıldızı",
+      },
+    },
+    {
+      value: languages.length,
+      label: {
+        en: "Technologies",
+        tr: "Teknolojiler",
       },
     },
   ];
@@ -38,9 +52,11 @@ export default function Dashboard({ lang, data }) {
         </p>
 
         <h2 className="mb-14 max-w-3xl text-4xl font-black leading-tight md:text-6xl">
-          {lang === "en" ? "Live data from my" : "Canlı veriler doğrudan"}{" "}
+          {language === "en"
+            ? "Live data from my"
+            : "Canlı veriler doğrudan"}{" "}
           <span className="bg-linear-to-r from-purple-400 to-cyan-300 bg-clip-text text-transparent">
-            {lang === "en"
+            {language === "en"
               ? "GitHub portfolio."
               : "GitHub portfolyomdan."}
           </span>
@@ -59,49 +75,96 @@ export default function Dashboard({ lang, data }) {
               </p>
 
               <p className="relative text-slate-300">
-                {item.label[lang]}
+                {item.label[language]}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 rounded-[32px] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
-          <p className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-purple-300">
-            {lang === "en"
-              ? "Technology Distribution"
-              : "Teknoloji Dağılımı"}
-          </p>
-
-          {data.languages.length === 0 ? (
-            <p className="text-slate-400">
-              {lang === "en"
-                ? "Language data is not available yet."
-                : "Dil verisi henüz mevcut değil."}
+        <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_0.65fr]">
+          <div className="rounded-[32px] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+            <p className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-purple-300">
+              {language === "en"
+                ? "Technology Distribution"
+                : "Teknoloji Dağılımı"}
             </p>
-          ) : (
-            <div className="space-y-6">
-              {data.languages.map((item) => (
-                <div key={item.name}>
-                  <div className="mb-2 flex items-center justify-between gap-4">
-                    <span className="font-bold text-white">
-                      {item.name}
-                    </span>
 
-                    <span className="text-sm text-cyan-300">
-                      {item.percentage}%
-                    </span>
-                  </div>
+            {languages.length === 0 ? (
+              <p className="text-slate-400">
+                {language === "en"
+                  ? "Language data is not available yet."
+                  : "Dil verisi henüz mevcut değil."}
+              </p>
+            ) : (
+              <div className="space-y-6">
+                {languages.map((item) => (
+                  <div key={item.name}>
+                    <div className="mb-2 flex items-center justify-between gap-4">
+                      <span className="font-bold text-white">
+                        {item.name}
+                      </span>
 
-                  <div className="h-3 overflow-hidden rounded-full bg-slate-800">
-                    <div
-                      className="h-full rounded-full bg-linear-to-r from-purple-500 to-cyan-400"
-                      style={{ width: `${item.percentage}%` }}
-                    />
+                      <span className="text-sm text-cyan-300">
+                        {item.percentage}%
+                      </span>
+                    </div>
+
+                    <div className="h-3 overflow-hidden rounded-full bg-slate-800">
+                      <div
+                        className="h-full rounded-full bg-linear-to-r from-purple-500 to-cyan-400 transition-all duration-700"
+                        style={{
+                          width: `${item.percentage}%`,
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="rounded-[32px] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+            <p className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-cyan-300">
+              {language === "en"
+                ? "Latest Project"
+                : "Son Proje"}
+            </p>
+
+            {latestProject ? (
+              <>
+                <h3 className="text-2xl font-black text-white">
+                  {latestProject.title}
+                </h3>
+
+                <p className="mt-4 line-clamp-4 leading-7 text-slate-400">
+                  {latestProject.summary ||
+                    (language === "en"
+                      ? "Project details are available on GitHub."
+                      : "Proje ayrıntıları GitHub üzerinde mevcut.")}
+                </p>
+
+                {latestProject.githubUrl && (
+                  <a
+                    href={latestProject.githubUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-6 inline-flex items-center gap-2 font-bold text-cyan-300 transition hover:gap-3 hover:text-white"
+                  >
+                    {language === "en"
+                      ? "View on GitHub"
+                      : "GitHub’da Görüntüle"}
+                    <span>→</span>
+                  </a>
+                )}
+              </>
+            ) : (
+              <p className="text-slate-400">
+                {language === "en"
+                  ? "No project is available yet."
+                  : "Henüz kullanılabilir bir proje bulunmuyor."}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </section>
