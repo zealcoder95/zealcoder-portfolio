@@ -12,31 +12,59 @@ export default async function Home() {
     }),
   ]);
 
-  const dashboardData = {
-    totalProjects: projects.length,
-    featuredProjects: projects.filter(
-      (project) => project.featured
-    ).length,
-    totalStars: projects.reduce(
-      (total, project) =>
-        total + (project.stars || 0),
-      0
-    ),
-    latestProject:
-      [...projects].sort(
-        (a, b) =>
-          new Date(
-            b.pushedAt ||
-              b.updatedAt ||
-              0
-          ) -
-          new Date(
-            a.pushedAt ||
-              a.updatedAt ||
-              0
-          )
-      )[0] || null,
-  };
+  const languageCounts = projects.reduce(
+  (accumulator, project) => {
+    const language = project.language;
+
+    if (!language) {
+      return accumulator;
+    }
+
+    accumulator[language] =
+      (accumulator[language] || 0) + 1;
+
+    return accumulator;
+  },
+  {}
+);
+
+const languages = Object.entries(languageCounts)
+  .map(([name, count]) => ({
+    name,
+    count,
+  }))
+  .sort((a, b) => b.count - a.count);
+
+const dashboardData = {
+  totalProjects: projects.length,
+
+  featuredProjects: projects.filter(
+    (project) => project.featured
+  ).length,
+
+  totalStars: projects.reduce(
+    (total, project) =>
+      total + (project.stars || 0),
+    0
+  ),
+
+  languages,
+
+  latestProject:
+    [...projects].sort(
+      (a, b) =>
+        new Date(
+          b.pushedAt ||
+            b.updatedAt ||
+            0
+        ) -
+        new Date(
+          a.pushedAt ||
+            a.updatedAt ||
+            0
+        )
+    )[0] || null,
+};
 
   return (
     <HomePageContent
