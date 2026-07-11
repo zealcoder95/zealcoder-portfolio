@@ -1,19 +1,47 @@
-import { createClient } from "@supabase/supabase-js";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
-export function createSupabaseServerClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+export async function createSupabaseServerClient() {
+  const cookieStore = await cookies();
 
-  if (!url || !anonKey) {
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  const supabaseKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
     throw new Error(
       "Supabase environment variables are missing."
     );
   }
 
-  return createClient(url, anonKey, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-    },
-  });
+  return createServerClient(
+    supabaseUrl,
+    supabaseKey,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(
+              ({ name, value, options }) => {
+                cookieStore.set(
+                  name,
+                  value,
+                  options
+                );
+              }
+            );
+          } catch {
+            // Server Components cannot always write cookies.
+            // Session refresh will be handled by proxy later.
+          }
+        },
+      },
+    }
+  );
 }
