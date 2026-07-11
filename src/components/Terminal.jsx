@@ -57,6 +57,7 @@ export default function Terminal() {
       );
 
       const data = await response.json();
+      console.log("FULL RESPONSE:", data);
 
       console.log(
         "ZEALCODER RESPONSE",
