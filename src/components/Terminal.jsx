@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import MarkdownMessage from "./MarkdownMessage";
+import ProjectCard from "./ProjectCard";
 
 export default function Terminal() {
   const [input, setInput] = useState("");
@@ -11,49 +12,56 @@ export default function Terminal() {
     {
       role: "assistant",
       text: "🤖 ZealCoder AI is online.",
+      projects: [],
     },
     {
       role: "assistant",
       text:
         "Ask me anything about Gizem, Projects, GitHub, Kaggle, AI or Machine Learning.",
+      projects: [],
     },
   ]);
 
   const bottomRef = useRef(null);
 
-  async function askAI(question, historySnapshot) {
+  async function askAI(
+    question,
+    historySnapshot
+  ) {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
+      const response = await fetch(
+        "/api/chat",
+        {
+          method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
 
-        cache: "no-store",
+          cache: "no-store",
 
-        body: JSON.stringify({
-          message: question,
+          body: JSON.stringify({
+            message: question,
 
-          history: historySnapshot
-            .slice(-10)
-            .map((item) => ({
-              role: item.role,
-              text: item.text,
-            })),
-        }),
-      });
+            history: historySnapshot
+              .slice(-10)
+              .map((item) => ({
+                role: item.role,
+                text: item.text,
+              })),
+          }),
+        }
+      );
 
       const data = await response.json();
 
-      console.log("ZEALCODER RESPONSE", data);
-      console.log("AI Provider:", {
-        provider: data.provider,
-        model: data.model,
-        mode: data.mode,
-      });
+      console.log(
+        "ZEALCODER RESPONSE",
+        data
+      );
 
       if (!response.ok) {
         throw new Error(
@@ -66,6 +74,11 @@ export default function Terminal() {
         {
           role: "assistant",
           text: data.answer,
+          projects: Array.isArray(
+            data.projects
+          )
+            ? data.projects
+            : [],
         },
       ]);
     } catch (error) {
@@ -80,6 +93,7 @@ export default function Terminal() {
           role: "assistant",
           text:
             "⚠️ AI engine is temporarily unavailable.",
+          projects: [],
         },
       ]);
     } finally {
@@ -101,7 +115,8 @@ export default function Terminal() {
     if (!question || loading) return;
 
     if (
-      question.toLocaleLowerCase("tr") === "clear"
+      question.toLocaleLowerCase("tr") ===
+      "clear"
     ) {
       setHistory([]);
       setInput("");
@@ -111,6 +126,7 @@ export default function Terminal() {
     const userMessage = {
       role: "user",
       text: question,
+      projects: [],
     };
 
     const nextHistory = [
@@ -121,24 +137,25 @@ export default function Terminal() {
     setHistory(nextHistory);
     setInput("");
 
-    await askAI(question, nextHistory);
+    await askAI(
+      question,
+      nextHistory
+    );
   }
 
   return (
     <div className="w-full max-w-lg rounded-[32px] border border-white/10 bg-black/70 p-6 font-mono shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
       <div className="mb-4 flex items-center gap-2 border-b border-white/10 pb-3">
         <span className="h-3 w-3 rounded-full bg-red-400" />
-
         <span className="h-3 w-3 rounded-full bg-yellow-400" />
-
         <span className="h-3 w-3 rounded-full bg-green-400" />
 
         <span className="ml-3 text-xs text-slate-500">
-          zealcoder-ai-v5.1
+          zealcoder-ai-v5.4
         </span>
       </div>
 
-      <div className="mb-5 h-80 space-y-5 overflow-y-auto">
+      <div className="mb-5 h-96 space-y-5 overflow-y-auto pr-2">
         {history.map((item, index) => (
           <div
             key={`${item.role}-${index}`}
@@ -155,12 +172,32 @@ export default function Terminal() {
             </span>
 
             <div className="mt-2">
-              
-              <MarkdownMessage>
-                {item.text}
-              </MarkdownMessage>
-
+              {item.role === "assistant" ? (
+                <MarkdownMessage>
+                  {item.text}
+                </MarkdownMessage>
+              ) : (
+                <p className="whitespace-pre-wrap leading-7">
+                  {item.text}
+                </p>
+              )}
             </div>
+
+            {item.projects?.length > 0 && (
+              <div className="mt-4 space-y-4">
+                {item.projects.map(
+                  (project) => (
+                    <ProjectCard
+                      key={
+                        project.slug ||
+                        project.githubUrl
+                      }
+                      {...project}
+                    />
+                  )
+                )}
+              </div>
+            )}
           </div>
         ))}
 

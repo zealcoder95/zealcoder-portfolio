@@ -9,7 +9,7 @@ import {
 import { buildGeminiPrompt } from "@/lib/ai/prompt";
 import { retrieveProjectEvidence } from "@/lib/ai/retrieval";
 
-const ROUTE_VERSION = "zealcoder-ai-v5.3-rag";
+const ROUTE_VERSION = "zealcoder-ai-v5.4-cards";
 
 function normalizeQuestion(value = "") {
   return value
@@ -53,6 +53,25 @@ function selectRecruiterProjects(projects = []) {
       : projects;
 
   return selectedProjects.slice(0, 4);
+}
+
+function serializeProjects(projects = []) {
+  return projects.map((project) => ({
+    id: project.id,
+    slug: project.slug,
+    title: project.title,
+    summary: project.summary,
+    category: project.category,
+    technologies: project.technologies || [],
+    skills: project.skills || [],
+    featured: project.featured === true,
+    cover: project.cover || null,
+    githubUrl: project.githubUrl || null,
+    kaggleUrl: project.kaggleUrl || null,
+    homepage: project.homepage || null,
+    stars: project.stars || 0,
+    updatedAt: project.pushedAt || project.updatedAt || null,
+  }));
 }
 
 export async function POST(request) {
@@ -108,6 +127,9 @@ export async function POST(request) {
         chunksPerProject: 2,
       });
 
+    const projectCards =
+      serializeProjects(evidenceProjects);
+
     const fallbackAnswer = buildFallbackAnswer({
       message,
       projects,
@@ -153,6 +175,7 @@ export async function POST(request) {
 
         return NextResponse.json({
           answer: result.answer,
+          projects: projectCards,
           mode: "ai",
           provider: result.provider,
           model: result.model,
@@ -166,6 +189,7 @@ export async function POST(request) {
 
       return NextResponse.json({
         answer: fallbackAnswer,
+        projects: projectCards,
         mode: "local",
         provider: "local",
         model: null,
@@ -179,6 +203,7 @@ export async function POST(request) {
 
       return NextResponse.json({
         answer: fallbackAnswer,
+        projects: projectCards,
         mode: "local",
         provider: "local",
         model: null,
