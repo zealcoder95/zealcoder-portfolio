@@ -1,48 +1,47 @@
-import { getGitHubProjects } from "@/lib/github";
 import HomePageContent from "@/components/HomePageContent";
+import { getGitHubProjects } from "@/lib/github";
+import { getAutomaticUpdates } from "@/lib/updates/getAutomaticUpdates";
+
+export const revalidate = 1800;
 
 export default async function Home() {
-  let projects = [];
-
-  try {
-    projects = await getGitHubProjects();
-  } catch (error) {
-    console.error("Dashboard data could not be loaded:", error);
-  }
-
-  const languageCounts = projects.reduce((acc, project) => {
-    if (!project.language) return acc;
-
-    acc[project.language] = (acc[project.language] || 0) + 1;
-    return acc;
-  }, {});
-
-  const totalLanguages = Object.values(languageCounts).reduce(
-    (total, count) => total + count,
-    0
-  );
-
-  const languages = Object.entries(languageCounts)
-    .map(([name, count]) => ({
-      name,
-      count,
-      percentage:
-        totalLanguages === 0
-          ? 0
-          : Math.round((count / totalLanguages) * 100),
-    }))
-    .sort((a, b) => b.count - a.count);
+  const [projects, updates] = await Promise.all([
+    getGitHubProjects(),
+    getAutomaticUpdates({
+      limit: 6,
+    }),
+  ]);
 
   const dashboardData = {
-    repositories: projects.length,
-    portfolioProjects: projects.length,
-    featuredProjects: projects.filter((project) => project.featured).length,
+    totalProjects: projects.length,
+    featuredProjects: projects.filter(
+      (project) => project.featured
+    ).length,
     totalStars: projects.reduce(
-      (total, project) => total + (project.stars || 0),
+      (total, project) =>
+        total + (project.stars || 0),
       0
     ),
-    languages,
+    latestProject:
+      [...projects].sort(
+        (a, b) =>
+          new Date(
+            b.pushedAt ||
+              b.updatedAt ||
+              0
+          ) -
+          new Date(
+            a.pushedAt ||
+              a.updatedAt ||
+              0
+          )
+      )[0] || null,
   };
 
-  return <HomePageContent dashboardData={dashboardData} />;
+  return (
+    <HomePageContent
+      dashboardData={dashboardData}
+      updates={updates}
+    />
+  );
 }
