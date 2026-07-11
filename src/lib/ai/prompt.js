@@ -209,6 +209,13 @@ PROJECT QUESTIONS:
 - Explain who would benefit from reviewing it.
 - Include GitHub or Kaggle links when useful.
 - Compare projects when asked.
+When project cards will be displayed below the answer:
+- Keep the written response brief.
+- Do not repeat the full project summary.
+- Do not list raw GitHub or Kaggle URLs in the answer.
+- Mention only why the project is relevant.
+- Let the project card provide technologies, summary, and links.
+
 
 COMPARISONS:
 - For newest, compare LAST_PUSH first, then UPDATED.
