@@ -12,8 +12,21 @@ export default function ProjectCard({
   cover,
   featured = false,
   stars = 0,
+  lang = "en",
 }) {
-  const visibleTechnologies = technologies.slice(0, 5);
+  const isTurkish = lang === "tr";
+
+  const labels = {
+    project: isTurkish ? "Proje" : "Project",
+    featured: isTurkish ? "Öne Çıkan" : "Featured",
+    technologies: isTurkish ? "Teknolojiler" : "Technologies",
+    skills: isTurkish ? "Gösterilen Beceriler" : "Demonstrated Skills",
+    github: isTurkish ? "GitHub’da Görüntüle" : "View on GitHub",
+    kaggle: isTurkish ? "Kaggle’da Aç" : "Open Kaggle",
+    demo: isTurkish ? "Canlı Demoyu Aç" : "Live Demo",
+  };
+
+  const visibleTechnologies = technologies.slice(0, 7);
   const visibleSkills = skills.slice(0, 4);
 
   return (
@@ -30,7 +43,7 @@ export default function ProjectCard({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.24em] text-purple-300">
-              {category || "Project"}
+              {category || labels.project}
             </p>
 
             <h3 className="mt-2 text-xl font-black text-white">
@@ -41,7 +54,7 @@ export default function ProjectCard({
           <div className="flex flex-wrap gap-2">
             {featured && (
               <span className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-1 text-xs font-bold text-cyan-300">
-                Featured
+                {labels.featured}
               </span>
             )}
 
@@ -62,7 +75,7 @@ export default function ProjectCard({
         {visibleTechnologies.length > 0 && (
           <div className="mt-4">
             <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">
-              Technologies
+              {labels.technologies}
             </p>
 
             <div className="flex flex-wrap gap-2">
@@ -81,18 +94,13 @@ export default function ProjectCard({
         {visibleSkills.length > 0 && (
           <div className="mt-4">
             <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">
-              Demonstrated skills
+              {labels.skills}
             </p>
 
             <ul className="space-y-2 text-sm text-slate-300">
               {visibleSkills.map((skill) => (
-                <li
-                  key={skill}
-                  className="flex items-start gap-2"
-                >
-                  <span className="mt-0.5 text-cyan-300">
-                    ✓
-                  </span>
+                <li key={skill} className="flex items-start gap-2">
+                  <span className="mt-0.5 text-cyan-300">✓</span>
                   <span>{skill}</span>
                 </li>
               ))}
@@ -108,7 +116,7 @@ export default function ProjectCard({
               rel="noreferrer"
               className="zeal-button-gradient rounded-full px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-1"
             >
-              View on GitHub
+              {labels.github}
             </a>
           )}
 
@@ -119,7 +127,7 @@ export default function ProjectCard({
               rel="noreferrer"
               className="rounded-full border border-cyan-300/40 px-4 py-2 text-sm font-bold text-cyan-300 transition hover:-translate-y-1 hover:bg-cyan-300/10"
             >
-              Open Kaggle
+              {labels.kaggle}
             </a>
           )}
 
@@ -130,7 +138,7 @@ export default function ProjectCard({
               rel="noreferrer"
               className="rounded-full border border-purple-300/40 px-4 py-2 text-sm font-bold text-purple-300 transition hover:-translate-y-1 hover:bg-purple-300/10"
             >
-              Live Demo
+              {labels.demo}
             </a>
           )}
         </div>

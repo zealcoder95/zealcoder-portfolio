@@ -12,57 +12,48 @@ export default function Terminal() {
     {
       role: "assistant",
       text: "🤖 ZealCoder AI is online.",
+      language: "en",
       projects: [],
     },
     {
       role: "assistant",
       text:
         "Ask me anything about Gizem, Projects, GitHub, Kaggle, AI or Machine Learning.",
+      language: "en",
       projects: [],
     },
   ]);
 
   const bottomRef = useRef(null);
 
-  async function askAI(
-    question,
-    historySnapshot
-  ) {
+  async function askAI(question, historySnapshot) {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "/api/chat",
-        {
-          method: "POST",
+      const response = await fetch("/api/chat", {
+        method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-          cache: "no-store",
+        cache: "no-store",
 
-          body: JSON.stringify({
-            message: question,
+        body: JSON.stringify({
+          message: question,
 
-            history: historySnapshot
-              .slice(-10)
-              .map((item) => ({
-                role: item.role,
-                text: item.text,
-              })),
-          }),
-        }
-      );
+          history: historySnapshot
+            .slice(-10)
+            .map((item) => ({
+              role: item.role,
+              text: item.text,
+            })),
+        }),
+      });
 
       const data = await response.json();
-      console.log("FULL RESPONSE:", data);
 
-      console.log(
-        "ZEALCODER RESPONSE",
-        data
-      );
+      console.log("ZEALCODER RESPONSE", data);
 
       if (!response.ok) {
         throw new Error(
@@ -75,9 +66,8 @@ export default function Terminal() {
         {
           role: "assistant",
           text: data.answer,
-          projects: Array.isArray(
-            data.projects
-          )
+          language: data.language || "en",
+          projects: Array.isArray(data.projects)
             ? data.projects
             : [],
         },
@@ -94,6 +84,7 @@ export default function Terminal() {
           role: "assistant",
           text:
             "⚠️ AI engine is temporarily unavailable.",
+          language: "en",
           projects: [],
         },
       ]);
@@ -113,7 +104,9 @@ export default function Terminal() {
 
     const question = input.trim();
 
-    if (!question || loading) return;
+    if (!question || loading) {
+      return;
+    }
 
     if (
       question.toLocaleLowerCase("tr") ===
@@ -152,7 +145,7 @@ export default function Terminal() {
         <span className="h-3 w-3 rounded-full bg-green-400" />
 
         <span className="ml-3 text-xs text-slate-500">
-          zealcoder-ai-v5.4
+          zealcoder-ai-v5.5
         </span>
       </div>
 
@@ -194,6 +187,9 @@ export default function Terminal() {
                         project.githubUrl
                       }
                       {...project}
+                      lang={
+                        item.language || "en"
+                      }
                     />
                   )
                 )}

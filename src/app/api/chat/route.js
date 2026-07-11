@@ -11,41 +11,81 @@ import { buildGeminiPrompt } from "@/lib/ai/prompt";
 import { retrieveProjectEvidence } from "@/lib/ai/retrieval";
 import { buildProjectPrompt } from "@/lib/ai/projectPrompt";
 
-const ROUTE_VERSION = "zealcoder-ai-v5.4-cards";
+const ROUTE_VERSION =
+  "zealcoder-ai-v5.5-language";
 
 function normalizeQuestion(value = "") {
-  return value
+  return String(value)
     .toLocaleLowerCase("tr")
     .replace(/[.,!?;:()[\]{}"'`]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
 
-function isRecruiterQuestion(message = "") {
-  const question = normalizeQuestion(message);
+function detectLanguage(message = "") {
+  const normalized =
+    normalizeQuestion(message);
+
+  const turkishWords =
+    /\b(bana|benim|bunlar|bunlardan|göster|gösterir|hangi|hangisi|hakkında|işe|neden|nedir|proje|projeler|uygun|yetenek|beceri|güncel|yeni|kullanılan|teknolojiler)\b/;
 
   return (
-    question.includes("why should i hire") ||
+    /[çğıöşü]/i.test(message) ||
+    turkishWords.test(normalized)
+  )
+    ? "tr"
+    : "en";
+}
+
+function isRecruiterQuestion(
+  message = ""
+) {
+  const question =
+    normalizeQuestion(message);
+
+  return (
+    question.includes(
+      "why should i hire"
+    ) ||
     question.includes("why hire") ||
     question.includes("hire gizem") ||
     question.includes("fit a junior") ||
     question.includes("fit this role") ||
     question.includes("candidate") ||
     question.includes("recruiter") ||
-    question.includes("evaluate gizem") ||
+    question.includes(
+      "evaluate gizem"
+    ) ||
     question.includes("review gizem") ||
-    question.includes("neden işe almal") ||
-    question.includes("gizemi neden") ||
-    question.includes("gizem i neden") ||
-    question.includes("bu role uygun") ||
-    question.includes("aday olarak") ||
-    question.includes("güçlü yönleri") ||
-    question.includes("geliştirmesi gereken")
+    question.includes(
+      "neden işe almal"
+    ) ||
+    question.includes(
+      "gizemi neden"
+    ) ||
+    question.includes(
+      "gizem i neden"
+    ) ||
+    question.includes(
+      "bu role uygun"
+    ) ||
+    question.includes(
+      "aday olarak"
+    ) ||
+    question.includes(
+      "güçlü yönleri"
+    ) ||
+    question.includes(
+      "geliştirmesi gereken"
+    )
   );
 }
 
-function isProjectQuestion(message = "") {
-  const question = normalizeQuestion(message);
+function isProjectQuestion(
+  message = ""
+) {
+  const question =
+    normalizeQuestion(message);
 
   return (
     question.includes("project") ||
@@ -55,7 +95,9 @@ function isProjectQuestion(message = "") {
     question.includes("sql") ||
     question.includes("python") ||
     question.includes("power bi") ||
-    question.includes("machine learning") ||
+    question.includes(
+      "machine learning"
+    ) ||
     question.includes("github") ||
     question.includes("kaggle") ||
     question.includes("newest") ||
@@ -67,10 +109,13 @@ function isProjectQuestion(message = "") {
   );
 }
 
-function selectRecruiterProjects(projects = []) {
-  const featuredProjects = projects.filter(
-    (project) => project.featured
-  );
+function selectRecruiterProjects(
+  projects = []
+) {
+  const featuredProjects =
+    projects.filter(
+      (project) => project.featured
+    );
 
   const selectedProjects =
     featuredProjects.length >= 2
@@ -80,21 +125,40 @@ function selectRecruiterProjects(projects = []) {
   return selectedProjects.slice(0, 4);
 }
 
-function serializeProjects(projects = []) {
+function serializeProjects(
+  projects = []
+) {
   return projects.map((project) => ({
     id: project.id,
     slug: project.slug,
     title: project.title,
     summary: project.summary,
     category: project.category,
-    technologies: project.technologies || [],
-    skills: project.skills || [],
-    featured: project.featured === true,
-    cover: project.cover || null,
-    githubUrl: project.githubUrl || null,
-    kaggleUrl: project.kaggleUrl || null,
-    homepage: project.homepage || null,
-    stars: project.stars || 0,
+
+    technologies:
+      project.technologies || [],
+
+    skills:
+      project.skills || [],
+
+    featured:
+      project.featured === true,
+
+    cover:
+      project.cover || null,
+
+    githubUrl:
+      project.githubUrl || null,
+
+    kaggleUrl:
+      project.kaggleUrl || null,
+
+    homepage:
+      project.homepage || null,
+
+    stars:
+      project.stars || 0,
+
     updatedAt:
       project.pushedAt ||
       project.updatedAt ||
@@ -103,32 +167,51 @@ function serializeProjects(projects = []) {
 }
 
 export async function POST(request) {
-  try {
-    const body = await request.json();
-    const message = body?.message?.trim();
+  let responseLanguage = "en";
 
-    const history = Array.isArray(body?.history)
-      ? body.history
-          .filter(
-            (item) =>
-              item &&
-              ["user", "assistant"].includes(item.role) &&
-              typeof item.text === "string"
-          )
-          .slice(-10)
-      : [];
+  try {
+    const body =
+      await request.json();
+
+    const message =
+      body?.message?.trim();
+
+    const history =
+      Array.isArray(body?.history)
+        ? body.history
+            .filter(
+              (item) =>
+                item &&
+                [
+                  "user",
+                  "assistant",
+                ].includes(
+                  item.role
+                ) &&
+                typeof item.text ===
+                  "string"
+            )
+            .slice(-10)
+        : [];
 
     if (!message) {
       return NextResponse.json(
         {
-          error: "A message is required.",
-          version: ROUTE_VERSION,
+          error:
+            "A message is required.",
+          language:
+            responseLanguage,
+          version:
+            ROUTE_VERSION,
         },
         {
           status: 400,
         }
       );
     }
+
+    responseLanguage =
+      detectLanguage(message);
 
     const loadedProjects =
       await getGitHubProjects();
@@ -147,7 +230,9 @@ export async function POST(request) {
 
     const relevantProjects =
       recruiterQuestion
-        ? selectRecruiterProjects(projects)
+        ? selectRecruiterProjects(
+            projects
+          )
         : findRelevantProjects(
             projects,
             message,
@@ -156,15 +241,21 @@ export async function POST(request) {
 
     const evidenceProjects =
       retrieveProjectEvidence({
-        projects: relevantProjects,
+        projects:
+          relevantProjects,
         message,
         history,
-        maxProjects: recruiterQuestion ? 4 : 3,
+        maxProjects:
+          recruiterQuestion
+            ? 4
+            : 3,
         chunksPerProject: 2,
       });
 
     const projectCards =
-      serializeProjects(evidenceProjects);
+      serializeProjects(
+        evidenceProjects
+      );
 
     const fallbackAnswer =
       buildFallbackAnswer({
@@ -173,47 +264,68 @@ export async function POST(request) {
         history,
       });
 
-    console.log("ZEALCODER CHAT", {
-      version: ROUTE_VERSION,
-      message,
-      recruiterQuestion,
-      projectQuestion,
-      historyLength: history.length,
-      loadedProjectCount:
-        loadedProjects.length,
-      filteredProjectCount:
-        projects.length,
-      relevantSlugs:
-        relevantProjects.map(
-          (project) => project.slug
-        ),
-      evidenceProjects:
-        evidenceProjects.map(
-          (project) => ({
-            slug: project.slug,
-            retrievalScore:
-              project.retrievalScore,
-            headings:
-              (
-                project.evidence || []
-              ).map(
-                (item) => item.heading
-              ),
-          })
-        ),
-    });
+    console.log(
+      "ZEALCODER CHAT",
+      {
+        version:
+          ROUTE_VERSION,
 
-    const prompt = projectQuestion
-      ? buildProjectPrompt({
-          message,
-          history,
-          projects: evidenceProjects,
-        })
-      : buildGeminiPrompt({
-          message,
-          history,
-          projects: evidenceProjects,
-        });
+        message,
+        responseLanguage,
+        recruiterQuestion,
+        projectQuestion,
+
+        historyLength:
+          history.length,
+
+        loadedProjectCount:
+          loadedProjects.length,
+
+        filteredProjectCount:
+          projects.length,
+
+        relevantSlugs:
+          relevantProjects.map(
+            (project) =>
+              project.slug
+          ),
+
+        evidenceProjects:
+          evidenceProjects.map(
+            (project) => ({
+              slug:
+                project.slug,
+
+              retrievalScore:
+                project.retrievalScore,
+
+              headings:
+                (
+                  project.evidence ||
+                  []
+                ).map(
+                  (item) =>
+                    item.heading
+                ),
+            })
+          ),
+      }
+    );
+
+    const prompt =
+      projectQuestion
+        ? buildProjectPrompt({
+            message,
+            history,
+            projects:
+              evidenceProjects,
+          })
+        : buildGeminiPrompt({
+            message,
+            history,
+            projects:
+              evidenceProjects,
+          });
 
     try {
       const result =
@@ -225,18 +337,34 @@ export async function POST(request) {
         console.log(
           "ZEALCODER AI PROVIDER",
           {
-            provider: result.provider,
-            model: result.model,
+            provider:
+              result.provider,
+
+            model:
+              result.model,
           }
         );
 
         return NextResponse.json({
-          answer: result.answer,
-          projects: projectCards,
+          answer:
+            result.answer,
+
+          projects:
+            projectCards,
+
+          language:
+            responseLanguage,
+
           mode: "ai",
-          provider: result.provider,
-          model: result.model,
-          version: ROUTE_VERSION,
+
+          provider:
+            result.provider,
+
+          model:
+            result.model,
+
+          version:
+            ROUTE_VERSION,
         });
       }
 
@@ -245,12 +373,21 @@ export async function POST(request) {
       );
 
       return NextResponse.json({
-        answer: fallbackAnswer,
-        projects: projectCards,
+        answer:
+          fallbackAnswer,
+
+        projects:
+          projectCards,
+
+        language:
+          responseLanguage,
+
         mode: "local",
         provider: "local",
         model: null,
-        version: ROUTE_VERSION,
+
+        version:
+          ROUTE_VERSION,
       });
     } catch (error) {
       console.error(
@@ -259,12 +396,21 @@ export async function POST(request) {
       );
 
       return NextResponse.json({
-        answer: fallbackAnswer,
-        projects: projectCards,
+        answer:
+          fallbackAnswer,
+
+        projects:
+          projectCards,
+
+        language:
+          responseLanguage,
+
         mode: "local",
         provider: "local",
         model: null,
-        version: ROUTE_VERSION,
+
+        version:
+          ROUTE_VERSION,
       });
     }
   } catch (error) {
@@ -276,8 +422,15 @@ export async function POST(request) {
     return NextResponse.json(
       {
         error:
-          "The assistant is temporarily unavailable.",
-        version: ROUTE_VERSION,
+          responseLanguage === "tr"
+            ? "Asistan geçici olarak kullanılamıyor."
+            : "The assistant is temporarily unavailable.",
+
+        language:
+          responseLanguage,
+
+        version:
+          ROUTE_VERSION,
       },
       {
         status: 500,
