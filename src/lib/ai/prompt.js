@@ -58,9 +58,7 @@ ${readmeExcerpt}
 `;
 }
 
-export function buildConversationHistory(
-  history = []
-) {
+export function buildConversationHistory(history = []) {
   const recentHistory = history.slice(-6);
 
   if (!recentHistory.length) {
@@ -161,6 +159,25 @@ One realistic and constructive gap.
 **Suitable roles**
 
 Two or three realistic junior or internship-level roles.
+
+DEVELOPMENT AREA RULES:
+- Do not recommend improving documentation when the portfolio already includes structured README files, project summaries, technologies, skills, tags, and descriptions.
+- Do not claim that technologies are undocumented when TECHNOLOGIES or SKILLS are supplied.
+- Prefer development suggestions supported by the current portfolio scope.
+- Prioritize realistic next steps such as:
+  - production deployment
+  - cloud platforms
+  - larger end-to-end machine learning applications
+  - model serving
+  - API development
+  - automated testing
+  - CI/CD
+  - Docker and containerization
+  - collaborative software development
+  - monitoring and observability
+- Mention only one or two development areas.
+- Present gaps constructively, not negatively.
+- Do not invent missing skills as facts. Phrase them as useful next steps.
 
 PROJECT QUESTIONS:
 - Explain why a project is relevant.
