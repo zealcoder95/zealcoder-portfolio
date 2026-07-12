@@ -13,8 +13,7 @@ function getSafeNextPath(value) {
   if (
     typeof value === "string" &&
     value.startsWith("/admin") &&
-    !value.startsWith("//") &&
-    value !== "/admin/login"
+    !value.startsWith("//")
   ) {
     return value;
   }
@@ -26,10 +25,11 @@ export default function AdminLoginPage() {
   const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
+
   const [isSubmitting, setIsSubmitting] =
     useState(false);
+
   const [errorMessage, setErrorMessage] =
     useState("");
 
@@ -48,14 +48,41 @@ export default function AdminLoginPage() {
           email: email.trim().toLowerCase(),
           password,
         });
+      
+      console.log("LOGIN RESULT", data);
+      console.log("LOGIN ERROR", error);
+
+      const {
+        data: userData,
+      } = await supabase.auth.getUser();
+
+      console.log("CURRENT USER", userData.user);
 
       if (error) {
         throw error;
       }
 
-      if (!data.user || !data.session) {
+      if (!data.session) {
         throw new Error(
-          "Oturum oluşturulamadı."
+          "Supabase oturumu oluşturulamadı."
+        );
+      }
+
+      // Oturumun tarayıcıya yazıldığını doğrula.
+      const {
+        data: sessionData,
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (
+        sessionError ||
+        !sessionData.session
+      ) {
+        throw (
+          sessionError ||
+          new Error(
+            "Oturum doğrulanamadı."
+          )
         );
       }
 
@@ -63,7 +90,8 @@ export default function AdminLoginPage() {
         searchParams.get("next")
       );
 
-      window.location.href = nextPath;
+      // Tam sayfa geçişi: Proxy yeni cookie'yi kesin olarak görür.
+      window.location.assign(nextPath);
     } catch (error) {
       console.error(
         "Admin login error:",
@@ -75,7 +103,7 @@ export default function AdminLoginPage() {
           "Invalid login credentials"
           ? "E-posta adresi veya şifre yanlış."
           : error?.message ||
-              "Giriş yapılamadı."
+              "Giriş yapılamadı. Bilgilerini kontrol edip tekrar dene."
       );
 
       setIsSubmitting(false);
@@ -85,12 +113,13 @@ export default function AdminLoginPage() {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-6 py-20 text-white">
       <div className="absolute left-[-120px] top-[-120px] h-80 w-80 rounded-full bg-purple-600/20 blur-[110px]" />
+
       <div className="absolute bottom-[-120px] right-[-120px] h-80 w-80 rounded-full bg-cyan-500/15 blur-[110px]" />
 
       <div className="relative z-10 w-full max-w-md">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm font-bold text-cyan-300 transition hover:text-white"
+          className="inline-flex items-center gap-2 text-sm font-bold text-cyan-300 transition hover:gap-3 hover:text-white"
         >
           <span>←</span>
           ZealCoder’a dön
@@ -113,8 +142,9 @@ export default function AdminLoginPage() {
           </h1>
 
           <p className="mt-3 leading-7 text-slate-400">
-            Supabase’te oluşturduğun admin
-            hesabıyla giriş yap.
+            Yönetim paneline erişmek için
+            Supabase’te oluşturduğun admin hesabıyla
+            giriş yap.
           </p>
 
           <div className="mt-8 space-y-5">
@@ -128,6 +158,7 @@ export default function AdminLoginPage() {
                   setEmail(event.target.value)
                 }
                 autoComplete="email"
+                placeholder="E-posta adresin"
                 className={INPUT_CLASS}
               />
             </label>
@@ -142,6 +173,7 @@ export default function AdminLoginPage() {
                   setPassword(event.target.value)
                 }
                 autoComplete="current-password"
+                placeholder="Admin şifren"
                 className={INPUT_CLASS}
               />
             </label>
@@ -156,12 +188,18 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="mt-7 inline-flex w-full items-center justify-center rounded-2xl bg-linear-to-r from-purple-600 to-cyan-500 px-6 py-4 font-black text-white transition hover:-translate-y-1 disabled:opacity-50"
+            className="mt-7 inline-flex w-full items-center justify-center rounded-2xl bg-linear-to-r from-purple-600 to-cyan-500 px-6 py-4 font-black text-white shadow-lg shadow-cyan-500/10 transition hover:-translate-y-1 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSubmitting
               ? "Giriş yapılıyor..."
               : "Admin Paneline Giriş Yap"}
           </button>
+
+          <p className="mt-5 text-center text-xs leading-5 text-slate-500">
+            Bu ekran yalnızca ZealCoder içerik
+            yönetimi için yetkili kullanıcılar
+            tarafından kullanılır.
+          </p>
         </form>
       </div>
     </main>

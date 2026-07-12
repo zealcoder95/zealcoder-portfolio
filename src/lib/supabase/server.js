@@ -4,44 +4,37 @@ import { cookies } from "next/headers";
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
 
-  const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-  const supabaseKey =
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!supabaseUrl || !supabaseKey) {
+  if (!url || !anonKey) {
     throw new Error(
-      "Supabase environment variables are missing."
+      "Supabase server environment variables are missing."
     );
   }
 
-  return createServerClient(
-    supabaseUrl,
-    supabaseKey,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(
-              ({ name, value, options }) => {
-                cookieStore.set(
-                  name,
-                  value,
-                  options
-                );
-              }
-            );
-          } catch {
-            // Server Components cannot always write cookies.
-            // Session refresh will be handled by proxy later.
-          }
-        },
+  return createServerClient(url, anonKey, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll();
       },
-    }
-  );
+
+      setAll(cookiesToSet) {
+        try {
+          cookiesToSet.forEach(
+            ({ name, value, options }) => {
+              cookieStore.set(
+                name,
+                value,
+                options
+              );
+            }
+          );
+        } catch {
+          // Proxy refreshes the session cookies.
+        }
+      },
+    },
+  });
 }

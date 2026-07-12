@@ -1,62 +1,44 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import StatsGrid from "@/components/admin/StatsGrid";
-import RecentActivity from "@/components/admin/RecentActivity";
-import QuickActions from "@/components/admin/QuickActions";
 import LogoutButton from "@/components/admin/LogoutButton";
-
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
-  const sessionClient =
+  const supabase =
     await createSupabaseServerClient();
 
   const {
     data: { user },
-  } = await sessionClient.auth.getUser();
+  } = await supabase.auth.getUser();
 
   if (!user) {
     redirect("/admin/login");
   }
 
-  const adminEmail =
-    process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const configuredAdminEmail =
+    process.env.ADMIN_EMAIL
+      ?.trim()
+      .toLowerCase();
+
+  const userEmail = user.email
+    ?.trim()
+    .toLowerCase();
 
   if (
-    !adminEmail ||
-    user.email?.trim().toLowerCase() !==
-      adminEmail
+    !configuredAdminEmail ||
+    userEmail !== configuredAdminEmail
   ) {
+    await supabase.auth.signOut();
     redirect("/admin/login");
   }
-
-  const adminClient =
-    createSupabaseAdminClient();
-
-  const { data, error } = await adminClient
-    .from("updates")
-    .select("*")
-    .order("published_at", {
-      ascending: false,
-    })
-    .limit(100);
-
-  if (error) {
-    console.error(
-      "Admin dashboard updates error:",
-      error
-    );
-  }
-
-  const updates = data || [];
 
   return (
     <main className="min-h-screen bg-slate-950 px-6 pb-16 pt-28 text-white md:px-10 md:pt-32">
       <div className="mx-auto max-w-7xl">
-        <div className="rounded-[32px] border border-white/10 bg-white/[0.035] p-6 backdrop-blur-xl md:p-8">
+        <header className="rounded-[32px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl md:p-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.32em] text-cyan-300">
@@ -74,16 +56,37 @@ export default async function AdminPage() {
 
             <LogoutButton />
           </div>
-        </div>
+        </header>
 
-        <div className="mt-10">
-          <StatsGrid updates={updates} />
-        </div>
+        <section className="mt-10 grid gap-6 md:grid-cols-2">
+          <Link
+            href="/admin/new"
+            className="rounded-[28px] border border-purple-300/20 bg-purple-400/10 p-8 transition hover:-translate-y-1 hover:border-purple-300/50"
+          >
+            <p className="text-3xl">＋</p>
+            <h2 className="mt-5 text-2xl font-black">
+              New Update
+            </h2>
+            <p className="mt-2 text-slate-400">
+              Yeni proje, yazı, kaynak veya
+              platform duyurusu ekle.
+            </p>
+          </Link>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[1.4fr_0.6fr]">
-          <RecentActivity updates={updates} />
-          <QuickActions />
-        </div>
+          <Link
+            href="/updates"
+            className="rounded-[28px] border border-cyan-300/20 bg-cyan-400/10 p-8 transition hover:-translate-y-1 hover:border-cyan-300/50"
+          >
+            <p className="text-3xl">↗</p>
+            <h2 className="mt-5 text-2xl font-black">
+              Public Updates
+            </h2>
+            <p className="mt-2 text-slate-400">
+              Ziyaretçilerin gördüğü gelişmeler
+              sayfasını aç.
+            </p>
+          </Link>
+        </section>
       </div>
     </main>
   );

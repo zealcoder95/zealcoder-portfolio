@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
-function getSafeNextPath(value) {
+function getSafeAdminPath(value) {
   if (
     typeof value === "string" &&
     value.startsWith("/admin") &&
@@ -19,19 +19,21 @@ export async function updateSession(request) {
     request,
   });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey =
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  const supabaseAnonKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!url || !anonKey) {
+  if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(
-      "Supabase proxy environment variables are missing."
+      "Supabase environment variables are missing."
     );
   }
 
   const supabase = createServerClient(
-    url,
-    anonKey,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() {
@@ -68,13 +70,17 @@ export async function updateSession(request) {
   } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
-  const isLoginPage =
-    pathname === "/admin/login";
-  const isProtectedAdminPage =
-    pathname.startsWith("/admin") &&
-    !isLoginPage;
+  const isAdminRoute =
+    pathname.startsWith("/admin");
 
-  if (isProtectedAdminPage && !user) {
+  const isLoginRoute =
+    pathname === "/admin/login";
+
+  if (
+    isAdminRoute &&
+    !isLoginRoute &&
+    !user
+  ) {
     const loginUrl =
       request.nextUrl.clone();
 
@@ -82,26 +88,24 @@ export async function updateSession(request) {
     loginUrl.search = "";
     loginUrl.searchParams.set(
       "next",
-      `${pathname}${request.nextUrl.search}`
+      pathname
     );
 
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isLoginPage && user) {
-    const destination = getSafeNextPath(
+  if (isLoginRoute && user) {
+    const nextPath = getSafeAdminPath(
       request.nextUrl.searchParams.get("next")
     );
 
-    const destinationUrl =
+    const redirectUrl =
       request.nextUrl.clone();
 
-    destinationUrl.pathname = destination;
-    destinationUrl.search = "";
+    redirectUrl.pathname = nextPath;
+    redirectUrl.search = "";
 
-    return NextResponse.redirect(
-      destinationUrl
-    );
+    return NextResponse.redirect(redirectUrl);
   }
 
   return response;
