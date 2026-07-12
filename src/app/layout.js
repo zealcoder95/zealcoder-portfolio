@@ -1,13 +1,12 @@
 import "./globals.css";
 
 import { LanguageProvider } from "@/context/LanguageContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import LoadingScreen from "@/components/LoadingScreen";
-import FloatingAssistant from "@/components/FloatingAssistant";
+import AppChrome from "@/components/AppChrome";
 
 export const metadata = {
-  metadataBase: new URL("https://zealcoder.vercel.app"),
+  metadataBase: new URL(
+    "https://zealcoder.vercel.app"
+  ),
 
   title: {
     default: "ZealCoder | Gizem Gülcü",
@@ -77,18 +76,16 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}) {
   return (
     <html lang="tr">
       <body className="bg-slate-950 text-white antialiased">
         <LanguageProvider>
-          <LoadingScreen />
-          <Navbar />
-
-          {children}
-
-          <Footer />
-          <FloatingAssistant />
+          <AppChrome>
+            {children}
+          </AppChrome>
         </LanguageProvider>
       </body>
     </html>
