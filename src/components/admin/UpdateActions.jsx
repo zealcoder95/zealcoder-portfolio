@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -115,13 +116,13 @@ export default function UpdateActions({
   return (
     <div className="flex flex-col items-end gap-3">
       <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          disabled={isWorking}
-          className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm font-bold text-cyan-200 opacity-60"
+        
+        <Link
+          href={`/admin/updates/${id}/edit`}
+          className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm font-bold text-cyan-200 transition hover:bg-cyan-300/20"
         >
           Düzenle
-        </button>
+        </Link>
 
         <button
           type="button"
