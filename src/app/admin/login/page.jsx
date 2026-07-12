@@ -48,6 +48,15 @@ export default function AdminLoginPage() {
           email: email.trim().toLowerCase(),
           password,
         });
+      
+      console.log("LOGIN RESULT", data);
+      console.log("LOGIN ERROR", error);
+
+      const {
+        data: userData,
+      } = await supabase.auth.getUser();
+
+      console.log("CURRENT USER", userData.user);
 
       if (error) {
         throw error;
