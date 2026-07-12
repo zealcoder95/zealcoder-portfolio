@@ -1,9 +1,58 @@
+import { redirect } from "next/navigation";
+
 import StatsGrid from "@/components/admin/StatsGrid";
 import RecentActivity from "@/components/admin/RecentActivity";
 import QuickActions from "@/components/admin/QuickActions";
 import LogoutButton from "@/components/admin/LogoutButton";
 
-export default function AdminPage() {
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+
+export const dynamic = "force-dynamic";
+
+export default async function AdminPage() {
+  const sessionClient =
+    await createSupabaseServerClient();
+
+  const {
+    data: { user },
+  } = await sessionClient.auth.getUser();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
+  const adminEmail =
+    process.env.ADMIN_EMAIL?.trim().toLowerCase();
+
+  if (
+    !adminEmail ||
+    user.email?.trim().toLowerCase() !==
+      adminEmail
+  ) {
+    redirect("/admin/login");
+  }
+
+  const adminClient =
+    createSupabaseAdminClient();
+
+  const { data, error } = await adminClient
+    .from("updates")
+    .select("*")
+    .order("published_at", {
+      ascending: false,
+    })
+    .limit(100);
+
+  if (error) {
+    console.error(
+      "Admin dashboard updates error:",
+      error
+    );
+  }
+
+  const updates = data || [];
+
   return (
     <main className="min-h-screen bg-slate-950 px-6 pb-16 pt-28 text-white md:px-10 md:pt-32">
       <div className="mx-auto max-w-7xl">
@@ -19,7 +68,7 @@ export default function AdminPage() {
               </h1>
 
               <p className="mt-3 text-slate-400">
-                Portfolio Control Center
+                Signed in as {user.email}
               </p>
             </div>
 
@@ -28,11 +77,11 @@ export default function AdminPage() {
         </div>
 
         <div className="mt-10">
-          <StatsGrid />
+          <StatsGrid updates={updates} />
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.4fr_0.6fr]">
-          <RecentActivity />
+          <RecentActivity updates={updates} />
           <QuickActions />
         </div>
       </div>

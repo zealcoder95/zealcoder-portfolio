@@ -1,53 +1,89 @@
-const activities = [
-  {
-    platform: "GitHub",
-    title: "SQL Project Updated",
-    time: "2 hours ago",
-  },
-  {
-    platform: "Medium",
-    title: "New AI Article",
-    time: "Yesterday",
-  },
-  {
-    platform: "Learning Hub",
-    title: "3 books added",
-    time: "2 days ago",
-  },
-];
+function formatDate(value) {
+  const date = new Date(value);
 
-export default function RecentActivity() {
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return new Intl.DateTimeFormat("tr-TR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
+export default function RecentActivity({
+  updates = [],
+}) {
+  const recentUpdates = updates.slice(0, 6);
+
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
+    <section className="rounded-3xl border border-white/10 bg-white/5 p-6 md:p-8">
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-2xl font-black">
+          🔥 Recent Activity
+        </h2>
 
-      <h2 className="text-2xl font-black">
-        🔥 Recent Activity
-      </h2>
-
-      <div className="mt-8 space-y-5">
-
-        {activities.map((item) => (
-          <div
-            key={item.title}
-            className="rounded-2xl border border-white/10 bg-black/20 p-5"
-          >
-            <p className="text-cyan-300">
-              {item.platform}
-            </p>
-
-            <h3 className="mt-2 font-bold">
-              {item.title}
-            </h3>
-
-            <p className="mt-1 text-sm text-slate-500">
-              {item.time}
-            </p>
-
-          </div>
-        ))}
-
+        <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-bold text-slate-400">
+          {updates.length} records
+        </span>
       </div>
 
-    </div>
+      {recentUpdates.length === 0 ? (
+        <p className="mt-8 text-slate-400">
+          Henüz kayıt bulunmuyor.
+        </p>
+      ) : (
+        <div className="mt-8 space-y-4">
+          {recentUpdates.map((update) => (
+            <a
+              key={update.id}
+              href={update.url}
+              target={
+                update.url?.startsWith("http")
+                  ? "_blank"
+                  : undefined
+              }
+              rel={
+                update.url?.startsWith("http")
+                  ? "noreferrer"
+                  : undefined
+              }
+              className="block rounded-2xl border border-white/10 bg-black/20 p-5 transition hover:-translate-y-1 hover:border-cyan-300/30"
+            >
+              <div className="flex flex-wrap items-center gap-2 text-xs">
+                <span className="font-bold capitalize text-cyan-300">
+                  {update.platform}
+                </span>
+
+                <span className="text-slate-600">
+                  •
+                </span>
+
+                <span className="capitalize text-slate-500">
+                  {update.action}
+                </span>
+
+                {!update.is_visible && (
+                  <span className="rounded-full border border-amber-300/30 bg-amber-300/10 px-2 py-0.5 text-amber-200">
+                    Hidden
+                  </span>
+                )}
+              </div>
+
+              <h3 className="mt-2 font-bold text-white">
+                {update.title_en}
+              </h3>
+
+              <time className="mt-2 block text-sm text-slate-500">
+                {formatDate(update.published_at)}
+              </time>
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
