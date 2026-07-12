@@ -14,9 +14,10 @@ export default function AdminPageHeader({
     <header className="mb-12">
       <Link
         href={href}
-        className="inline-flex items-center gap-2 text-cyan-300 hover:text-white transition"
+        className="inline-flex items-center gap-2 text-cyan-300 transition hover:text-white"
       >
         <ArrowLeft size={18} />
+
         <span>
           Back to Admin
           <span className="mx-2 opacity-40">/</span>
@@ -25,13 +26,13 @@ export default function AdminPageHeader({
       </Link>
 
       <div className="mt-8">
-        <p className="text-xs font-black tracking-[0.32em] uppercase text-cyan-300">
+        <p className="text-xs font-black uppercase tracking-[0.32em] text-cyan-300">
           {eyebrowEn}
           <span className="mx-2 opacity-50">/</span>
           {eyebrowTr}
         </p>
 
-        <h1 className="mt-3 text-5xl font-black leading-tight">
+        <h1 className="mt-4 text-5xl font-black leading-tight">
           {titleEn}
           <br />
           <span className="text-slate-300">
@@ -40,7 +41,7 @@ export default function AdminPageHeader({
         </h1>
 
         {(descriptionEn || descriptionTr) && (
-          <p className="mt-5 max-w-3xl text-slate-400 leading-8">
+          <p className="mt-5 max-w-3xl leading-8 text-slate-400">
             {descriptionEn}
             <br />
             <span className="text-slate-500">
