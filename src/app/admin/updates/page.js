@@ -27,9 +27,7 @@ const PLATFORM_STYLES = {
 function formatDate(value) {
   const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return "";
-  }
+  if (Number.isNaN(date.getTime())) return "";
 
   return new Intl.DateTimeFormat("tr-TR", {
     day: "numeric",
@@ -49,23 +47,18 @@ export default async function AdminUpdatesPage() {
   } = await sessionClient.auth.getUser();
 
   if (!user) {
-    redirect(
-      "/admin/login?next=%2Fadmin%2Fupdates"
-    );
+    redirect("/admin/login?next=%2Fadmin%2Fupdates");
   }
 
   const configuredAdminEmail =
-    process.env.ADMIN_EMAIL
-      ?.trim()
-      .toLowerCase();
+    process.env.ADMIN_EMAIL?.trim().toLowerCase();
 
-  const userEmail = user.email
-    ?.trim()
-    .toLowerCase();
+  const userEmail =
+    user.email?.trim().toLowerCase();
 
   if (
     !configuredAdminEmail ||
-    userEmail !== configuredAdminEmail
+    configuredAdminEmail !== userEmail
   ) {
     redirect("/admin/login");
   }
@@ -73,89 +66,123 @@ export default async function AdminUpdatesPage() {
   const adminClient =
     createSupabaseAdminClient();
 
-  const { data, error } = await adminClient
-    .from("updates")
-    .select("*")
-    .order("published_at", {
-      ascending: false,
-    })
-    .limit(100);
+  const { data, error } =
+    await adminClient
+      .from("updates")
+      .select("*")
+      .order("published_at", {
+        ascending: false,
+      });
 
   if (error) {
-    console.error(
-      "Admin updates page error:",
-      error
-    );
+    console.error(error);
   }
 
   const updates = data || [];
 
+  const visibleCount = updates.filter(
+    (u) => u.is_visible
+  ).length;
+
+  const hiddenCount =
+    updates.length - visibleCount;
+
   return (
     <main className="min-h-screen bg-slate-950 px-6 py-16 text-white">
       <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+
           <div>
+
             <Link
               href="/admin"
               className="inline-flex items-center gap-2 text-sm font-bold text-cyan-300 transition hover:text-white"
             >
-              <span>←</span>
-              Admin paneline dön
+              ← Dashboard
             </Link>
 
-            <p className="mt-10 text-xs font-black uppercase tracking-[0.32em] text-cyan-300">
-              Content Management
+            <p className="mt-8 text-xs font-black uppercase tracking-[0.32em] text-cyan-300">
+              Content Management / İçerik Yönetimi
             </p>
 
-            <h1 className="mt-3 text-4xl font-black md:text-6xl">
-              Tüm Güncellemeler
+            <h1 className="mt-3 text-5xl font-black">
+              Updates
             </h1>
 
-            <p className="mt-4 max-w-2xl leading-7 text-slate-400">
-              Supabase üzerinde kayıtlı tüm platform
-              gelişmelerini buradan yönetebilirsin.
+            <p className="mt-4 max-w-2xl text-slate-400 leading-7">
+              Tüm içerikleri buradan
+              düzenleyebilir, gizleyebilir,
+              silebilir veya yeni içerik
+              ekleyebilirsin.
             </p>
+
           </div>
 
           <Link
             href="/admin/new"
-            className="inline-flex w-fit items-center justify-center rounded-full bg-linear-to-r from-purple-600 to-cyan-500 px-6 py-3 font-black text-white transition hover:-translate-y-1"
+            className="rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 px-7 py-4 font-black transition hover:-translate-y-1"
           >
-            + Yeni Güncelleme
+            + New Update / Yeni Güncelleme
           </Link>
+
         </div>
 
-        <div className="mt-12 flex flex-wrap gap-3">
-          <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-slate-300">
-            Toplam: {updates.length}
-          </span>
+        <section className="mt-10 grid gap-4 md:grid-cols-3">
 
-          <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-4 py-2 text-sm font-bold text-emerald-200">
-            Görünür:{" "}
-            {
-              updates.filter(
-                (update) => update.is_visible
-              ).length
-            }
-          </span>
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <p className="text-slate-400">
+              Total Updates
+            </p>
 
-          <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-4 py-2 text-sm font-bold text-amber-200">
-            Gizli:{" "}
-            {
-              updates.filter(
-                (update) => !update.is_visible
-              ).length
-            }
-          </span>
-        </div>
+            <h2 className="mt-4 text-5xl font-black">
+              {updates.length}
+            </h2>
+          </div>
+
+          <div className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-6">
+            <p className="text-emerald-200">
+              Visible / Yayında
+            </p>
+
+            <h2 className="mt-4 text-5xl font-black">
+              {visibleCount}
+            </h2>
+          </div>
+
+          <div className="rounded-3xl border border-amber-300/20 bg-amber-400/10 p-6">
+            <p className="text-amber-200">
+              Hidden / Gizli
+            </p>
+
+            <h2 className="mt-4 text-5xl font-black">
+              {hiddenCount}
+            </h2>
+          </div>
+
+        </section>
 
         {updates.length === 0 ? (
-          <div className="mt-10 rounded-[32px] border border-white/10 bg-white/[0.04] p-10 text-slate-400">
-            Henüz güncelleme kaydı bulunmuyor.
+
+          <div className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-12 text-center">
+
+            <h2 className="text-2xl font-black">
+              No Updates Yet
+            </h2>
+
+            <p className="mt-4 text-slate-400">
+              Henüz herhangi bir içerik
+              eklenmedi.
+            </p>
+
           </div>
+
         ) : (
-          <div className="mt-10 space-y-4">
+
+          <div className="mt-10 space-y-5">
+
             {updates.map((update) => {
+
               const platformClass =
                 PLATFORM_STYLES[
                   update.platform
@@ -163,13 +190,18 @@ export default async function AdminUpdatesPage() {
                 PLATFORM_STYLES.website;
 
               return (
+
                 <article
                   key={update.id}
-                  className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 transition hover:border-cyan-300/25"
+                  className="rounded-3xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:border-cyan-300/40 hover:bg-white/[0.07]"
                 >
-                  <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
+
+                  <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
+
                     <div className="min-w-0">
+
                       <div className="flex flex-wrap items-center gap-3 text-xs">
+
                         <span
                           className={`rounded-full border px-3 py-1 font-black capitalize ${platformClass}`}
                         >
@@ -185,9 +217,7 @@ export default async function AdminUpdatesPage() {
                         </span>
 
                         <time className="text-slate-500">
-                          {formatDate(
-                            update.published_at
-                          )}
+                          {formatDate(update.published_at)}
                         </time>
 
                         <span
@@ -198,38 +228,51 @@ export default async function AdminUpdatesPage() {
                           }`}
                         >
                           {update.is_visible
-                            ? "Görünür"
-                            : "Gizli"}
+                            ? "Visible"
+                            : "Hidden"}
                         </span>
+
                       </div>
 
-                      <h2 className="mt-4 text-xl font-black text-white md:text-2xl">
+                      <h2 className="mt-4 text-2xl font-black">
                         {update.title_tr ||
                           update.title_en}
                       </h2>
 
                       {update.description_tr && (
-                        <p className="mt-3 max-w-4xl leading-7 text-slate-400">
+                        <p className="mt-4 leading-7 text-slate-400">
                           {update.description_tr}
                         </p>
                       )}
 
-                      <p className="mt-4 break-all text-sm text-cyan-300">
+                      <a
+                        href={update.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-5 inline-block break-all text-cyan-300 hover:text-cyan-200"
+                      >
                         {update.url}
-                      </p>
+                      </a>
+
                     </div>
 
                     <UpdateActions
-                    id={update.id}
-                    isVisible={update.is_visible}
+                      id={update.id}
+                      isVisible={update.is_visible}
                     />
-                    
+
                   </div>
+
                 </article>
+
               );
+
             })}
+
           </div>
+
         )}
+
       </div>
     </main>
   );
