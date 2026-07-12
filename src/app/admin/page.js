@@ -3,12 +3,12 @@ import { redirect } from "next/navigation";
 
 import LogoutButton from "@/components/admin/LogoutButton";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
-  const supabase =
-    await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const {
     data: { user },
@@ -19,13 +19,10 @@ export default async function AdminPage() {
   }
 
   const configuredAdminEmail =
-    process.env.ADMIN_EMAIL
-      ?.trim()
-      .toLowerCase();
+    process.env.ADMIN_EMAIL?.trim().toLowerCase();
 
-  const userEmail = user.email
-    ?.trim()
-    .toLowerCase();
+  const userEmail =
+    user.email?.trim().toLowerCase();
 
   if (
     !configuredAdminEmail ||
@@ -34,6 +31,37 @@ export default async function AdminPage() {
     await supabase.auth.signOut();
     redirect("/admin/login");
   }
+
+  const adminClient = createSupabaseAdminClient();
+
+  const [
+    { count: totalUpdates },
+    { count: visibleUpdates },
+    { count: hiddenUpdates },
+  ] = await Promise.all([
+    adminClient
+      .from("updates")
+      .select("*", {
+        count: "exact",
+        head: true,
+      }),
+
+    adminClient
+      .from("updates")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("is_visible", true),
+
+    adminClient
+      .from("updates")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("is_visible", false),
+  ]);
 
   return (
     <main className="min-h-screen bg-slate-950 px-6 pb-16 pt-28 text-white md:px-10 md:pt-32">
@@ -57,6 +85,38 @@ export default async function AdminPage() {
             <LogoutButton />
           </div>
         </header>
+
+        <section className="mt-8 grid gap-6 md:grid-cols-3">
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6">
+            <p className="text-sm text-slate-400">
+              Toplam Güncelleme
+            </p>
+
+            <h2 className="mt-4 text-5xl font-black">
+              {totalUpdates ?? 0}
+            </h2>
+          </div>
+
+          <div className="rounded-[28px] border border-emerald-400/20 bg-emerald-400/10 p-6">
+            <p className="text-sm text-emerald-200">
+              Yayında
+            </p>
+
+            <h2 className="mt-4 text-5xl font-black">
+              {visibleUpdates ?? 0}
+            </h2>
+          </div>
+
+          <div className="rounded-[28px] border border-amber-400/20 bg-amber-400/10 p-6">
+            <p className="text-sm text-amber-200">
+              Gizli
+            </p>
+
+            <h2 className="mt-4 text-5xl font-black">
+              {hiddenUpdates ?? 0}
+            </h2>
+          </div>
+        </section>
 
         <section className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <Link
@@ -86,8 +146,8 @@ export default async function AdminPage() {
             </h2>
 
             <p className="mt-2 text-slate-400">
-              Kayıtları görüntüle, düzenle, gizle veya
-              sil.
+              Kayıtları görüntüle, düzenle,
+              gizle veya sil.
             </p>
           </Link>
 
@@ -102,8 +162,8 @@ export default async function AdminPage() {
             </h2>
 
             <p className="mt-2 text-slate-400">
-              Ziyaretçilerin gördüğü gelişmeler
-              sayfasını aç.
+              Ziyaretçilerin gördüğü güncellemeleri
+              aç.
             </p>
           </Link>
         </section>
