@@ -58,18 +58,36 @@ export default async function AdminPage() {
           </div>
         </header>
 
-        <section className="mt-10 grid gap-6 md:grid-cols-2">
+        <section className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <Link
             href="/admin/new"
             className="rounded-[28px] border border-purple-300/20 bg-purple-400/10 p-8 transition hover:-translate-y-1 hover:border-purple-300/50"
           >
             <p className="text-3xl">＋</p>
+
             <h2 className="mt-5 text-2xl font-black">
               New Update
             </h2>
+
             <p className="mt-2 text-slate-400">
-              Yeni proje, yazı, kaynak veya
-              platform duyurusu ekle.
+              Yeni proje, yazı, kaynak veya platform
+              duyurusu ekle.
+            </p>
+          </Link>
+
+          <Link
+            href="/admin/updates"
+            className="rounded-[28px] border border-emerald-300/20 bg-emerald-400/10 p-8 transition hover:-translate-y-1 hover:border-emerald-300/50"
+          >
+            <p className="text-3xl">☷</p>
+
+            <h2 className="mt-5 text-2xl font-black">
+              Manage Updates
+            </h2>
+
+            <p className="mt-2 text-slate-400">
+              Kayıtları görüntüle, düzenle, gizle veya
+              sil.
             </p>
           </Link>
 
@@ -78,9 +96,11 @@ export default async function AdminPage() {
             className="rounded-[28px] border border-cyan-300/20 bg-cyan-400/10 p-8 transition hover:-translate-y-1 hover:border-cyan-300/50"
           >
             <p className="text-3xl">↗</p>
+
             <h2 className="mt-5 text-2xl font-black">
               Public Updates
             </h2>
+
             <p className="mt-2 text-slate-400">
               Ziyaretçilerin gördüğü gelişmeler
               sayfasını aç.
