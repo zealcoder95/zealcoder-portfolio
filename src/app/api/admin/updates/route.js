@@ -4,12 +4,50 @@ import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
+const ALLOWED_PLATFORMS = [
+  "github",
+  "medium",
+  "kaggle",
+  "linkedin",
+  "resource",
+  "certificate",
+  "website",
+];
+
+const ALLOWED_ACTIONS = [
+  "published",
+  "updated",
+  "added",
+  "removed",
+  "shared",
+];
+
 function normalizeText(value) {
-  return typeof value === "string" ? value.trim() : "";
+  return typeof value === "string"
+    ? value.trim()
+    : "";
+}
+
+function isValidUrl(value) {
+  if (value.startsWith("/")) {
+    return true;
+  }
+
+  try {
+    const parsedUrl = new URL(value);
+
+    return (
+      parsedUrl.protocol === "https:" ||
+      parsedUrl.protocol === "http:"
+    );
+  } catch {
+    return false;
+  }
 }
 
 async function getAuthorizedAdmin() {
-  const supabase = await createSupabaseServerClient();
+  const supabase =
+    await createSupabaseServerClient();
 
   const {
     data: { user },
@@ -42,7 +80,198 @@ function revalidateUpdatePages() {
   revalidatePath("/");
   revalidatePath("/updates");
   revalidatePath("/admin");
+  revalidatePath("/admin/new");
   revalidatePath("/admin/updates");
+}
+
+export async function POST(request) {
+  try {
+    const user = await getAuthorizedAdmin();
+
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Unauthorized.",
+        },
+        {
+          status: 401,
+        }
+      );
+    }
+
+    const body = await request.json();
+
+    const platform = normalizeText(
+      body.platform
+    );
+
+    const action = normalizeText(
+      body.action
+    );
+
+    const titleEn = normalizeText(
+      body.titleEn
+    );
+
+    const titleTr = normalizeText(
+      body.titleTr
+    );
+
+    const descriptionEn = normalizeText(
+      body.descriptionEn
+    );
+
+    const descriptionTr = normalizeText(
+      body.descriptionTr
+    );
+
+    const url = normalizeText(body.url);
+
+    const publishedAt = normalizeText(
+      body.publishedAt
+    );
+
+    if (
+      !ALLOWED_PLATFORMS.includes(platform)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid platform.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (!ALLOWED_ACTIONS.includes(action)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid action.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (!titleEn || !titleTr) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "İngilizce ve Türkçe başlık zorunludur.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (!url || !isValidUrl(url)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Geçerli bir URL gereklidir.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const publicationDate = publishedAt
+      ? new Date(publishedAt)
+      : new Date();
+
+    if (
+      Number.isNaN(
+        publicationDate.getTime()
+      )
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Geçersiz yayın tarihi.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const adminClient =
+      createSupabaseAdminClient();
+
+    const { data, error } =
+      await adminClient
+        .from("updates")
+        .insert({
+          platform,
+          action,
+          title_en: titleEn,
+          title_tr: titleTr,
+          description_en:
+            descriptionEn || null,
+          description_tr:
+            descriptionTr || null,
+          url,
+          published_at:
+            publicationDate.toISOString(),
+          is_visible: true,
+        })
+        .select()
+        .single();
+
+    if (error) {
+      console.error(
+        "Admin update insert error:",
+        error
+      );
+
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Güncelleme yayımlanamadı.",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
+
+    revalidateUpdatePages();
+
+    return NextResponse.json(
+      {
+        success: true,
+        update: data,
+      },
+      {
+        status: 201,
+      }
+    );
+  } catch (error) {
+    console.error(
+      "Admin updates POST error:",
+      error
+    );
+
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          "Admin servisine ulaşılamadı.",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 }
 
 export async function PATCH(request) {
@@ -62,26 +291,14 @@ export async function PATCH(request) {
     }
 
     const body = await request.json();
-
     const id = normalizeText(body.id);
 
     if (!id) {
       return NextResponse.json(
         {
           success: false,
-          error: "Update id is required.",
-        },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    if (typeof body.isVisible !== "boolean") {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "isVisible must be a boolean.",
+          error:
+            "Güncelleme kimliği gereklidir.",
         },
         {
           status: 400,
@@ -92,26 +309,189 @@ export async function PATCH(request) {
     const adminClient =
       createSupabaseAdminClient();
 
-    const { data, error } = await adminClient
-      .from("updates")
-      .update({
-        is_visible: body.isVisible,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", id)
-      .select()
-      .single();
+    /*
+     * Yalnızca görünürlüğü değiştiren istek:
+     * { id, isVisible }
+     */
+    if (
+      typeof body.isVisible === "boolean"
+    ) {
+      const { data, error } =
+        await adminClient
+          .from("updates")
+          .update({
+            is_visible: body.isVisible,
+            updated_at:
+              new Date().toISOString(),
+          })
+          .eq("id", id)
+          .select()
+          .single();
+
+      if (error) {
+        console.error(
+          "Visibility update error:",
+          error
+        );
+
+        return NextResponse.json(
+          {
+            success: false,
+            error:
+              "Görünürlük değiştirilemedi.",
+          },
+          {
+            status: 500,
+          }
+        );
+      }
+
+      revalidateUpdatePages();
+
+      return NextResponse.json({
+        success: true,
+        update: data,
+      });
+    }
+
+    /*
+     * İçeriği düzenleyen istek:
+     * { id, platform, action, titleEn, ... }
+     */
+    const platform = normalizeText(
+      body.platform
+    );
+
+    const action = normalizeText(
+      body.action
+    );
+
+    const titleEn = normalizeText(
+      body.titleEn
+    );
+
+    const titleTr = normalizeText(
+      body.titleTr
+    );
+
+    const descriptionEn = normalizeText(
+      body.descriptionEn
+    );
+
+    const descriptionTr = normalizeText(
+      body.descriptionTr
+    );
+
+    const url = normalizeText(body.url);
+
+    const publishedAt = normalizeText(
+      body.publishedAt
+    );
+
+    if (
+      !ALLOWED_PLATFORMS.includes(platform)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid platform.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (!ALLOWED_ACTIONS.includes(action)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid action.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (!titleEn || !titleTr) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "İngilizce ve Türkçe başlık zorunludur.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (!url || !isValidUrl(url)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Geçerli bir URL gereklidir.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const publicationDate = publishedAt
+      ? new Date(publishedAt)
+      : new Date();
+
+    if (
+      Number.isNaN(
+        publicationDate.getTime()
+      )
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Geçersiz yayın tarihi.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const { data, error } =
+      await adminClient
+        .from("updates")
+        .update({
+          platform,
+          action,
+          title_en: titleEn,
+          title_tr: titleTr,
+          description_en:
+            descriptionEn || null,
+          description_tr:
+            descriptionTr || null,
+          url,
+          published_at:
+            publicationDate.toISOString(),
+          updated_at:
+            new Date().toISOString(),
+        })
+        .eq("id", id)
+        .select()
+        .single();
 
     if (error) {
       console.error(
-        "Admin update visibility error:",
+        "Content update error:",
         error
       );
 
       return NextResponse.json(
         {
           success: false,
-          error: "Update visibility could not be changed.",
+          error:
+            "Değişiklikler kaydedilemedi.",
         },
         {
           status: 500,
@@ -134,7 +514,8 @@ export async function PATCH(request) {
     return NextResponse.json(
       {
         success: false,
-        error: "Admin service is unavailable.",
+        error:
+          "Admin servisine ulaşılamadı.",
       },
       {
         status: 500,
@@ -166,7 +547,8 @@ export async function DELETE(request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Update id is required.",
+          error:
+            "Güncelleme kimliği gereklidir.",
         },
         {
           status: 400,
@@ -191,7 +573,8 @@ export async function DELETE(request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Update could not be deleted.",
+          error:
+            "Güncelleme silinemedi.",
         },
         {
           status: 500,
@@ -213,7 +596,8 @@ export async function DELETE(request) {
     return NextResponse.json(
       {
         success: false,
-        error: "Admin service is unavailable.",
+        error:
+          "Admin servisine ulaşılamadı.",
       },
       {
         status: 500,
