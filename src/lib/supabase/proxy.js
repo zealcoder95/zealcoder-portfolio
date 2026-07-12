@@ -1,6 +1,19 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
+function getSafeAdminPath(value) {
+  if (
+    typeof value === "string" &&
+    value.startsWith("/admin") &&
+    !value.startsWith("//") &&
+    value !== "/admin/login"
+  ) {
+    return value;
+  }
+
+  return "/admin";
+}
+
 export async function updateSession(request) {
   let response = NextResponse.next({
     request,
@@ -59,6 +72,7 @@ export async function updateSession(request) {
   const pathname = request.nextUrl.pathname;
   const isAdminRoute =
     pathname.startsWith("/admin");
+
   const isLoginRoute =
     pathname === "/admin/login";
 
@@ -71,6 +85,7 @@ export async function updateSession(request) {
       request.nextUrl.clone();
 
     loginUrl.pathname = "/admin/login";
+    loginUrl.search = "";
     loginUrl.searchParams.set(
       "next",
       pathname
@@ -80,13 +95,17 @@ export async function updateSession(request) {
   }
 
   if (isLoginRoute && user) {
-    const adminUrl =
+    const nextPath = getSafeAdminPath(
+      request.nextUrl.searchParams.get("next")
+    );
+
+    const redirectUrl =
       request.nextUrl.clone();
 
-    adminUrl.pathname = "/admin";
-    adminUrl.search = "";
+    redirectUrl.pathname = nextPath;
+    redirectUrl.search = "";
 
-    return NextResponse.redirect(adminUrl);
+    return NextResponse.redirect(redirectUrl);
   }
 
   return response;
