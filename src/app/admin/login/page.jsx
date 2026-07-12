@@ -1,19 +1,31 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 const INPUT_CLASS =
   "mt-2 w-full rounded-2xl border border-white/10 bg-black/25 px-4 py-3.5 text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-300/50 focus:bg-black/40";
 
+function getSafeNextPath(value) {
+  if (
+    typeof value === "string" &&
+    value.startsWith("/admin") &&
+    !value.startsWith("//")
+  ) {
+    return value;
+  }
+
+  return "/admin";
+}
+
 export default function AdminLoginPage() {
-  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
   const [isSubmitting, setIsSubmitting] =
     useState(false);
@@ -31,9 +43,9 @@ export default function AdminLoginPage() {
       const supabase =
         createSupabaseBrowserClient();
 
-      const { error } =
+      const { data, error } =
         await supabase.auth.signInWithPassword({
-          email: email.trim(),
+          email: email.trim().toLowerCase(),
           password,
         });
 
@@ -41,8 +53,36 @@ export default function AdminLoginPage() {
         throw error;
       }
 
-      router.replace("/admin");
-      router.refresh();
+      if (!data.session) {
+        throw new Error(
+          "Supabase oturumu oluşturulamadı."
+        );
+      }
+
+      // Oturumun tarayıcıya yazıldığını doğrula.
+      const {
+        data: sessionData,
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (
+        sessionError ||
+        !sessionData.session
+      ) {
+        throw (
+          sessionError ||
+          new Error(
+            "Oturum doğrulanamadı."
+          )
+        );
+      }
+
+      const nextPath = getSafeNextPath(
+        searchParams.get("next")
+      );
+
+      // Tam sayfa geçişi: Proxy yeni cookie'yi kesin olarak görür.
+      window.location.assign(nextPath);
     } catch (error) {
       console.error(
         "Admin login error:",
@@ -53,9 +93,10 @@ export default function AdminLoginPage() {
         error?.message ===
           "Invalid login credentials"
           ? "E-posta adresi veya şifre yanlış."
-          : "Giriş yapılamadı. Bilgilerini kontrol edip tekrar dene."
+          : error?.message ||
+              "Giriş yapılamadı. Bilgilerini kontrol edip tekrar dene."
       );
-    } finally {
+
       setIsSubmitting(false);
     }
   }
@@ -92,8 +133,9 @@ export default function AdminLoginPage() {
           </h1>
 
           <p className="mt-3 leading-7 text-slate-400">
-            Yönetim paneline erişmek için Supabase’te
-            oluşturduğun admin hesabıyla giriş yap.
+            Yönetim paneline erişmek için
+            Supabase’te oluşturduğun admin hesabıyla
+            giriş yap.
           </p>
 
           <div className="mt-8 space-y-5">
@@ -145,8 +187,9 @@ export default function AdminLoginPage() {
           </button>
 
           <p className="mt-5 text-center text-xs leading-5 text-slate-500">
-            Bu ekran yalnızca ZealCoder içerik yönetimi
-            için yetkili kullanıcılar tarafından kullanılır.
+            Bu ekran yalnızca ZealCoder içerik
+            yönetimi için yetkili kullanıcılar
+            tarafından kullanılır.
           </p>
         </form>
       </div>
