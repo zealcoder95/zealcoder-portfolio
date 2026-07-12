@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import UpdateActions from "@/components/admin/UpdateActions";
 
 export const dynamic = "force-dynamic";
 
@@ -218,33 +219,11 @@ export default async function AdminUpdatesPage() {
                       </p>
                     </div>
 
-                    <div className="flex shrink-0 flex-wrap gap-3">
-                      <button
-                        type="button"
-                        disabled
-                        className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm font-bold text-cyan-200 opacity-60"
-                      >
-                        Düzenle
-                      </button>
-
-                      <button
-                        type="button"
-                        disabled
-                        className="rounded-full border border-amber-300/20 bg-amber-300/10 px-4 py-2 text-sm font-bold text-amber-200 opacity-60"
-                      >
-                        {update.is_visible
-                          ? "Gizle"
-                          : "Göster"}
-                      </button>
-
-                      <button
-                        type="button"
-                        disabled
-                        className="rounded-full border border-red-300/20 bg-red-300/10 px-4 py-2 text-sm font-bold text-red-200 opacity-60"
-                      >
-                        Sil
-                      </button>
-                    </div>
+                    <UpdateActions
+                    id={update.id}
+                    isVisible={update.is_visible}
+                    />
+                    
                   </div>
                 </article>
               );
