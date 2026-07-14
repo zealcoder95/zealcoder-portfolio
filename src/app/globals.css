@@ -1,450 +1,432 @@
 @import "tailwindcss";
 
 /* =========================================================
-   ZEALCODER DESIGN SYSTEM
+   ZEALCODER DESIGN SYSTEM - PROFESSIONAL & CLEAN
    AI • DATA SCIENCE • ENGINEERING
 ========================================================= */
 
 :root {
   color-scheme: dark;
-
-  --background: #020617;
-  --surface: #0f172a;
-  --surface-light: #162033;
-
-  --foreground: #f8fafc;
-  --muted: #94a3b8;
-
-  --primary: #6366f1;
+  
+  /* Core Colors */
+  --background: #0f1419;
+  --surface: #1a1f2e;
+  --surface-light: #242d3f;
+  --surface-lighter: #2d3749;
+  
+  /* Text Colors */
+  --foreground: #f0f4f8;
+  --text-secondary: #b0b8c4;
+  --text-muted: #7a8294;
+  
+  /* Accent Colors - Limited Palette */
+  --primary: #0ea5e9;
+  --primary-dark: #0284c7;
   --secondary: #8b5cf6;
   --accent: #06b6d4;
-
-  --success: #22c55e;
+  
+  /* System Colors */
+  --success: #10b981;
   --warning: #f59e0b;
   --danger: #ef4444;
-
-  --border: rgba(255,255,255,.08);
-
-  --radius: 20px;
+  
+  /* Borders & Effects */
+  --border: rgba(148, 163, 184, 0.12);
+  --border-light: rgba(148, 163, 184, 0.2);
+  --radius: 12px;
 }
 
 /* =========================================================
-   Base
+   Reset & Base
 ========================================================= */
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html{
-  scroll-behavior:smooth;
+html {
+  scroll-behavior: smooth;
 }
 
-body{
-
-  background:
-  radial-gradient(circle at top,#1e1b4b 0%,#020617 45%),
-  #020617;
-
-  color:var(--foreground);
-
-  font-family:
-  Inter,
-  system-ui,
-  sans-serif;
-
-  overflow-x:hidden;
-
-  min-height:100vh;
-
-  line-height:1.7;
+body {
+  background: linear-gradient(to bottom, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-::selection{
-
-  background:#6366f1;
-
-  color:white;
-
+::selection {
+  background: var(--primary);
+  color: white;
 }
 
-img{
-
-  max-width:100%;
-
-  display:block;
-
+img {
+  max-width: 100%;
+  display: block;
+  height: auto;
 }
 
-a{
-
-  color:inherit;
-
-  text-decoration:none;
-
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-button{
-
-  cursor:pointer;
-
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
 }
 
 /* =========================================================
    Scrollbar
 ========================================================= */
 
-::-webkit-scrollbar{
-
-  width:9px;
-
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-::-webkit-scrollbar-track{
-
-  background:#020617;
-
+::-webkit-scrollbar-track {
+  background: var(--background);
 }
 
-::-webkit-scrollbar-thumb{
-
-  background:#334155;
-
-  border-radius:100px;
-
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+  transition: background 0.3s;
 }
 
-::-webkit-scrollbar-thumb:hover{
-
-  background:#6366f1;
-
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
 
 /* =========================================================
-   Typography
+   Typography - Consistent Scale
 ========================================================= */
 
-h1{
-
-  font-size:clamp(3rem,7vw,5.8rem);
-
-  line-height:1;
-
-  font-weight:800;
-
+h1 {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
-h2{
-
-  font-size:clamp(2.2rem,5vw,4rem);
-
-  font-weight:700;
-
+h2 {
+  font-size: clamp(1.8rem, 6vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
-h3{
-
-  font-size:1.7rem;
-
-  font-weight:700;
-
+h3 {
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1.3;
 }
 
-p{
+h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
 
-  color:var(--muted);
+p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
 
+small {
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 /* =========================================================
    Containers
 ========================================================= */
 
-.container{
+.container {
+  width: min(1280px, 90%);
+  margin-inline: auto;
+}
 
-  width:min(1200px,92%);
+.section {
+  padding-block: 80px;
+}
 
-  margin-inline:auto;
-
+@media (max-width: 768px) {
+  .section {
+    padding-block: 60px;
+  }
 }
 
 /* =========================================================
-   Section
+   Glass & Cards - Clean Design
 ========================================================= */
 
-.section{
+.glass {
+  background: rgba(26, 31, 46, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
 
-  padding-block:120px;
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: all 0.3s ease;
+}
 
+.card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 12px 40px rgba(14, 165, 233, 0.12);
+  transform: translateY(-2px);
 }
 
 /* =========================================================
-   Glass Card
+   Gradients - Professional
 ========================================================= */
 
-.glass{
+.gradient-text {
+  background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
 
-  background:rgba(15,23,42,.55);
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
 
-  backdrop-filter:blur(18px);
-
-  border:1px solid rgba(255,255,255,.08);
-
-  border-radius:24px;
-
+.gradient-accent {
+  background: linear-gradient(135deg, var(--accent), var(--primary));
 }
 
 /* =========================================================
-   Gradient Text
+   Buttons - Clean & Consistent
 ========================================================= */
 
-.gradient-text{
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
 
-  background:
-  linear-gradient(
-  135deg,
-  #818cf8,
-  #c084fc,
-  #22d3ee);
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  border: none;
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.25);
+}
 
-  background-clip:text;
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(14, 165, 233, 0.35);
+}
 
-  -webkit-background-clip:text;
+.btn-secondary {
+  background: var(--surface);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
 
-  color:transparent;
+.btn-secondary:hover {
+  border-color: var(--primary);
+  background: rgba(14, 165, 233, 0.08);
+}
 
+.btn-ghost {
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border-light);
+}
+
+.btn-ghost:hover {
+  background: var(--surface);
+  border-color: var(--primary);
 }
 
 /* =========================================================
-   Buttons
+   Badge - Clean Style
 ========================================================= */
 
-.btn{
-
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:.65rem;
-
-  padding:14px 28px;
-
-  border-radius:999px;
-
-  font-weight:600;
-
-  transition:.35s;
-
-}
-
-.btn-primary{
-
-  background:
-  linear-gradient(
-  135deg,
-  #6366f1,
-  #8b5cf6);
-
-  color:white;
-
-}
-
-.btn-primary:hover{
-
-  transform:translateY(-3px);
-
-  box-shadow:
-  0 20px 50px rgba(99,102,241,.35);
-
-}
-
-.btn-secondary{
-
-  border:1px solid rgba(255,255,255,.1);
-
-  background:rgba(255,255,255,.03);
-
-}
-
-.btn-secondary:hover{
-
-  background:rgba(255,255,255,.08);
-
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 6px 12px;
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary);
 }
 
 /* =========================================================
-   Cards
+   Animations - Smooth
 ========================================================= */
 
-.card{
-
-  background:#0f172a;
-
-  border:1px solid rgba(255,255,255,.08);
-
-  border-radius:24px;
-
-  transition:.4s;
-
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.card:hover{
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
-  transform:translateY(-6px);
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
-  border-color:#6366f1;
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
 
-  box-shadow:
-  0 25px 70px rgba(99,102,241,.18);
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
 
+.fade-up {
+  animation: fadeUp 0.6s ease both;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.6s ease both;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.6s ease both;
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
 }
 
 /* =========================================================
-   Glow
+   Utility Classes
 ========================================================= */
 
-.glow{
-
-  position:relative;
-
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
-.glow::before{
+.border-gradient {
+  border: 2px solid;
+  border-image: linear-gradient(135deg, var(--primary), var(--accent)) 1;
+}
 
-  content:"";
+.shadow-glow {
+  box-shadow: 0 0 30px rgba(14, 165, 233, 0.2);
+}
 
-  position:absolute;
-
-  inset:-1px;
-
-  border-radius:inherit;
-
-  padding:1px;
-
-  background:
-  linear-gradient(
-  135deg,
-  #6366f1,
-  #8b5cf6,
-  #06b6d4);
-
-  -webkit-mask:
-  linear-gradient(#fff 0 0) content-box,
-  linear-gradient(#fff 0 0);
-
-  -webkit-mask-composite:xor;
-
-  mask-composite:exclude;
-
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* =========================================================
-   Hero Background
+   Focus & Accessibility
 ========================================================= */
 
-.hero-grid{
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
 
-  background-image:
-
-  linear-gradient(
-  rgba(255,255,255,.03) 1px,
-  transparent 1px),
-
-  linear-gradient(
-  90deg,
-  rgba(255,255,255,.03) 1px,
-  transparent 1px);
-
-  background-size:45px 45px;
-
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 /* =========================================================
-   Animations
+   Responsive Adjustments
 ========================================================= */
 
-@keyframes fadeUp{
-
-  from{
-
-    opacity:0;
-
-    transform:translateY(40px);
-
+@media (max-width: 768px) {
+  h1 {
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
   }
 
-  to{
-
-    opacity:1;
-
-    transform:none;
-
+  h2 {
+    font-size: clamp(1.4rem, 5vw, 2.2rem);
   }
 
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .card {
+    padding: 16px;
+  }
 }
 
-.fade-up{
+/* =========================================================
+   Print Styles
+========================================================= */
 
-  animation:fadeUp .8s ease both;
-
-}
-
-@keyframes float{
-
-  0%{
-
-    transform:translateY(0);
-
+@media print {
+  body {
+    background: white;
+    color: black;
   }
 
-  50%{
-
-    transform:translateY(-12px);
-
+  .no-print {
+    display: none;
   }
-
-  100%{
-
-    transform:translateY(0);
-
-  }
-
-}
-
-.float{
-
-  animation:float 6s ease-in-out infinite;
-
-}
-
-@keyframes pulseGlow{
-
-  0%{
-
-    opacity:.4;
-
-  }
-
-  50%{
-
-    opacity:1;
-
-  }
-
-  100%{
-
-    opacity:.4;
-
-  }
-
-}
-
-.glow-animation{
-
-  animation:pulseGlow 4s infinite;
-
 }
