@@ -89,4 +89,33 @@ export const projects = [
         "https://www.kaggle.com/code/gizemglc/analyzing-nyc-high-school-data",
     },
   },
+
+  {
+    id: "ecommerce-sql",
+    category: {
+      en: "SQL & Database Engineering",
+      tr: "SQL ve Veritabanı Mühendisliği",
+    },
+    title: {
+      en: "E-Commerce Management Database",
+      tr: "E-Ticaret Yönetim Veritabanı",
+    },
+    description: {
+      en: "A relational e-commerce database designed for customer, product and order management, reporting and query performance.",
+      tr: "Müşteri, ürün ve sipariş yönetimi; raporlama ve sorgu performansı için tasarlanmış ilişkisel e-ticaret veritabanı.",
+    },
+    problem: {
+      en: "How can an e-commerce data model support reliable operational reporting as order volume grows?",
+      tr: "Sipariş hacmi büyürken bir e-ticaret veri modeli güvenilir operasyonel raporlamayı nasıl destekleyebilir?",
+    },
+    outcome: {
+      en: "A normalized SQL design with 1,000 customer and product records, 100,000 order records, indexed order lookups, a reporting view and a date-range stored procedure.",
+      tr: "1.000 müşteri ve ürün kaydı, 100.000 sipariş kaydı, indeksli sipariş aramaları, raporlama view’ı ve tarih aralığı stored procedure içeren normalize SQL tasarımı.",
+    },
+    tech: ["SQL", "T-SQL", "Database Design", "Indexing", "Views", "Stored Procedures"],
+    links: {
+      github: "https://github.com/zealcoder95/ecommerce-sql-project",
+      kaggle: null,
+    },
+  },
 ];

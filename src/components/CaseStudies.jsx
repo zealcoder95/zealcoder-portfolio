@@ -8,10 +8,10 @@ const accents = ["from-cyan-400/20 to-blue-600/10", "from-fuchsia-400/20 to-purp
 
 export default function CaseStudies({ compact = false }) {
   const { lang } = useLanguage();
-  const studies = compact ? caseStudies.slice(0, 3) : caseStudies;
+  const studies = compact ? caseStudies.slice(0, 4) : caseStudies;
 
   return (
-    <div className={`grid gap-6 ${compact ? "lg:grid-cols-3" : "md:grid-cols-2 xl:grid-cols-3"}`}>
+    <div className={`grid gap-6 ${compact ? "md:grid-cols-2 xl:grid-cols-4" : "md:grid-cols-2 xl:grid-cols-4"}`}>
       {studies.map((project, index) => (
         <article key={project.id} className="group relative flex min-h-[390px] flex-col overflow-hidden rounded-[30px] border border-white/10 bg-white/5 p-7 backdrop-blur-xl transition duration-500 hover:-translate-y-2 hover:border-cyan-300/40 hover:shadow-[0_0_42px_rgba(34,211,238,0.14)]">
           <div className={`absolute inset-x-0 top-0 h-36 bg-linear-to-br ${accents[index % accents.length]}`} />

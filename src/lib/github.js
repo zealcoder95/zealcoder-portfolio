@@ -109,19 +109,26 @@ function titleFromRepoName(name = "") {
 }
 
 async function githubFetch(path) {
-  const response = await fetch(
-    `${GITHUB_API}${path}`,
-    {
-      headers: {
-        Accept:
-          "application/vnd.github+json",
-        "X-GitHub-Api-Version":
-          "2022-11-28",
-      },
+  let response;
 
-      cache: "no-store",
-    }
-  );
+  try {
+    response = await fetch(
+      `${GITHUB_API}${path}`,
+      {
+        headers: {
+          Accept:
+            "application/vnd.github+json",
+          "X-GitHub-Api-Version":
+            "2022-11-28",
+        },
+
+        next: { revalidate: 1800 },
+      }
+    );
+  } catch (error) {
+    console.error("GitHub API request failed:", path, error);
+    return null;
+  }
 
   if (!response.ok) {
     console.error("GitHub API error:", {
@@ -137,19 +144,24 @@ async function githubFetch(path) {
 }
 
 async function getRepositoryReadme(repoName) {
-  const response = await fetch(
-    `${GITHUB_API}/repos/${GITHUB_USERNAME}/${repoName}/readme`,
-    {
-      headers: {
-        Accept:
-          "application/vnd.github.raw+json",
-        "X-GitHub-Api-Version":
-          "2022-11-28",
-      },
+  let response;
 
-      cache: "no-store",
-    }
-  );
+  try {
+    response = await fetch(
+      `${GITHUB_API}/repos/${GITHUB_USERNAME}/${repoName}/readme`,
+      {
+        headers: {
+          Accept:
+            "application/vnd.github.raw+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+        },
+        next: { revalidate: 1800 },
+      }
+    );
+  } catch (error) {
+    console.warn("GitHub README could not be loaded:", repoName, error);
+    return { metadata: {}, markdown: "" };
+  }
 
   if (!response.ok) {
     return {
@@ -175,9 +187,7 @@ export async function getGitHubProjects() {
   );
 
   if (!response) {
-    throw new Error(
-      "GitHub repositories could not be loaded."
-    );
+    return [];
   }
 
   const repositories =
@@ -188,6 +198,7 @@ export async function getGitHubProjects() {
       (repo) =>
         !repo.fork &&
         !repo.archived &&
+        repo.name !== GITHUB_USERNAME &&
         Array.isArray(repo.topics) &&
         repo.topics.includes("portfolio")
     );

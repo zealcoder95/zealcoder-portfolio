@@ -55,10 +55,10 @@ export default function Hero({ t }) {
 
           <div className="grid max-w-xl grid-cols-3 gap-6">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-              <h3 className="text-3xl font-black text-cyan-300">20+</h3>
+              <h3 className="text-3xl font-black text-cyan-300">4</h3>
 
               <p className="mt-2 text-sm text-slate-400">
-                AI & Data Projects
+                Featured Case Studies
               </p>
             </div>
 

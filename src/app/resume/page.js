@@ -63,7 +63,8 @@ export default function ResumePage() {
             </h2>
 
             <p className="text-slate-300">
-              Electrical and Electronics Engineering
+              Electrical and Electronics Engineering · İskenderun Technical University
+              <span className="mt-1 block text-sm text-slate-500">2014 — 2020</span>
             </p>
           </section>
 
