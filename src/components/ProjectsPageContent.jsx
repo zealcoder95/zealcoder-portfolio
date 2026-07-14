@@ -5,11 +5,11 @@ import ProjectsGrid from "@/components/ProjectsGrid";
 import CaseStudies from "@/components/CaseStudies";
 import { projects as caseStudies } from "@/data/projects";
 
-export default function ProjectsPageContent({ projects }) {
+export default function ProjectsPageContent({ projects = [] }) {
   const { lang } = useLanguage();
 
   const featuredGithubUrls = new Set(
-    caseStudies.map((project) => project.links.github).filter(Boolean)
+    caseStudies.map((project) => project.links?.github).filter(Boolean)
   );
 
   const archiveProjects = projects.filter(
