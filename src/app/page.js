@@ -1,5 +1,3 @@
-'use client';
-
 import HomePageContent from "@/components/HomePageContent";
 import { getGitHubProjects } from "@/lib/github";
 import { getAutomaticUpdates } from "@/lib/updates/getAutomaticUpdates";
