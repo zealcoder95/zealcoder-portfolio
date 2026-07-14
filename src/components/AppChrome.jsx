@@ -7,25 +7,34 @@ import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import FloatingAssistant from "@/components/FloatingAssistant";
 
-export default function AppChrome({ children }) {
+export default function AppChrome({
+  children,
+}) {
   const pathname = usePathname();
 
   const isAdminRoute =
-    pathname === "/admin" ||
-    pathname?.startsWith("/admin/");
+    pathname?.startsWith("/admin");
 
+  // Admin Panel
   if (isAdminRoute) {
-    return <>{children}</>;
+    return (
+      <main className="min-h-screen bg-slate-950 text-white">
+        {children}
+      </main>
+    );
   }
 
+  // Public Website
   return (
     <>
       <LoadingScreen />
+
       <Navbar />
 
-      {children}
+      <main>{children}</main>
 
       <Footer />
+
       <FloatingAssistant />
     </>
   );
