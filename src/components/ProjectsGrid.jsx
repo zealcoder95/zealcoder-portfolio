@@ -27,11 +27,7 @@ export default function ProjectsGrid({ projects = [] }) {
 
     return projects.filter((project) => {
       const title = getLocalizedText(project.title, lang, project.title);
-      const summary = getLocalizedText(
-        project.summary,
-        lang,
-        project.summary
-      );
+      const summary = getLocalizedText(project.summary, lang, project.summary);
       const description = getLocalizedText(
         project.description,
         lang,
@@ -194,7 +190,7 @@ export default function ProjectsGrid({ projects = [] }) {
                   )}
                   {tags.slice(0, 4).map((tag) => (
                     <span
-                      key={typeof tag === "string" ? tag : JSON.stringify(tag)}
+                      key={tag}
                       className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-300"
                     >
                       {tag}
