@@ -1,26 +1,9 @@
 import "./globals.css";
+import "@/styles/overrides.css";
 
 import { LanguageProvider } from "@/context/LanguageContext";
-
 import AppChrome from "@/components/AppChrome";
-
 import Script from "next/script";
-
-import "@/styles/overrides.css";
-// ...existing code...
-export default function RootLayout({ children }) {
-  return (
-    <html lang="tr" suppressHydrationWarning>
-      <body className="bg-slate-950 text-slate-100 antialiased overflow-x-hidden selection:bg-indigo-600 selection:text-white">
-        {/* ...existing code... */}
-        <LanguageProvider>
-          <AppChrome>{children}</AppChrome>
-        </LanguageProvider>
-      </body>
-    </html>
-  );
-}
-// ...existing code...
 
 const siteUrl = "https://zealcoder.vercel.app";
 
