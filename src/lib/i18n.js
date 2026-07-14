@@ -1,9 +1,10 @@
 export function getLocalizedText(value, lang, fallback = "") {
   if (typeof value === "string") return value;
+  if (Array.isArray(value))
+    return value.map((item) => getLocalizedText(item, lang)).join(" ");
   if (value && typeof value === "object") {
-    if (typeof value[lang] === "string") return value[lang];
-    if (typeof value.en === "string") return value.en;
-    if (typeof value.tr === "string") return value.tr;
+    const text = value[lang] ?? value.en ?? value.tr ?? Object.values(value)[0];
+    return getLocalizedText(text, lang, fallback);
   }
   return fallback;
 }
