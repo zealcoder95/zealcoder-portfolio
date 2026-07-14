@@ -5,9 +5,8 @@ import Link from "next/link";
 import ProjectFilters from "@/components/ProjectFilters";
 import { useLanguage } from "@/context/LanguageContext";
 
-export default function ProjectsGrid({ projects }) {
+export default function ProjectsGrid({ projects = [] }) {
   const { lang } = useLanguage();
-
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -15,7 +14,6 @@ export default function ProjectsGrid({ projects }) {
     const uniqueCategories = new Set(
       projects.map((project) => project.category).filter(Boolean)
     );
-
     return ["All", ...Array.from(uniqueCategories)];
   }, [projects]);
 
@@ -24,8 +22,7 @@ export default function ProjectsGrid({ projects }) {
 
     return projects.filter((project) => {
       const matchesCategory =
-        activeCategory === "All" ||
-        project.category === activeCategory;
+        activeCategory === "All" || project.category === activeCategory;
 
       const searchableText = [
         project.title,
@@ -39,19 +36,15 @@ export default function ProjectsGrid({ projects }) {
         .join(" ")
         .toLocaleLowerCase("tr");
 
-      const matchesSearch =
-        !query || searchableText.includes(query);
-
-      return matchesCategory && matchesSearch;
+      return !query || searchableText.includes(query);
     });
   }, [projects, activeCategory, searchQuery]);
 
   return (
     <>
-      <div className="mb-8 rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur-xl">
-        <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/20 px-5 py-4 focus-within:border-cyan-300/50">
+      <div className="mb-8 rounded-3xl border border-white/10 bg-slate-900/70 p-4 backdrop-blur-xl">
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/80 px-5 py-4">
           <span className="text-lg text-cyan-300">⌕</span>
-
           <input
             type="search"
             value={searchQuery}
@@ -61,12 +54,9 @@ export default function ProjectsGrid({ projects }) {
                 ? "Search projects, technologies or categories..."
                 : "Proje, teknoloji veya kategori ara..."
             }
-            aria-label={
-              lang === "en" ? "Search projects" : "Projelerde ara"
-            }
-            className="w-full bg-transparent text-white outline-none placeholder:text-slate-500"
+            aria-label={lang === "en" ? "Search projects" : "Projelerde ara"}
+            className="min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-slate-500"
           />
-
           {searchQuery && (
             <button
               type="button"
@@ -87,26 +77,20 @@ export default function ProjectsGrid({ projects }) {
 
       <p className="mb-6 text-sm text-slate-400">
         {lang === "en"
-          ? `${filteredProjects.length} project${
-              filteredProjects.length === 1 ? "" : "s"
-            } found`
+          ? `${filteredProjects.length} project${filteredProjects.length === 1 ? "" : "s"} found`
           : `${filteredProjects.length} proje bulundu`}
       </p>
 
       {filteredProjects.length === 0 ? (
-        <div className="rounded-[30px] border border-white/10 bg-white/5 p-10 text-center">
+        <div className="rounded-[28px] border border-white/10 bg-slate-900/80 p-10 text-center">
           <h2 className="text-2xl font-black text-white">
-            {lang === "en"
-              ? "No matching projects"
-              : "Eşleşen proje bulunamadı"}
+            {lang === "en" ? "No matching projects" : "Eşleşen proje bulunamadı"}
           </h2>
-
           <p className="mt-3 text-slate-400">
             {lang === "en"
               ? "Try a different keyword or category."
               : "Farklı bir anahtar kelime veya kategori deneyin."}
           </p>
-
           <button
             type="button"
             onClick={() => {
@@ -115,127 +99,75 @@ export default function ProjectsGrid({ projects }) {
             }}
             className="mt-6 rounded-full border border-cyan-300/40 px-5 py-3 font-bold text-cyan-300 transition hover:bg-cyan-300/10"
           >
-            {lang === "en"
-              ? "Reset filters"
-              : "Filtreleri sıfırla"}
+            {lang === "en" ? "Reset filters" : "Filtreleri sıfırla"}
           </button>
         </div>
       ) : (
-        <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
           {filteredProjects.map((project) => (
             <article
               key={project.id}
-              className="group relative flex h-full flex-col overflow-hidden rounded-[30px] border border-white/10 bg-white/5 backdrop-blur-xl transition duration-500 hover:-translate-y-2 hover:border-cyan-400/40 hover:shadow-[0_0_35px_rgba(34,211,238,0.14)]"
+              className="group flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/80 p-6 transition duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:shadow-[0_20px_60px_rgba(14,165,233,0.12)]"
             >
-              <div className="relative h-52 overflow-hidden border-b border-white/10 bg-slate-900">
-                {project.cover ? (
-                  <img
-                    src={project.cover}
-                    alt={`${project.title} project cover`}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_30%_20%,rgba(168,85,247,0.32),transparent_40%),radial-gradient(circle_at_80%_70%,rgba(34,211,238,0.25),transparent_40%)]">
-                    <div className="text-center">
-                      <p className="text-5xl font-black text-white/10">
-                        {"</>"}
-                      </p>
-
-                      <p className="mt-3 text-xs font-bold uppercase tracking-[0.3em] text-cyan-300/70">
-                        ZealCoder Project
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                <div className="absolute inset-0 bg-linear-to-t from-slate-950/70 via-transparent to-transparent" />
-
+              <div className="mb-5 flex items-center justify-between gap-3">
+                <span className="rounded-full border border-white/10 bg-slate-800/80 px-3 py-1 text-xs uppercase tracking-[0.24em] text-slate-300">
+                  {project.category || "Project"}
+                </span>
                 {project.featured && (
-                  <span className="absolute right-4 top-4 rounded-full border border-cyan-300/30 bg-slate-950/80 px-3 py-1 text-xs font-bold text-cyan-300 backdrop-blur-xl">
+                  <span className="rounded-full border border-cyan-300/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-300">
                     Featured
                   </span>
                 )}
               </div>
 
-              <div className="relative flex h-full flex-col p-7">
-                <span className="mb-5 w-fit rounded-full border border-purple-300/20 bg-purple-400/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-purple-300">
-                  {project.category}
-                </span>
+              <h2 className="mb-4 text-2xl font-semibold text-white">{project.title}</h2>
 
-                <h2 className="mb-4 text-2xl font-black capitalize">
-                  {project.title}
-                </h2>
+              <p className="mb-6 flex-1 text-sm leading-7 text-slate-300">
+                {project.summary}
+              </p>
 
-                <p className="mb-6 flex-1 text-sm leading-7 text-slate-300">
-                  {project.summary}
-                </p>
-
-                <div className="mb-6 flex flex-wrap gap-2">
-                  {project.language && (
-                    <span className="rounded-full bg-white/5 px-3 py-1 text-sm text-slate-300">
-                      {project.language}
-                    </span>
-                  )}
-
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-300"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mb-6 flex flex-wrap gap-4 text-sm text-slate-400">
-                  <span>★ {project.stars}</span>
-                  <span>Forks: {project.forks}</span>
-                </div>
-
-                <div className="flex flex-wrap gap-x-5 gap-y-3">
-                  <Link
-                    href={`/projects/${project.slug}`}
-                    className="font-bold text-white transition hover:text-cyan-300"
+              <div className="mb-5 flex flex-wrap gap-2">
+                {project.language && (
+                  <span className="rounded-full bg-white/5 px-3 py-1 text-sm text-slate-300">
+                    {project.language}
+                  </span>
+                )}
+                {project.tags?.slice(0, 4).map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-300"
                   >
-                    {lang === "en"
-                      ? "Read Summary →"
-                      : "Özeti Oku →"}
-                  </Link>
+                    {tag}
+                  </span>
+                ))}
+              </div>
 
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-bold text-cyan-300 transition hover:text-white"
-                  >
-                    GitHub →
-                  </a>
-
-                  {project.kaggleUrl && (
-                    <a
-                      href={project.kaggleUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="font-bold text-purple-300 transition hover:text-white"
-                    >
-                      Kaggle →
-                    </a>
-                  )}
-
-                  {project.homepage && (
-                    <a
-                      href={project.homepage}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="font-bold text-emerald-300 transition hover:text-white"
-                    >
-                      {lang === "en"
-                        ? "Live Demo →"
-                        : "Canlı Demo →"}
-                    </a>
-                  )}
+              <div className="mb-6 grid gap-3 text-sm text-slate-400">
+                <div className="flex items-center justify-between">
+                  <span>Stars</span>
+                  <span>{project.stars || 0}</span>
                 </div>
+                <div className="flex items-center justify-between">
+                  <span>Forks</span>
+                  <span>{project.forks || 0}</span>
+                </div>
+              </div>
+
+              <div className="mt-auto flex flex-wrap gap-3">
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="font-semibold text-cyan-300 transition hover:text-white"
+                >
+                  {lang === "en" ? "Read Summary →" : "Özeti Oku →"}
+                </Link>
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-semibold text-slate-300 transition hover:text-cyan-200"
+                >
+                  GitHub →
+                </a>
               </div>
             </article>
           ))}
