@@ -42,26 +42,29 @@ export default function ProjectsGrid({ projects = [] }) {
 
   return (
     <>
-      <div className="mb-8 rounded-3xl border border-white/10 bg-slate-900/70 p-4 backdrop-blur-xl">
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/80 px-5 py-4">
-          <span className="text-lg text-cyan-300">⌕</span>
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder={
-              lang === "en"
-                ? "Search projects, technologies or categories..."
-                : "Proje, teknoloji veya kategori ara..."
-            }
-            aria-label={lang === "en" ? "Search projects" : "Projelerde ara"}
-            className="min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-slate-500"
-          />
+      <div className="mb-8 rounded-3xl border border-white/10 bg-slate-950/80 p-5 backdrop-blur-xl">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3">
+            <span className="text-lg text-cyan-300">⌕</span>
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder={
+                lang === "en"
+                  ? "Search projects, technologies or categories..."
+                  : "Proje, teknoloji veya kategori ara..."
+              }
+              aria-label={lang === "en" ? "Search projects" : "Projelerde ara"}
+              className="min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-slate-500"
+            />
+          </div>
+
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery("")}
-              className="rounded-full px-3 py-1 text-sm text-slate-400 transition hover:bg-white/5 hover:text-white"
+              className="rounded-full border border-white/10 bg-slate-900/80 px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-white/5 hover:text-white"
             >
               {lang === "en" ? "Clear" : "Temizle"}
             </button>
@@ -82,7 +85,7 @@ export default function ProjectsGrid({ projects = [] }) {
       </p>
 
       {filteredProjects.length === 0 ? (
-        <div className="rounded-[28px] border border-white/10 bg-slate-900/80 p-10 text-center">
+        <div className="rounded-[28px] border border-white/10 bg-slate-950/80 p-10 text-center">
           <h2 className="text-2xl font-black text-white">
             {lang === "en" ? "No matching projects" : "Eşleşen proje bulunamadı"}
           </h2>
@@ -103,14 +106,14 @@ export default function ProjectsGrid({ projects = [] }) {
           </button>
         </div>
       ) : (
-        <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {filteredProjects.map((project) => (
             <article
               key={project.id}
-              className="group flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/80 p-6 transition duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:shadow-[0_20px_60px_rgba(14,165,233,0.12)]"
+              className="group flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/80 p-6 shadow-lg shadow-slate-950/30 transition duration-300 hover:-translate-y-1 hover:border-cyan-400/30"
             >
-              <div className="mb-5 flex items-center justify-between gap-3">
-                <span className="rounded-full border border-white/10 bg-slate-800/80 px-3 py-1 text-xs uppercase tracking-[0.24em] text-slate-300">
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                <span className="rounded-full border border-white/10 bg-slate-800 px-3 py-1 text-xs uppercase tracking-[0.22em] text-slate-300">
                   {project.category || "Project"}
                 </span>
                 {project.featured && (
