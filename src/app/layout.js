@@ -105,7 +105,7 @@ export const metadata = {
     shortcut: "/assets/zealcoder-logo.png",
     apple: "/assets/zealcoder-logo.png",
   },
-  manifest: "/site.webmanifest",
+  manifest: "/manifest.json",
   referrer: "origin-when-cross-origin",
 };
 
