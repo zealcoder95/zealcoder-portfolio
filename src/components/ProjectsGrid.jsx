@@ -42,9 +42,9 @@ export default function ProjectsGrid({ projects = [] }) {
 
   return (
     <>
-      <div className="mb-8 rounded-3xl border border-white/10 bg-slate-950/80 p-5 backdrop-blur-xl">
+      <div className="mb-8 rounded-3xl border border-white/10 bg-slate-950/80 p-4 backdrop-blur-xl">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3">
+          <div className="flex w-full items-center gap-3 rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-3">
             <span className="text-lg text-cyan-300">⌕</span>
             <input
               type="search"

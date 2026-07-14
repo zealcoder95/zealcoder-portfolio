@@ -6,7 +6,7 @@ export default function ProjectFilters({
   onChange,
 }) {
   return (
-    <div className="mb-10 flex flex-wrap gap-3">
+    <div className="mb-8 flex flex-wrap gap-3">
       {categories.map((category) => {
         const active = activeCategory === category;
 
