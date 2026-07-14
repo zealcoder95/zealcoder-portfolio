@@ -1,6 +1,8 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageContext";
+import Link from "next/link";
+import CaseStudies from "@/components/CaseStudies";
 
 export default function HomePreview() {
   const { lang } = useLanguage();
@@ -74,6 +76,17 @@ export default function HomePreview() {
               <p className="text-slate-300">{item.text}</p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-16">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.35em] text-purple-300">{lang === "en" ? "Featured work" : "Öne çıkan çalışmalar"}</p>
+              <h3 className="mt-2 text-3xl font-black">{lang === "en" ? "Built around real questions." : "Gerçek sorular etrafında geliştirildi."}</h3>
+            </div>
+            <Link href="/projects" className="font-bold text-cyan-300 transition hover:text-white">{lang === "en" ? "All projects →" : "Tüm projeler →"}</Link>
+          </div>
+          <CaseStudies compact />
         </div>
       </div>
     </section>

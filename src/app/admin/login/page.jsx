@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
@@ -23,6 +23,14 @@ function getSafeNextPath(value) {
 }
 
 export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-slate-950" />}>
+      <AdminLoginForm />
+    </Suspense>
+  );
+}
+
+function AdminLoginForm() {
   const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");

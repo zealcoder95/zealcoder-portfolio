@@ -7,6 +7,7 @@ import CurrentFocus from "@/components/CurrentFocus";
 import UpdatesSection from "@/components/UpdatesSection";
 import HomePreview from "@/components/HomePreview";
 import Dashboard from "@/components/Dashboard";
+import RecruiterPanel from "@/components/RecruiterPanel";
 
 export default function HomePageContent({
   dashboardData,
@@ -17,6 +18,8 @@ export default function HomePageContent({
   return (
     <main className="bg-slate-950 text-white">
       <Hero t={t} />
+
+      <RecruiterPanel />
 
       <CurrentFocus />
 

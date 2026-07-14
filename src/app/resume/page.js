@@ -21,10 +21,9 @@ export default function ResumePage() {
             </h2>
 
             <p className="leading-8 text-slate-300">
-              Data Science and Artificial Intelligence enthusiast focused on
-              Python, SQL, Machine Learning and modern AI systems.
-              Passionate about building real-world solutions through
-              analytics, automation and intelligent applications.
+              Electrical and Electronics Engineering graduate building a career
+              in Data Science and AI Engineering. Focused on Python, SQL,
+              machine learning and practical analytical systems.
             </p>
           </section>
 
@@ -64,7 +63,7 @@ export default function ResumePage() {
             </h2>
 
             <p className="text-slate-300">
-              Software Engineering
+              Electrical and Electronics Engineering
             </p>
           </section>
 

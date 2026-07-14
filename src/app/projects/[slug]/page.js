@@ -3,9 +3,17 @@ import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getGitHubProject } from "@/lib/github";
+import { projects as caseStudies } from "@/data/projects";
+import CaseStudyDetail from "@/components/CaseStudyDetail";
 
 export default async function ProjectDetailPage({ params }) {
   const { slug } = await params;
+  const caseStudy = caseStudies.find((project) => project.id === slug);
+
+  if (caseStudy) {
+    return <CaseStudyDetail project={caseStudy} />;
+  }
+
   const project = await getGitHubProject(slug);
 
   if (!project) {

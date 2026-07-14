@@ -1,5 +1,6 @@
 import { resources } from "@/data/resources";
 import SectionHeader from "@/components/SectionHeader";
+import Link from "next/link";
 
 export default function Resources({ lang }) {
   return (
@@ -28,6 +29,13 @@ export default function Resources({ lang }) {
               <h3 className="mb-4 text-2xl font-black">{item.title}</h3>
 
               <p className="text-slate-300">{item.description[lang]}</p>
+
+              <Link
+                href="/learning"
+                className="mt-6 inline-flex font-bold text-cyan-300 transition hover:text-white"
+              >
+                {lang === "en" ? "Explore learning hub →" : "Öğrenme merkezini keşfet →"}
+              </Link>
             </div>
           ))}
         </div>
