@@ -1,24 +1,22 @@
 import "./globals.css";
 
 import { LanguageProvider } from "@/context/LanguageContext";
+
 import AppChrome from "@/components/AppChrome";
+
 import Script from "next/script";
 
 const siteUrl = "https://zealcoder.vercel.app";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
-
   applicationName: "ZealCoder",
-
   title: {
     default: "ZealCoder | Gizem Gülcü",
     template: "%s | ZealCoder",
   },
-
   description:
     "Building intelligent solutions through data, machine learning and artificial intelligence. Explore real-world case studies, engineering projects, learning resources, research notes and technical insights by Gizem Gülcü.",
-
   keywords: [
     "Gizem Gülcü",
     "ZealCoder",
@@ -44,20 +42,15 @@ export const metadata = {
     "Learning Hub",
     "Research",
   ],
-
   authors: [
     {
       name: "Gizem Gülcü",
       url: siteUrl,
     },
   ],
-
   creator: "Gizem Gülcü",
-
   publisher: "ZealCoder",
-
   category: "Technology",
-
   alternates: {
     canonical: "/",
     languages: {
@@ -65,23 +58,15 @@ export const metadata = {
       "en-US": "/en",
     },
   },
-
   openGraph: {
     title: "ZealCoder | AI • Data Science • Engineering",
-
     description:
       "Discover AI, Machine Learning, Data Science, engineering projects, technical articles and learning resources.",
-
     url: siteUrl,
-
     siteName: "ZealCoder",
-
     locale: "tr_TR",
-
     alternateLocale: ["en_US"],
-
     type: "website",
-
     images: [
       {
         url: "/assets/zealcoder-logo.png",
@@ -91,20 +76,14 @@ export const metadata = {
       },
     ],
   },
-
   twitter: {
     card: "summary_large_image",
-
     title: "ZealCoder",
-
     description:
       "AI • Data Science • Engineering • Learning Platform",
-
     images: ["/assets/zealcoder-logo.png"],
-
     creator: "@zealcoder",
   },
-
   robots: {
     index: true,
     follow: true,
@@ -116,21 +95,17 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-
   formatDetection: {
     telephone: false,
     address: false,
     email: false,
   },
-
   icons: {
     icon: "/assets/zealcoder-logo.png",
     shortcut: "/assets/zealcoder-logo.png",
     apple: "/assets/zealcoder-logo.png",
   },
-
   manifest: "/site.webmanifest",
-
   referrer: "origin-when-cross-origin",
 };
 
@@ -196,7 +171,6 @@ export default function RootLayout({ children }) {
             __html: JSON.stringify(personSchema),
           }}
         />
-
         <Script
           id="website-schema"
           type="application/ld+json"
@@ -204,7 +178,6 @@ export default function RootLayout({ children }) {
             __html: JSON.stringify(websiteSchema),
           }}
         />
-
         <LanguageProvider>
           <AppChrome>{children}</AppChrome>
         </LanguageProvider>
