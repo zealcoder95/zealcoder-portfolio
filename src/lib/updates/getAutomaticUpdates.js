@@ -3,6 +3,7 @@ import { manualUpdates } from "@/data/manualUpdates";
 
 const GITHUB_USERNAME = "zealcoder95";
 const MEDIUM_USERNAME = "zealcoder";
+const REQUEST_TIMEOUT_MS = 8000;
 
 const xmlParser = new XMLParser({
   ignoreAttributes: true,
@@ -82,6 +83,7 @@ async function getGitHubUpdates() {
         next: {
           revalidate: 1800,
         },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       }
     );
 
@@ -143,6 +145,7 @@ async function getMediumUpdates() {
         next: {
           revalidate: 1800,
         },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       }
     );
 

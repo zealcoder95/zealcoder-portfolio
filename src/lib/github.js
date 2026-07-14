@@ -2,6 +2,7 @@ import matter from "gray-matter";
 
 const GITHUB_USERNAME = "zealcoder95";
 const GITHUB_API = "https://api.github.com";
+const REQUEST_TIMEOUT_MS = 8000;
 
 function removeHtml(markdown = "") {
   return markdown
@@ -123,6 +124,7 @@ async function githubFetch(path) {
         },
 
         next: { revalidate: 1800 },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       }
     );
   } catch (error) {
@@ -156,6 +158,7 @@ async function getRepositoryReadme(repoName) {
             "X-GitHub-Api-Version": "2022-11-28",
         },
         next: { revalidate: 1800 },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       }
     );
   } catch (error) {
