@@ -8,6 +8,7 @@ import CaseStudyDetail from "@/components/CaseStudyDetail";
 
 export default async function ProjectDetailPage({ params }) {
   const { slug } = await params;
+
   const caseStudy = caseStudies.find((project) => project.id === slug);
 
   if (caseStudy) {
@@ -19,6 +20,10 @@ export default async function ProjectDetailPage({ params }) {
   if (!project) {
     notFound();
   }
+
+  // Ensure we have the repo name (slug is the repo name from GitHub)
+  const repoName = project.slug || slug;
+  const defaultBranch = project.defaultBranch || "main";
 
   return (
     <main className="min-h-screen bg-slate-950 px-6 pb-24 pt-32 text-white">
@@ -34,7 +39,6 @@ export default async function ProjectDetailPage({ params }) {
           <span className="rounded-full border border-purple-300/20 bg-purple-400/10 px-4 py-2 text-sm font-bold text-purple-300">
             {project.category}
           </span>
-
           {project.featured && (
             <span className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-4 py-2 text-sm font-bold text-cyan-300">
               Featured
@@ -56,8 +60,7 @@ export default async function ProjectDetailPage({ params }) {
               {project.language}
             </span>
           )}
-
-          {project.tags.map((tag) => (
+          {project.tags?.map((tag) => (
             <span
               key={tag}
               className="rounded-full bg-cyan-400/10 px-4 py-2 text-cyan-300"
@@ -72,28 +75,26 @@ export default async function ProjectDetailPage({ params }) {
             href={project.githubUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full bg-linear-to-r from-purple-600 to-cyan-500 px-6 py-3 font-bold text-white"
+            className="rounded-full bg-linear-to-r from-purple-600 to-cyan-500 px-6 py-3 font-bold text-white transition hover:shadow-lg hover:shadow-purple-600/30"
           >
             View on GitHub
           </a>
-
           {project.kaggleUrl && (
             <a
               href={project.kaggleUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-purple-300/40 px-6 py-3 font-bold text-purple-300"
+              className="rounded-full border border-purple-300/40 px-6 py-3 font-bold text-purple-300 transition hover:bg-purple-300/10"
             >
               View on Kaggle
             </a>
           )}
-
           {project.homepage && (
             <a
               href={project.homepage}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-cyan-300/40 px-6 py-3 font-bold text-cyan-300"
+              className="rounded-full border border-cyan-300/40 px-6 py-3 font-bold text-cyan-300 transition hover:bg-cyan-300/10"
             >
               Live Demo
             </a>
@@ -111,56 +112,53 @@ export default async function ProjectDetailPage({ params }) {
                       {children}
                     </h2>
                   ),
-
                   h2: ({ children }) => (
                     <h2 className="mt-10 text-3xl font-black text-white">
                       {children}
                     </h2>
                   ),
-
                   h3: ({ children }) => (
                     <h3 className="mt-8 text-2xl font-bold text-cyan-300">
                       {children}
                     </h3>
                   ),
-
                   p: ({ children }) => (
                     <p className="leading-8 text-slate-300">{children}</p>
                   ),
-
                   ul: ({ children }) => (
                     <ul className="list-disc space-y-2 pl-6 text-slate-300">
                       {children}
                     </ul>
                   ),
-
                   ol: ({ children }) => (
                     <ol className="list-decimal space-y-2 pl-6 text-slate-300">
                       {children}
                     </ol>
                   ),
-
                   a: ({ href, children }) => (
                     <a
                       href={href}
                       target="_blank"
                       rel="noreferrer"
-                      className="font-semibold text-cyan-300 underline underline-offset-4"
+                      className="font-semibold text-cyan-300 underline underline-offset-4 transition hover:text-white"
                     >
                       {children}
                     </a>
                   ),
-
                   img: ({ src, alt }) => {
-                    const isAbsolute =
-                      src?.startsWith("http://") ||
-                      src?.startsWith("https://");
+                    if (!src || !repoName) {
+                      return null;
+                    }
 
-                    const cleanSrc = src?.replace(/^\.\//, "");
+                    const isAbsolute =
+                      src.startsWith("http://") ||
+                      src.startsWith("https://");
+
+                    const cleanSrc = src.replace(/^\.\//, "");
 
                     const imageUrl = isAbsolute
                       ? src
-                      : `https://raw.githubusercontent.com/zealcoder95/${project.slug}/${project.defaultBranch}/${cleanSrc}`;
+                      : `https://raw.githubusercontent.com/zealcoder95/${repoName}/${defaultBranch}/${cleanSrc}`;
 
                     return (
                       <img
@@ -171,19 +169,16 @@ export default async function ProjectDetailPage({ params }) {
                       />
                     );
                   },
-
                   code: ({ children }) => (
                     <code className="rounded bg-black/40 px-2 py-1 text-purple-300">
                       {children}
                     </code>
                   ),
-
                   pre: ({ children }) => (
                     <pre className="overflow-x-auto rounded-2xl border border-white/10 bg-black/50 p-5">
                       {children}
                     </pre>
                   ),
-
                   table: ({ children }) => (
                     <div className="overflow-x-auto">
                       <table className="w-full border-collapse border border-white/10">
@@ -191,13 +186,11 @@ export default async function ProjectDetailPage({ params }) {
                       </table>
                     </div>
                   ),
-
                   th: ({ children }) => (
                     <th className="border border-white/10 bg-white/5 p-3 text-left text-cyan-300">
                       {children}
                     </th>
                   ),
-
                   td: ({ children }) => (
                     <td className="border border-white/10 p-3">
                       {children}
