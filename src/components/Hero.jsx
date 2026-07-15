@@ -1,37 +1,164 @@
 import Link from "next/link";
 
-export default function Hero({ t }) {
+const heroCopy = {
+  en: {
+    eyebrow: "Gizem Gülcü · AI Engineering Journey",
+    title: "Building toward AI Engineering, one real project at a time.",
+    journey:
+      "From Electrical & Electronics Engineering to programming, data, machine learning and AI Engineering—ZealCoder documents the work, questions and lessons along the way.",
+    focusLabel: "Current focus",
+    profilesLabel: "Follow the work",
+    projectsLabel: "View Projects",
+    learningLabel: "Learning Journey",
+    continueLabel: "Continue to featured projects",
+    status: [
+      {
+        label: "Currently learning",
+        value: "Machine Learning & AI Engineering",
+        href: "/learning",
+      },
+      {
+        label: "Currently building",
+        value: "A practical AI learning platform",
+        href: "/ai-lab",
+      },
+      {
+        label: "Latest project",
+        value: "Renewable Energy & Climate Analysis",
+        href: "/projects/renewable-energy",
+      },
+      {
+        label: "Latest article",
+        value: "Technical notes on Medium",
+        href: "https://medium.com/@zealcoder",
+        external: true,
+      },
+    ],
+  },
+  tr: {
+    eyebrow: "Gizem Gülcü · AI Engineering Yolculuğu",
+    title: "AI Engineering yolunda, gerçek projelerle ilerliyorum.",
+    journey:
+      "Elektrik-Elektronik Mühendisliğinden programlama, veri, makine öğrenmesi ve AI Engineering'e uzanan bu yolculuk; yapılan çalışmaları, soruları ve öğrenilenleri belgeliyor.",
+    focusLabel: "Mevcut odak",
+    profilesLabel: "Çalışmaları takip et",
+    projectsLabel: "Projeleri Gör",
+    learningLabel: "Öğrenme Yolculuğu",
+    continueLabel: "Öne çıkan projelere devam et",
+    status: [
+      {
+        label: "Şu anda öğreniliyor",
+        value: "Makine Öğrenmesi ve AI Engineering",
+        href: "/learning",
+      },
+      {
+        label: "Şu anda geliştiriliyor",
+        value: "Uygulamalı bir AI öğrenme platformu",
+        href: "/ai-lab",
+      },
+      {
+        label: "Son proje",
+        value: "Yenilenebilir Enerji ve İklim Analizi",
+        href: "/projects/renewable-energy",
+      },
+      {
+        label: "Son yazılar",
+        value: "Medium'da teknik notlar",
+        href: "https://medium.com/@zealcoder",
+        external: true,
+      },
+    ],
+  },
+};
+
+const profiles = [
+  { name: "GitHub", href: "https://github.com/zealcoder95" },
+  { name: "Medium", href: "https://medium.com/@zealcoder" },
+  { name: "Kaggle", href: "https://www.kaggle.com/gizemglc" },
+  { name: "LinkedIn", href: "https://www.linkedin.com/in/gizemgulcu" },
+];
+
+export default function Hero({ lang }) {
+  const copy = heroCopy[lang] || heroCopy.en;
+
   return (
-    <section className="relative min-h-screen overflow-hidden bg-slate-950 px-6 pt-36 text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(168,85,247,0.22),transparent_30%),radial-gradient(circle_at_80%_20%,rgba(34,211,238,0.18),transparent_30%),radial-gradient(circle_at_50%_90%,rgba(59,130,246,0.15),transparent_35%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:60px_60px] opacity-30" />
-      <div className="absolute left-1/2 top-1/2 h-[760px] w-[760px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/10" />
-      <div className="absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-purple-400/10" />
+    <section className="relative overflow-hidden bg-slate-950 text-white">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_82%_12%,rgba(34,211,238,0.08),transparent_24%),radial-gradient(circle_at_16%_80%,rgba(139,92,246,0.07),transparent_28%)]"
+      />
 
-      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-9rem)] max-w-7xl items-center gap-20 lg:grid-cols-2">
-        <div>
-          <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-5 py-2 backdrop-blur"><span className="h-2.5 w-2.5 animate-pulse rounded-full bg-cyan-400" /><span className="text-xs font-bold uppercase tracking-[0.35em] text-cyan-300">ZEALCODER PLATFORM</span></div>
-          <h1 className="mb-8 text-5xl font-black leading-[1.05] md:text-7xl">Building <span className="zeal-text-gradient">intelligence</span><br />one project at a time.</h1>
-          <p className="mb-10 max-w-2xl text-lg leading-8 text-slate-300">{t.hero.text}</p>
-          <div className="mb-14 flex flex-wrap gap-4">
-            <Link href="/projects" className="zeal-button-gradient rounded-full px-8 py-4 font-bold text-white shadow-xl shadow-cyan-500/20 transition duration-300 hover:-translate-y-1 hover:shadow-cyan-500/40">{t.hero.projectsButton}</Link>
-            <Link href="/learning" className="rounded-full border border-cyan-300/30 bg-white/5 px-8 py-4 font-bold text-cyan-300 backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-cyan-400/10">{t.hero.learningButton}</Link>
+      <div className="zc-container relative grid min-h-[calc(100svh-4rem)] items-center gap-12 px-6 pb-16 pt-32 lg:grid-cols-[minmax(0,1.25fr)_minmax(20rem,0.75fr)] lg:gap-20 lg:pb-20">
+        <div className="max-w-4xl">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-300 sm:text-sm">
+            {copy.eyebrow}
+          </p>
+
+          <h1 className="mt-6 max-w-4xl text-5xl font-black leading-[1.02] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl">
+            {copy.title}
+          </h1>
+
+          <p className="mt-7 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
+            {copy.journey}
+          </p>
+
+          <div className="mt-9 flex flex-wrap gap-3" aria-label="Primary actions">
+            <Link
+              href="/projects"
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-cyan-300 px-6 py-3 font-bold text-slate-950 transition duration-300 hover:-translate-y-0.5 hover:bg-cyan-200"
+            >
+              {copy.projectsLabel}
+            </Link>
+            <Link
+              href="/learning"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 px-6 py-3 font-bold text-white transition duration-300 hover:border-cyan-300/50 hover:bg-white/5"
+            >
+              {copy.learningLabel}
+            </Link>
           </div>
-          <div className="grid max-w-xl grid-cols-3 gap-6">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur"><h3 className="text-3xl font-black text-cyan-300">4</h3><p className="mt-2 text-sm text-slate-400">Featured Case Studies</p></div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur"><h3 className="text-3xl font-black text-purple-300">100%</h3><p className="mt-2 text-sm text-slate-400">Practical Learning</p></div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur"><h3 className="text-3xl font-black text-cyan-300">∞</h3><p className="mt-2 text-sm text-slate-400">Continuous Growth</p></div>
+
+          <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+            <span className="text-slate-500">{copy.profilesLabel}</span>
+            {profiles.map((profile) => (
+              <a
+                key={profile.name}
+                href={profile.href}
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold text-slate-300 underline decoration-white/20 underline-offset-4 transition hover:text-cyan-200 hover:decoration-cyan-300"
+              >
+                {profile.name}
+              </a>
+            ))}
           </div>
         </div>
 
-        <div className="relative flex items-center justify-center">
-          <div className="zeal-glow-gradient absolute h-[560px] w-[560px] animate-pulse rounded-full blur-3xl" />
-          <div className="absolute h-[520px] w-[520px] animate-[spin_40s_linear_infinite] rounded-full border border-dashed border-cyan-400/20" />
-          <div className="absolute h-[420px] w-[420px] animate-[spin_28s_linear_infinite_reverse] rounded-full border border-dashed border-purple-400/20" />
-          <div className="relative rounded-full border border-cyan-300/20 bg-white/5 p-6 shadow-[0_0_80px_rgba(34,211,238,0.18)] backdrop-blur-xl"><img src="/assets/zealcoder-logo.png" alt="ZealCoder Logo" className="h-80 w-80 rounded-full object-cover transition duration-500 hover:scale-105 md:h-96 md:w-96" /></div>
-          <div className="absolute left-0 top-16 hidden rounded-2xl border border-white/10 bg-slate-900/70 px-5 py-4 backdrop-blur lg:block"><p className="text-xs uppercase tracking-widest text-cyan-300">Focus</p><h4 className="mt-2 font-bold">Artificial Intelligence</h4></div>
-          <div className="absolute bottom-16 right-0 hidden rounded-2xl border border-white/10 bg-slate-900/70 px-5 py-4 backdrop-blur lg:block"><p className="text-xs uppercase tracking-widest text-purple-300">Stack</p><h4 className="mt-2 font-bold">Python • ML • Data Science</h4></div>
-        </div>
+        <aside className="border-t border-white/10 pt-7 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0" aria-label={copy.focusLabel}>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
+            {copy.focusLabel}
+          </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            {copy.status.map((item) => {
+              const cardClass = "group block rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition duration-300 hover:border-cyan-300/30 hover:bg-white/[0.05]";
+              const content = <><p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{item.label}</p><p className="mt-3 text-base font-bold leading-6 text-white transition group-hover:text-cyan-100">{item.value}</p></>;
+
+              return item.external ? (
+                <a key={item.label} href={item.href} target="_blank" rel="noreferrer" className={cardClass}>
+                  {content}
+                </a>
+              ) : (
+                <Link key={item.label} href={item.href} className={cardClass}>
+                  {content}
+                </Link>
+              );
+            })}
+          </div>
+        </aside>
+
+        <a href="#featured-projects" className="absolute bottom-6 left-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-400 transition hover:text-cyan-200 lg:left-0">
+          <span>{copy.continueLabel}</span>
+          <span aria-hidden="true">↓</span>
+        </a>
       </div>
     </section>
   );

@@ -5,11 +5,11 @@ import Hero from "@/components/Hero";
 import PortfolioHub from "@/components/PortfolioHub";
 
 export default function HomePageContent() {
-  const { t, lang } = useLanguage();
+  const { lang } = useLanguage();
 
   return (
     <main className="bg-slate-950 text-white">
-      <Hero t={t} />
+      <Hero lang={lang} />
       <PortfolioHub lang={lang} />
     </main>
   );

@@ -16,7 +16,7 @@ export default function PortfolioHub({ lang }) {
 
   return (
     <>
-      <section className="bg-slate-950 px-6 pb-28 pt-8 text-white">
+      <section id="featured-projects" className="scroll-mt-20 bg-slate-950 px-6 pb-28 pt-8 text-white">
         <div className="mx-auto max-w-7xl border-t border-white/10 pt-24">
           <div className="mb-12 flex flex-wrap items-end justify-between gap-5">
             <div><p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-300">{tr ? "Seçilmiş çalışmalar" : "Selected work"}</p><h2 className="mt-4 max-w-2xl text-4xl font-black leading-tight md:text-5xl">{tr ? "Gerçek sorulara, net analizler." : "Clear analysis for real questions."}</h2></div>
