@@ -464,3 +464,18 @@ p{
 .bg-white\/5{
   background-color: rgba(255,255,255,.06) !important;
 }
+/* Missing gradient utility classes used by Hero.jsx and ProjectCard.jsx */
+.zeal-button-gradient{
+  background-image: linear-gradient(to right, #9333ea, #06b6d4);
+}
+
+.zeal-glow-gradient{
+  background-image: radial-gradient(circle, rgba(168,85,247,0.45), rgba(34,211,238,0.35) 45%, transparent 70%);
+}
+
+.zeal-text-gradient{
+  background-image: linear-gradient(to right, #a855f7, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
