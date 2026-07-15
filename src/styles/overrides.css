@@ -1,124 +1,23 @@
-:root {
-  --bg: #020617;
-  --surface: rgba(10, 14, 28, 0.88);
-  --surface-strong: rgba(15, 23, 43, 0.95);
-  --text: #f8fafc;
-  --muted: #94a3b8;
-  --accent: #38bdf8;
-  --accent-2: #8b5cf6;
+/*
+ * Shared safeguards for the public product surface.
+ *
+ * Layout, type scale, colour and component geometry intentionally live beside
+ * their components in Tailwind classes. Keeping this file narrowly scoped
+ * prevents a generic selector from silently changing unrelated pages.
+ */
+
+:focus-visible {
+  outline: 2px solid var(--zc-color-focus);
+  outline-offset: 3px;
 }
 
-html {
-  scroll-behavior: auto;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
-  line-height: 1.6;
-}
-
-main,
-section,
-article,
-header,
-footer {
-  width: min(1200px, 100%);
-  margin-inline: auto;
-  padding-inline: clamp(1rem, 2.5vw, 3rem);
-}
-
-h1,
-.hero-title,
-.page-title {
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  line-height: 1.05;
-  margin: 0 0 1rem;
-  letter-spacing: -0.02em;
-}
-
-h2 {
-  font-size: clamp(1.15rem, 2.4vw, 1.75rem);
-  line-height: 1.2;
-  margin: 0 0 0.85rem;
-}
-
-h3 {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  margin: 0 0 0.75rem;
-}
-
-p,
-li,
-span,
-a {
-  color: var(--text);
-}
-
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-a:hover {
-  opacity: 0.9;
-}
-
-.card,
-[class*="rounded-"],
-.rounded-3xl {
-  background: var(--surface);
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  border-radius: 18px !important;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
-}
-
-.shadow-lg,
-.shadow-xl,
-.shadow-2xl {
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22) !important;
-}
-
-[class*="bg-[radial-gradient"],
-.hero-gradient,
-.absolute.inset-0 {
-  opacity: 0.2 !important;
-  filter: none !important;
-}
-
-[class*="tracking-"],
-.uppercase {
-  letter-spacing: normal !important;
-  text-transform: none !important;
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-@media (max-width: 768px) {
-  main,
-  section,
-  article,
-  header,
-  footer {
-    padding-inline: 1rem;
-  }
-
-  h1,
-  .hero-title,
-  .page-title {
-    font-size: 2rem !important;
-  }
-
-  h2 {
-    font-size: 1.35rem !important;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
