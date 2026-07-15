@@ -1,7 +1,8 @@
-import { resources } from "@/data/resources";
+import { getResources } from "@/content/resources";
 import SectionHeader from "@/components/SectionHeader";
 
 export default function Resources({ lang }) {
+  const resources = getResources();
   return (
     <section className="bg-slate-950 px-6 py-24 text-white">
       <div className="zc-container">

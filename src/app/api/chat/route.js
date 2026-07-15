@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getGitHubProjects } from "@/lib/github";
+import { getProjects } from "@/content";
 import { buildFallbackAnswer } from "@/lib/ai/fallback";
 import { generateGeminiAnswer } from "@/lib/ai/gemini";
 import {
@@ -214,7 +214,7 @@ export async function POST(request) {
       detectLanguage(message);
 
     const loadedProjects =
-      await getGitHubProjects();
+      await getProjects();
 
     const projects =
       removeNonPortfolioProfiles(

@@ -1,6 +1,5 @@
 import HomePageContent from "@/components/HomePageContent";
-import { getGitHubProjects } from "@/lib/github";
-import { getAutomaticUpdates } from "@/lib/updates/getAutomaticUpdates";
+import { getActivityFeed, getProjects } from "@/content";
 
 export const revalidate = 1800;
 
@@ -62,8 +61,8 @@ function createDashboardData(projects = []) {
 
 export default async function Home() {
   const [projects, updates] = await Promise.all([
-    getGitHubProjects(),
-    getAutomaticUpdates({
+    getProjects(),
+    getActivityFeed({
       limit: 6,
     }),
   ]);

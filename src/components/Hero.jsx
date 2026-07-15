@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getSocialLinks } from "@/content/settings";
 
 const heroCopy = {
   en: {
@@ -23,15 +24,9 @@ const heroCopy = {
   },
 };
 
-const profiles = [
-  { name: "GitHub", href: "https://github.com/zealcoder95" },
-  { name: "Medium", href: "https://medium.com/@zealcoder" },
-  { name: "Kaggle", href: "https://www.kaggle.com/gizemglc" },
-  { name: "LinkedIn", href: "https://www.linkedin.com/in/gizemgulcu" },
-];
-
 export default function Hero({ lang }) {
   const copy = heroCopy[lang] || heroCopy.en;
+  const profiles = getSocialLinks().filter((link) => link.platform !== "email");
 
   return (
     <section className="relative overflow-hidden bg-slate-950 text-white">
@@ -50,7 +45,7 @@ export default function Hero({ lang }) {
 
           <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
             <span className="text-slate-500">{copy.profilesLabel}</span>
-            {profiles.map((profile) => <a key={profile.name} href={profile.href} target="_blank" rel="noreferrer" className="font-semibold text-slate-300 underline decoration-white/20 underline-offset-4 transition hover:text-cyan-200 hover:decoration-cyan-300">{profile.name}</a>)}
+              {profiles.map((profile) => <a key={profile.id} href={profile.url} target="_blank" rel="noreferrer" className="font-semibold text-slate-300 underline decoration-white/20 underline-offset-4 transition hover:text-cyan-200 hover:decoration-cyan-300">{profile.label}</a>)}
           </div>
         </div>
 

@@ -1,11 +1,12 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageContext";
-import { projects as caseStudies } from "@/data/projects";
+import { getCaseStudies } from "@/content/projects";
 import { getLocalizedText } from "@/lib/i18n";
 
 export default function CaseStudies() {
   const { lang } = useLanguage();
+  const caseStudies = getCaseStudies();
 
   return (
     <section className="grid gap-6 lg:grid-cols-2">

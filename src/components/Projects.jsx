@@ -1,8 +1,9 @@
-import { projects } from "@/data/projects";
+import { getCaseStudies } from "@/content/projects";
 import ProjectCard from "@/components/ProjectCard";
 import SectionHeader from "@/components/SectionHeader";
 
 export default function Projects({ t, lang }) {
+  const projects = getCaseStudies();
   return (
     <section id="projects" className="bg-slate-950 px-6 py-24 text-white">
       <div className="zc-container">

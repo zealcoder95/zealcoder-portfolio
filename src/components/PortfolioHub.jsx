@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { aiLab } from "@/data/aiLab";
-import { projects } from "@/data/projects";
-import { resources } from "@/data/resources";
+import { getHomepageContent } from "@/content/homepage";
 
 const copy = {
   en: {
@@ -42,7 +40,7 @@ function Eyebrow({ children }) {
 
 export default function PortfolioHub({ lang }) {
   const text = copy[lang] || copy.en;
-  const featuredProject = projects[0];
+  const { experiments: aiLab, featuredProject, resources } = getHomepageContent();
   const focusItems = [
     { title: text.stages[1][0], description: text.stages[1][1], href: "/learning" },
     { title: lang === "tr" ? "Şu anda geliştiriliyor" : "Currently building", description: lang === "tr" ? "Uygulamalı bir AI öğrenme platformu." : "A practical AI learning platform.", href: "/ai-lab" },

@@ -1,5 +1,5 @@
 import UpdatesPageContent from "@/components/UpdatesPageContent";
-import { getAutomaticUpdates } from "@/lib/updates/getAutomaticUpdates";
+import { getActivityFeed } from "@/content";
 
 export const metadata = {
   title: "Updates | ZealCoder",
@@ -10,7 +10,7 @@ export const metadata = {
 export const revalidate = 1800;
 
 export default async function UpdatesPage() {
-  const updates = await getAutomaticUpdates({
+  const updates = await getActivityFeed({
     limit: 50,
   });
 

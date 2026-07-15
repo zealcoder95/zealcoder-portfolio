@@ -4,20 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import { getNavigation } from "@/content/settings";
 
 export default function Navbar() {
   const pathname = usePathname();
   const { lang, toggleLang, t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
-  const links = [
-    { href: "/about", label: t?.nav?.about || "About" },
-    { href: "/projects", label: t?.nav?.projects || "Projects" },
-    { href: "/learning", label: t?.nav?.learning || "Learning" },
-    { href: "/certificates", label: lang === "en" ? "Certificates" : "Sertifikalar" },
-    { href: "/ai-lab", label: "AI Lab" },
-    { href: "/resume", label: lang === "en" ? "Resume" : "Özgeçmiş" },
-    { href: "/contact", label: t?.nav?.contact || "Contact" },
-  ];
+  const links = getNavigation(lang);
   const active = (href) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (

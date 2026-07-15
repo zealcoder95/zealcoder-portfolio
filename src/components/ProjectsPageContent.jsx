@@ -3,10 +3,11 @@
 import { useLanguage } from "@/context/LanguageContext";
 import ProjectsGrid from "@/components/ProjectsGrid";
 import CaseStudies from "@/components/CaseStudies";
-import { projects as caseStudies } from "@/data/projects";
+import { getCaseStudies } from "@/content/projects";
 
 export default function ProjectsPageContent({ projects = [] }) {
   const { lang } = useLanguage();
+  const caseStudies = getCaseStudies();
 
   const featuredGithubUrls = new Set(
     caseStudies.map((project) => project.links?.github).filter(Boolean)

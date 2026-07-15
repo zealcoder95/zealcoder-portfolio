@@ -1,8 +1,9 @@
-import { skills } from "@/data/skills";
+import { getCurrentLearning } from "@/content/learning";
 import SkillCard from "@/components/SkillCard";
 import SectionHeader from "@/components/SectionHeader";
 
 export default function LearningHub({ t }) {
+  const skills = getCurrentLearning();
   return (
     <section id="learning" className="bg-slate-900 px-6 py-24 text-white">
       <div className="zc-container">

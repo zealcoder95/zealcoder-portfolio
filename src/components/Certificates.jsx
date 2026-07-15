@@ -1,6 +1,7 @@
-import { certificates } from "@/data/certificates";
+import { getCertificates } from "@/content/certificates";
 
 export default function Certificates({ lang }) {
+  const certificates = getCertificates();
   return (
     <section className="bg-slate-900 px-6 py-24 text-white">
       <div className="zc-container">

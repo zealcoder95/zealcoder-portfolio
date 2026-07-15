@@ -1,67 +1,12 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageContext";
+import { getTimeline } from "@/content/timeline";
 
 export default function CareerTimeline() {
   const { lang } = useLanguage();
 
-  const timeline = [
-    {
-      year: "2022",
-      title: {
-        en: "Engineering Foundation",
-        tr: "Mühendislik Temeli",
-      },
-      description: {
-        en: "Developed analytical thinking, problem-solving and engineering discipline.",
-        tr: "Analitik düşünme, problem çözme ve mühendislik disiplini geliştirdim.",
-      },
-    },
-    {
-      year: "2023",
-      title: {
-        en: "Python & SQL",
-        tr: "Python ve SQL",
-      },
-      description: {
-        en: "Started building programming and database foundations through practical exercises.",
-        tr: "Uygulamalı çalışmalarla programlama ve veritabanı temellerimi oluşturmaya başladım.",
-      },
-    },
-    {
-      year: "2024",
-      title: {
-        en: "Data Analytics",
-        tr: "Veri Analitiği",
-      },
-      description: {
-        en: "Worked with data cleaning, visualization, Power BI and analytical storytelling.",
-        tr: "Veri temizleme, görselleştirme, Power BI ve analitik hikâyeleştirme üzerine çalıştım.",
-      },
-    },
-    {
-      year: "2025",
-      title: {
-        en: "Data Science & Machine Learning",
-        tr: "Veri Bilimi ve Makine Öğrenmesi",
-      },
-      description: {
-        en: "Built project-based experience with exploratory analysis and machine learning workflows.",
-        tr: "Keşifsel veri analizi ve makine öğrenmesi süreçleriyle proje tabanlı deneyim geliştirdim.",
-      },
-    },
-    {
-      year: "2026",
-      title: {
-        en: "AI Engineering Journey",
-        tr: "AI Engineering Yolculuğu",
-      },
-      description: {
-        en: "Focusing on LLMs, RAG systems, AI agents and production-ready intelligent applications.",
-        tr: "LLM, RAG sistemleri, AI agentları ve üretime hazır akıllı uygulamalara odaklanıyorum.",
-      },
-    },
-  ];
+  const timeline = getTimeline();
 
   return (
     <section className="bg-slate-950 px-6 pb-28 text-white">
@@ -82,7 +27,7 @@ export default function CareerTimeline() {
           <div className="space-y-10">
             {timeline.map((item, index) => (
               <div
-                key={item.year}
+                key={item.id}
                 className={`relative grid gap-8 md:grid-cols-2 ${
                   index % 2 === 0 ? "" : "md:[&>div:first-child]:order-2"
                 }`}

@@ -1,13 +1,13 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import { content } from "@/data/content";
+import { getUiCopy } from "@/content/settings";
 
 const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
   const [lang, setLang] = useState("en");
-  const t = content[lang];
+  const t = getUiCopy(lang);
 
   function toggleLang() {
     setLang((current) => (current === "en" ? "tr" : "en"));

@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { projects } from "@/data/projects";
+import { getCaseStudies } from "@/content/projects";
 
 export default function HomeWork({ lang, totalProjects }) {
+  const projects = getCaseStudies();
   const copy = lang === "tr"
     ? { eyebrow: "Seçilmiş çalışmalar", title: "Veriden anlamlı sonuçlara.", all: "Tüm projeleri gör", more: "GitHub’da ek proje" }
     : { eyebrow: "Selected work", title: "From data to useful outcomes.", all: "View all projects", more: "More work on GitHub" };
