@@ -2,7 +2,7 @@ import HomePageContent from "@/components/HomePageContent";
 import { getGitHubProjects } from "@/lib/github";
 import { getAutomaticUpdates } from "@/lib/updates/getAutomaticUpdates";
 
-export const revalidate = 1800;
+export const revalidate = 0;
 
 function createDashboardData(projects = []) {
   const languageCounts = projects.reduce(
