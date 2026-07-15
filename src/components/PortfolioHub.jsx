@@ -1,50 +1,91 @@
 "use client";
 
 import Link from "next/link";
+import { aiLab } from "@/data/aiLab";
 import { projects } from "@/data/projects";
 import { resources } from "@/data/resources";
 
-const profiles = [
-  { name: "GitHub", handle: "@zealcoder95", href: "https://github.com/zealcoder95", mark: "GH", tone: "from-violet-500/20 to-slate-900", markTone: "text-slate-200" },
-  { name: "Kaggle", handle: "@gizemglc", href: "https://www.kaggle.com/gizemglc", mark: "K", tone: "from-cyan-400/20 to-slate-900", markTone: "text-cyan-300" },
-  { name: "LinkedIn", handle: "Gizem Gülcü", href: "https://www.linkedin.com/in/gizemgulcu", mark: "in", tone: "from-blue-500/20 to-slate-900", markTone: "text-blue-300" },
-  { name: "Medium", handle: "@zealcoder", href: "https://medium.com/@zealcoder", mark: "M", tone: "from-emerald-500/20 to-slate-900", markTone: "text-emerald-300" },
-];
+const copy = {
+  en: {
+    focus: "Current Focus", focusTitle: "A platform built in public, through practical work.",
+    featured: "Featured Project", featuredTitle: "One question, a careful analysis.", problem: "Problem", impact: "What it delivers", caseStudy: "View Case Study",
+    journey: "Learning Journey", journeyTitle: "A direction, not a finished story.",
+    writing: "Latest Writing", writingTitle: "Technical writing is taking shape.", writingText: "Notes and articles about data, machine learning and AI Engineering will be shared on Medium as the work develops.", topic: "Topic", reading: "Reading time", writingStatus: "Writing in progress", medium: "Visit Medium",
+    resources: "Resources", resourcesTitle: "Useful references for the next step.", resourcesText: "A small, practical library for building stronger foundations.", open: "Open resource",
+    lab: "AI Lab", labTitle: "A home for experiments worth documenting.", labText: "This space will collect LLM notes, RAG experiments and agent workflows as they become real, reviewable work.", comingSoon: "Coming Soon", exploreLab: "Explore AI Lab",
+    together: "Let's Build Together", togetherTitle: "Open to thoughtful conversations and practical collaboration.", togetherText: "Whether you are hiring, building, learning or exploring, ZealCoder is a place to start a useful conversation.", contact: "Contact", github: "Visit GitHub",
+    stages: [
+      ["Completed", "Python, SQL, Pandas and data analysis foundations."],
+      ["Current", "Machine learning, project documentation and AI Engineering foundations."],
+      ["Next", "Deep learning, LLMs, RAG systems and AI agents."],
+    ],
+  },
+  tr: {
+    focus: "Mevcut Odak", focusTitle: "Uygulamalı çalışmalarla, açıkça geliştirilen bir platform.",
+    featured: "Öne Çıkan Proje", featuredTitle: "Bir soru, dikkatli bir analiz.", problem: "Problem", impact: "Sunduğu değer", caseStudy: "Vaka Çalışmasını Gör",
+    journey: "Öğrenme Yolculuğu", journeyTitle: "Tamamlanmış bir hikâye değil, net bir yön.",
+    writing: "Son Yazılar", writingTitle: "Teknik yazılar şekilleniyor.", writingText: "Çalışmalar geliştikçe veri, makine öğrenmesi ve AI Engineering üzerine notlar ve yazılar Medium'da paylaşılacak.", topic: "Konu", reading: "Okuma süresi", writingStatus: "Yazım aşamasında", medium: "Medium'u ziyaret et",
+    resources: "Kaynaklar", resourcesTitle: "Sonraki adım için faydalı referanslar.", resourcesText: "Daha güçlü temeller kurmak için küçük ve uygulamalı bir kütüphane.", open: "Kaynağı aç",
+    lab: "AI Lab", labTitle: "Belgelenmeye değer deneyler için bir alan.", labText: "Bu alan, gerçek ve incelenebilir hâle geldikçe LLM notlarını, RAG deneylerini ve agent iş akışlarını bir araya getirecek.", comingSoon: "Yakında", exploreLab: "AI Lab'i keşfet",
+    together: "Birlikte Üretelim", togetherTitle: "Düşünülmüş sohbetlere ve uygulamalı iş birliklerine açığım.", togetherText: "İster işe alım, ister üretim, ister öğrenme veya keşif için burada olun; ZealCoder faydalı bir sohbetin başlangıç noktasıdır.", contact: "İletişime Geç", github: "GitHub'ı ziyaret et",
+    stages: [
+      ["Tamamlanan", "Python, SQL, Pandas ve veri analizi temelleri."],
+      ["Mevcut", "Makine öğrenmesi, proje dokümantasyonu ve AI Engineering temelleri."],
+      ["Sıradaki", "Derin öğrenme, LLM'ler, RAG sistemleri ve AI agent'lar."],
+    ],
+  },
+};
+
+function Eyebrow({ children }) {
+  return <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">{children}</p>;
+}
 
 export default function PortfolioHub({ lang }) {
-  const tr = lang === "tr";
+  const text = copy[lang] || copy.en;
+  const featuredProject = projects[0];
+  const focusItems = [
+    { title: text.stages[1][0], description: text.stages[1][1], href: "/learning" },
+    { title: lang === "tr" ? "Şu anda geliştiriliyor" : "Currently building", description: lang === "tr" ? "Uygulamalı bir AI öğrenme platformu." : "A practical AI learning platform.", href: "/ai-lab" },
+    { title: lang === "tr" ? "Son proje" : "Latest project", description: featuredProject.title[lang], href: `/projects/${featuredProject.id}` },
+    { title: lang === "tr" ? "Son yazılar" : "Latest writing", description: lang === "tr" ? "Medium'da teknik notlar hazırlanıyor." : "Technical notes are in progress on Medium.", href: "https://medium.com/@zealcoder", external: true },
+  ];
 
   return (
-    <>
-      <section id="featured-projects" className="scroll-mt-20 bg-slate-950 px-6 pb-28 pt-8 text-white">
-        <div className="mx-auto max-w-7xl border-t border-white/10 pt-24">
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-5">
-            <div><p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-300">{tr ? "Seçilmiş çalışmalar" : "Selected work"}</p><h2 className="mt-4 max-w-2xl text-4xl font-black leading-tight md:text-5xl">{tr ? "Gerçek sorulara, net analizler." : "Clear analysis for real questions."}</h2></div>
-            <Link href="/projects" className="rounded-full border border-cyan-300/30 px-5 py-3 text-sm font-bold text-cyan-200 transition hover:bg-cyan-300/10">{tr ? "Tüm projeler" : "All projects"} →</Link>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            {projects.slice(0, 3).map((project, index) => <Link key={project.id} href={`/projects/${project.id}`} className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.045] p-7 transition duration-300 hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/[0.075]">
-              <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-cyan-400/10 blur-3xl" />
-              <p className="relative text-sm font-black text-cyan-300">0{index + 1}</p><p className="relative mt-7 text-xs font-bold uppercase tracking-[0.16em] text-slate-400">{project.category[lang]}</p>
-              <h3 className="relative mt-3 text-2xl font-black leading-tight text-white">{project.title[lang]}</h3>
-              <div className="relative mt-6 flex flex-wrap gap-2">{project.tech.slice(0, 3).map((item) => <span key={item} className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">{item}</span>)}</div>
-              <p className="relative mt-8 font-bold text-cyan-200 transition group-hover:text-white">{tr ? "Vaka çalışmasını incele" : "Explore case study"} →</p>
-            </Link>)}
+    <main>
+      <section id="current-focus" className="scroll-mt-20 bg-slate-950 px-6 py-20 text-white md:py-24">
+        <div className="zc-container">
+          <div className="max-w-2xl"><Eyebrow>{text.focus}</Eyebrow><h2 className="mt-4 text-3xl font-black leading-tight text-white md:text-5xl">{text.focusTitle}</h2></div>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {focusItems.map((item) => {
+              const content = <><h3 className="text-sm font-bold text-cyan-200">{item.title}</h3><p className="mt-4 text-base font-semibold leading-6 text-white">{item.description}</p><span className="mt-6 inline-flex text-sm font-bold text-slate-400 transition group-hover:text-cyan-200">→</span></>;
+              const className = "group min-h-48 rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition duration-300 hover:border-cyan-300/30 hover:bg-white/[0.05]";
+              return item.external ? <a key={item.title} href={item.href} target="_blank" rel="noreferrer" className={className}>{content}</a> : <Link key={item.title} href={item.href} className={className}>{content}</Link>;
+            })}
           </div>
         </div>
       </section>
 
-      <section className="bg-[#0b1220] px-6 py-28 text-white">
-        <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-          <div><p className="text-sm font-black uppercase tracking-[0.28em] text-purple-300">{tr ? "Öğrenme kütüphanesi" : "Learning library"}</p><h2 className="mt-4 text-4xl font-black leading-tight">{tr ? "Paylaşmak için öğreniyorum." : "Learning, then sharing."}</h2><p className="mt-6 max-w-md leading-8 text-slate-400">{tr ? "Kullandığım notlar, yol haritaları ve güvenilir referanslar; öğrenme sürecini hızlandırmak isteyen herkes için burada." : "Notes, roadmaps and dependable references for anyone building stronger data skills."}</p><Link href="/resources" className="mt-8 inline-flex font-bold text-cyan-300 transition hover:text-white">{tr ? "Tüm kaynaklar" : "Explore the library"} →</Link></div>
-          <div className="grid gap-4 sm:grid-cols-3">{resources.map((resource, index) => <a key={resource.title} href={resource.url} target="_blank" rel="noreferrer" className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:-translate-y-1 hover:border-purple-300/40 hover:bg-white/[0.07]"><p className="text-sm font-black text-purple-300">0{index + 1}</p><p className="mt-10 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">{resource.type[lang]}</p><h3 className="mt-3 text-xl font-black text-white">{resource.title}</h3><p className="mt-6 text-sm font-bold text-cyan-200">{tr ? "Kaynağı aç" : "Open resource"} ↗</p></a>)}</div>
+      <section id="featured-projects" className="scroll-mt-20 bg-slate-900 px-6 py-24 text-white">
+        <div className="zc-container grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+          <div><Eyebrow>{text.featured}</Eyebrow><h2 className="mt-4 text-3xl font-black leading-tight md:text-5xl">{text.featuredTitle}</h2><Link href="/projects" className="mt-8 inline-flex font-bold text-cyan-200 transition hover:text-white">{lang === "tr" ? "Tüm projeler" : "All projects"} →</Link></div>
+          <article className="rounded-[28px] border border-white/10 bg-slate-950/50 p-7 md:p-9">
+            <p className="text-sm font-bold text-cyan-300">{featuredProject.category[lang]}</p><h3 className="mt-4 text-2xl font-black leading-tight text-white md:text-3xl">{featuredProject.title[lang]}</h3>
+            <div className="mt-8 grid gap-6 md:grid-cols-2"><div><p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">{text.problem}</p><p className="mt-3 leading-7 text-slate-300">{featuredProject.problem[lang]}</p></div><div><p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">{text.impact}</p><p className="mt-3 leading-7 text-slate-300">{featuredProject.outcome[lang]}</p></div></div>
+            <div className="mt-8 flex flex-wrap gap-2">{featuredProject.tech.map((tech) => <span key={tech} className="rounded-full border border-white/10 px-3 py-1 text-xs font-semibold text-slate-300">{tech}</span>)}</div>
+            <Link href={`/projects/${featuredProject.id}`} className="mt-8 inline-flex rounded-full bg-cyan-300 px-5 py-3 font-bold text-slate-950 transition hover:bg-cyan-200">{text.caseStudy}</Link>
+          </article>
         </div>
       </section>
 
-      <section className="bg-slate-950 px-6 py-28 text-white">
-        <div className="mx-auto max-w-7xl"><div className="mb-12 max-w-2xl"><p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-300">{tr ? "Takipte kal" : "Follow the work"}</p><h2 className="mt-4 text-4xl font-black leading-tight md:text-5xl">{tr ? "Çalışmaların yayınlandığı yerler." : "Where the work continues."}</h2><p className="mt-5 leading-8 text-slate-400">{tr ? "Kodlar, notebook'lar, profesyonel gelişmeler ve teknik yazılar tek bir yerde." : "Code, notebooks, professional updates and technical writing—connected in one place."}</p></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{profiles.map((profile) => <a key={profile.name} href={profile.href} target="_blank" rel="noreferrer" className={`group rounded-2xl border border-white/10 bg-linear-to-br ${profile.tone} p-6 transition hover:-translate-y-1 hover:border-white/30`}><span className={`flex h-12 w-12 items-center justify-center rounded-xl border border-white/15 bg-slate-950/60 text-lg font-black tracking-tight ${profile.markTone}`}>{profile.mark}</span><p className="mt-8 text-xl font-black text-white">{profile.name}</p><p className="mt-1 text-sm text-slate-400">{profile.handle}</p><p className="mt-6 font-bold text-cyan-200 transition group-hover:text-white">{tr ? "Profili aç" : "Visit profile"} ↗</p></a>)}</div></div>
-      </section>
-    </>
+      <section className="bg-slate-950 px-6 py-24 text-white"><div className="zc-container"><div className="max-w-2xl"><Eyebrow>{text.journey}</Eyebrow><h2 className="mt-4 text-3xl font-black leading-tight md:text-5xl">{text.journeyTitle}</h2></div><ol className="mt-10 grid gap-4 md:grid-cols-3">{text.stages.map(([stage, description], index) => <li key={stage} className="border-l-2 border-white/10 pl-5 first:border-emerald-300/60 nth-[2]:border-cyan-300/60 last:border-purple-300/60"><p className="text-sm font-bold text-cyan-200">0{index + 1} · {stage}</p><p className="mt-3 leading-7 text-slate-300">{description}</p></li>)}</ol><Link href="/learning" className="mt-10 inline-flex font-bold text-cyan-200 transition hover:text-white">{lang === "tr" ? "Öğrenme yolculuğunu incele" : "Explore the learning journey"} →</Link></div></section>
+
+      <section className="bg-slate-900 px-6 py-24 text-white"><div className="zc-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center"><div><Eyebrow>{text.writing}</Eyebrow><h2 className="mt-4 text-3xl font-black leading-tight md:text-5xl">{text.writingTitle}</h2><p className="mt-6 max-w-xl leading-8 text-slate-300">{text.writingText}</p></div><a href="https://medium.com/@zealcoder" target="_blank" rel="noreferrer" className="block rounded-[28px] border border-white/10 bg-slate-950/50 p-7 transition hover:border-emerald-300/30 md:p-9"><p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-300">Medium</p><h3 className="mt-5 text-2xl font-black text-white">{text.writingStatus}</h3><div className="mt-8 grid gap-4 text-sm sm:grid-cols-2"><div><p className="text-slate-500">{text.topic}</p><p className="mt-1 font-semibold text-slate-200">Data · ML · AI</p></div><div><p className="text-slate-500">{text.reading}</p><p className="mt-1 font-semibold text-slate-200">—</p></div></div><span className="mt-8 inline-flex font-bold text-emerald-200">{text.medium} ↗</span></a></div></section>
+
+      <section className="bg-slate-950 px-6 py-24 text-white"><div className="zc-container"><div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between"><div className="max-w-2xl"><Eyebrow>{text.resources}</Eyebrow><h2 className="mt-4 text-3xl font-black leading-tight md:text-5xl">{text.resourcesTitle}</h2><p className="mt-5 leading-8 text-slate-300">{text.resourcesText}</p></div><Link href="/resources" className="font-bold text-cyan-200 transition hover:text-white">{lang === "tr" ? "Tüm kaynaklar" : "All resources"} →</Link></div><div className="mt-10 grid gap-4 md:grid-cols-3">{resources.slice(0, 6).map((resource) => <a key={resource.title} href={resource.url} target="_blank" rel="noreferrer" className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-cyan-300/30 hover:bg-white/[0.05]"><p className="text-xs font-bold uppercase tracking-[0.14em] text-cyan-300">{resource.type[lang]}</p><h3 className="mt-4 text-xl font-black text-white">{resource.title}</h3><p className="mt-4 leading-7 text-slate-300">{resource.description[lang]}</p><span className="mt-6 inline-flex text-sm font-bold text-cyan-200 transition group-hover:text-white">{text.open} ↗</span></a>)}</div></div></section>
+
+      <section className="bg-slate-900 px-6 py-24 text-white"><div className="zc-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start"><div><p className="inline-flex rounded-full border border-purple-300/30 px-3 py-1 text-xs font-bold text-purple-200">{text.comingSoon}</p><h2 className="mt-5 text-3xl font-black leading-tight md:text-5xl">{text.labTitle}</h2><p className="mt-6 max-w-xl leading-8 text-slate-300">{text.labText}</p><Link href="/ai-lab" className="mt-8 inline-flex font-bold text-cyan-200 transition hover:text-white">{text.exploreLab} →</Link></div><div className="grid gap-3 sm:grid-cols-3">{aiLab.map((item) => <div key={item.title} className="rounded-2xl border border-white/10 bg-slate-950/50 p-5"><p className="text-xs font-bold uppercase tracking-[0.14em] text-purple-300">{item.status[lang]}</p><h3 className="mt-4 text-lg font-black text-white">{item.title}</h3><p className="mt-3 text-sm leading-6 text-slate-300">{item.description[lang]}</p></div>)}</div></div></section>
+
+      <section className="bg-slate-950 px-6 py-24 text-white"><div className="zc-container border-t border-white/10 pt-16"><div className="max-w-3xl"><Eyebrow>{text.together}</Eyebrow><h2 className="mt-4 text-3xl font-black leading-tight md:text-5xl">{text.togetherTitle}</h2><p className="mt-6 max-w-2xl leading-8 text-slate-300">{text.togetherText}</p><div className="mt-9 flex flex-wrap gap-3"><Link href="/contact" className="inline-flex rounded-full bg-cyan-300 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-200">{text.contact}</Link><a href="https://github.com/zealcoder95" target="_blank" rel="noreferrer" className="inline-flex rounded-full border border-white/15 px-6 py-3 font-bold text-white transition hover:border-cyan-300/50 hover:bg-white/5">{text.github}</a></div></div></div></section>
+    </main>
   );
 }
