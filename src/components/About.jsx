@@ -23,15 +23,27 @@ export default function About({ t }) {
 
             <div className="space-y-5">
               {[
-                "Data Science",
-                "Machine Learning",
-                "Power BI & SQL",
-                "AI Engineering",
+                {
+                  title: "Data Science",
+                  text: "Cleaning, exploring and analyzing real-world datasets to answer concrete questions.",
+                },
+                {
+                  title: "Machine Learning",
+                  text: "Building and evaluating predictive models, from classic regression to ensemble methods.",
+                },
+                {
+                  title: "Power BI & SQL",
+                  text: "Turning raw tables into dashboards and queries that support clear, data-driven decisions.",
+                },
+                {
+                  title: "AI Engineering",
+                  text: "Exploring LLMs, RAG pipelines and AI agents to build production-ready intelligent systems.",
+                },
               ].map((item) => (
-                <div key={item} className="rounded-2xl border border-white/10 bg-black/20 p-5">
-                  <p className="font-bold text-cyan-300">{item}</p>
+                <div key={item.title} className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <p className="font-bold text-cyan-300">{item.title}</p>
                   <p className="mt-2 text-sm text-slate-400">
-                    Building real projects, documenting the process, and growing step by step.
+                    {item.text}
                   </p>
                 </div>
               ))}
