@@ -1,55 +1,36 @@
-"use client";
-
 import Link from "next/link";
-import { useLanguage } from "@/context/LanguageContext";
-import { getLocalizedText } from "@/lib/i18n";
 
 export default function Hero({ t }) {
-  const { lang } = useLanguage();
-
   return (
-    <section className="relative overflow-hidden bg-[#f7f8fc] px-6 pb-20 pt-36 text-slate-950 sm:pb-28">
-      <div className="absolute -right-32 -top-28 h-96 w-96 rounded-full bg-cyan-200/45 blur-3xl" />
-      <div className="absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-violet-200/45 blur-3xl" />
+    <section className="relative min-h-screen overflow-hidden bg-slate-950 px-6 pt-36 text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(168,85,247,0.22),transparent_30%),radial-gradient(circle_at_80%_20%,rgba(34,211,238,0.18),transparent_30%),radial-gradient(circle_at_50%_90%,rgba(59,130,246,0.15),transparent_35%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:60px_60px] opacity-30" />
+      <div className="absolute left-1/2 top-1/2 h-[760px] w-[760px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/10" />
+      <div className="absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-purple-400/10" />
 
-      <div className="relative mx-auto max-w-6xl">
-        <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-          <div className="space-y-8">
-            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-cyan-700/15 bg-white/80 px-3.5 py-2 text-xs font-bold tracking-[0.14em] text-cyan-800 shadow-sm">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" /> AVAILABLE FOR NEW OPPORTUNITIES
-            </span>
-
-            <div className="space-y-6">
-              <h1 className="max-w-3xl text-5xl font-black leading-[1.02] tracking-[-0.045em] text-slate-950 sm:text-7xl">
-                {getLocalizedText(t?.hero?.title, lang, "Building clear, professional data products for modern teams.")}
-              </h1>
-              <p className="max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
-                {getLocalizedText(t?.hero?.text, lang, "I turn data into intelligent insights, clean dashboards, and production-ready analytics for real business impact.")}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4">
-              <Link href="/projects" className="inline-flex items-center justify-center rounded-xl bg-slate-950 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800">
-                {getLocalizedText(t?.hero?.ctaProjects, lang, "Explore Projects")}
-              </Link>
-              <Link href="/contact" className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white/70 px-6 py-3.5 text-sm font-bold text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-400 hover:bg-white">
-                {lang === "tr" ? "İletişime geç" : "Start a conversation"}
-              </Link>
-            </div>
+      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-9rem)] max-w-7xl items-center gap-20 lg:grid-cols-2">
+        <div>
+          <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-5 py-2 backdrop-blur"><span className="h-2.5 w-2.5 animate-pulse rounded-full bg-cyan-400" /><span className="text-xs font-bold uppercase tracking-[0.35em] text-cyan-300">ZEALCODER PLATFORM</span></div>
+          <h1 className="mb-8 text-5xl font-black leading-[1.05] md:text-7xl">Building <span className="zeal-text-gradient">intelligence</span><br />one project at a time.</h1>
+          <p className="mb-10 max-w-2xl text-lg leading-8 text-slate-300">{t.hero.text}</p>
+          <div className="mb-14 flex flex-wrap gap-4">
+            <Link href="/projects" className="zeal-button-gradient rounded-full px-8 py-4 font-bold text-white shadow-xl shadow-cyan-500/20 transition duration-300 hover:-translate-y-1 hover:shadow-cyan-500/40">{t.hero.projectsButton}</Link>
+            <Link href="/learning" className="rounded-full border border-cyan-300/30 bg-white/5 px-8 py-4 font-bold text-cyan-300 backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-cyan-400/10">{t.hero.learningButton}</Link>
           </div>
-
-          <div className="relative flex justify-center">
-            <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_24px_70px_rgba(15,23,42,0.12)] sm:p-8">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-5">
-                <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">ZealCoder / workspace</p><p className="mt-1 font-bold text-slate-900">Data to decisions</p></div>
-                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">Active</span>
-              </div>
-              <div className="mt-7 grid grid-cols-3 gap-3">
-                {[['Python', '01'], ['SQL', '02'], ['ML', '03']].map(([name, number]) => <div key={name} className="rounded-2xl bg-slate-50 p-4"><p className="text-xs font-bold text-slate-400">{number}</p><p className="mt-6 font-black text-slate-800">{name}</p></div>)}
-              </div>
-              <div className="mt-6 rounded-2xl bg-slate-950 p-5 text-white"><div className="flex items-center justify-between text-xs text-slate-400"><span>SELECTED WORK</span><span>2026</span></div><p className="mt-4 text-xl font-bold leading-tight">Analysis, systems &amp; useful AI.</p><div className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/10"><div className="h-full w-3/4 rounded-full bg-cyan-400" /></div></div>
-            </div>
+          <div className="grid max-w-xl grid-cols-3 gap-6">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur"><h3 className="text-3xl font-black text-cyan-300">4</h3><p className="mt-2 text-sm text-slate-400">Featured Case Studies</p></div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur"><h3 className="text-3xl font-black text-purple-300">100%</h3><p className="mt-2 text-sm text-slate-400">Practical Learning</p></div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur"><h3 className="text-3xl font-black text-cyan-300">∞</h3><p className="mt-2 text-sm text-slate-400">Continuous Growth</p></div>
           </div>
+        </div>
+
+        <div className="relative flex items-center justify-center">
+          <div className="zeal-glow-gradient absolute h-[560px] w-[560px] animate-pulse rounded-full blur-3xl" />
+          <div className="absolute h-[520px] w-[520px] animate-[spin_40s_linear_infinite] rounded-full border border-dashed border-cyan-400/20" />
+          <div className="absolute h-[420px] w-[420px] animate-[spin_28s_linear_infinite_reverse] rounded-full border border-dashed border-purple-400/20" />
+          <div className="relative rounded-full border border-cyan-300/20 bg-white/5 p-6 shadow-[0_0_80px_rgba(34,211,238,0.18)] backdrop-blur-xl"><img src="/assets/zealcoder-logo.png" alt="ZealCoder Logo" className="h-80 w-80 rounded-full object-cover transition duration-500 hover:scale-105 md:h-96 md:w-96" /></div>
+          <div className="absolute left-0 top-16 hidden rounded-2xl border border-white/10 bg-slate-900/70 px-5 py-4 backdrop-blur lg:block"><p className="text-xs uppercase tracking-widest text-cyan-300">Focus</p><h4 className="mt-2 font-bold">Artificial Intelligence</h4></div>
+          <div className="absolute bottom-16 right-0 hidden rounded-2xl border border-white/10 bg-slate-900/70 px-5 py-4 backdrop-blur lg:block"><p className="text-xs uppercase tracking-widest text-purple-300">Stack</p><h4 className="mt-2 font-bold">Python • ML • Data Science</h4></div>
         </div>
       </div>
     </section>

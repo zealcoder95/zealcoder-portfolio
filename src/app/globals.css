@@ -36,6 +36,26 @@
   --radius: 12px;
 }
 
+/* ZealCoder hero accents */
+.zeal-text-gradient {
+  background: linear-gradient(135deg, #a78bfa 0%, #c084fc 45%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.zeal-button-gradient {
+  background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+}
+
+.zeal-button-gradient:hover {
+  background: linear-gradient(135deg, #8b5cf6 0%, #22d3ee 100%);
+}
+
+.zeal-glow-gradient {
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.2) 0%, rgba(139, 92, 246, 0.12) 42%, transparent 72%);
+}
+
 /* =========================================================
    Reset & Base
 ========================================================= */

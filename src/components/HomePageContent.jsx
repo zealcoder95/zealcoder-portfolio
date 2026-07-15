@@ -1,16 +1,22 @@
-'use client';
+"use client";
 
-import { useLanguage } from '@/context/LanguageContext';
-import Hero from '@/components/Hero';
-import HomeWork from '@/components/HomeWork';
+import { useLanguage } from "@/context/LanguageContext";
+import Hero from "@/components/Hero";
+import CurrentFocus from "@/components/CurrentFocus";
+import UpdatesSection from "@/components/UpdatesSection";
+import HomePreview from "@/components/HomePreview";
+import Dashboard from "@/components/Dashboard";
 
-export default function HomePageContent({ dashboardData }) {
+export default function HomePageContent({ dashboardData, updates = [] }) {
   const { t, lang } = useLanguage();
 
   return (
-    <main className="min-h-screen bg-[#f7f8fc] text-slate-950">
+    <main className="bg-slate-950 text-white">
       <Hero t={t} />
-      <HomeWork lang={lang} totalProjects={dashboardData?.totalProjects || 0} />
+      <CurrentFocus />
+      <UpdatesSection updates={updates} />
+      <HomePreview />
+      <Dashboard lang={lang} data={dashboardData} />
     </main>
   );
 }
