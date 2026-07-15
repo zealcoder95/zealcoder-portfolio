@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import LoadingScreen from "@/components/LoadingScreen";
 import FloatingAssistant from "@/components/FloatingAssistant";
 
 export default function AppChrome({
@@ -27,8 +26,6 @@ export default function AppChrome({
   // Public Website
   return (
     <>
-      <LoadingScreen />
-
       <Navbar />
 
       <main>{children}</main>

@@ -1,5 +1,4 @@
 import "./globals.css";
-import "@/styles/overrides.css";
 
 import { LanguageProvider } from "@/context/LanguageContext";
 import AppChrome from "@/components/AppChrome";
