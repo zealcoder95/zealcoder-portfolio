@@ -7,7 +7,7 @@ export default function CertificatesPage() {
   const { lang } = useLanguage();
 
   return (
-    <main className="min-h-screen bg-slate-950 pt-24 text-white">
+    <main className="zc-page zc-page--nav-offset">
       <Certificates lang={lang} />
     </main>
   );

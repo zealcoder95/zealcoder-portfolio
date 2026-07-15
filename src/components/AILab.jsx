@@ -4,7 +4,7 @@ import SectionHeader from "@/components/SectionHeader";
 export default function AILab({ lang }) {
   return (
     <section className="bg-slate-900 px-6 py-24 text-white">
-      <div className="mx-auto max-w-7xl">
+      <div className="zc-container">
         <SectionHeader
           kicker={lang === "en" ? "AI Lab" : "AI Laboratuvarı"}
           title={lang === "en" ? "Future Experiments" : "Gelecek Deneyler"}

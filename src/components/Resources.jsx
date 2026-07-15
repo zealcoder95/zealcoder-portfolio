@@ -4,7 +4,7 @@ import SectionHeader from "@/components/SectionHeader";
 export default function Resources({ lang }) {
   return (
     <section className="bg-slate-950 px-6 py-24 text-white">
-      <div className="mx-auto max-w-7xl">
+      <div className="zc-container">
         <SectionHeader
           kicker={lang === "en" ? "Resources" : "Kaynaklar"}
           title={lang === "en" ? "Notes, Books & Datasets" : "Notlar, Kitaplar & Datasetler"}

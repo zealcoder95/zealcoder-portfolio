@@ -5,7 +5,7 @@ import SectionHeader from "@/components/SectionHeader";
 export default function LearningHub({ t }) {
   return (
     <section id="learning" className="bg-slate-900 px-6 py-24 text-white">
-      <div className="mx-auto max-w-7xl">
+      <div className="zc-container">
         <SectionHeader
           kicker={t.learning.kicker}
           title={t.learning.title}

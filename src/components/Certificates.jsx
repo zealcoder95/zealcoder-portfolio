@@ -3,7 +3,7 @@ import { certificates } from "@/data/certificates";
 export default function Certificates({ lang }) {
   return (
     <section className="bg-slate-900 px-6 py-24 text-white">
-      <div className="mx-auto max-w-7xl">
+      <div className="zc-container">
         <p className="mb-3 font-bold uppercase tracking-[0.35em] text-cyan-300">
           {lang === "en" ? "Achievements" : "Başarılar"}
         </p>

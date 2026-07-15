@@ -45,7 +45,7 @@ export default function GitHubRepos() {
 
   return (
     <section className="bg-slate-950 px-6 py-24 text-white">
-      <div className="mx-auto max-w-7xl">
+      <div className="zc-container">
         <p className="mb-3 text-sm font-black uppercase tracking-[0.4em] text-cyan-300">
           GitHub
         </p>

@@ -8,7 +8,7 @@ export default function AboutPage() {
   const { t } = useLanguage();
 
   return (
-    <main className="min-h-screen bg-slate-950 pt-24 text-white">
+    <main className="zc-page zc-page--nav-offset">
       <About t={t} />
       <CareerTimeline />
     </main>
