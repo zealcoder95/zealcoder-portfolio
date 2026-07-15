@@ -8,7 +8,10 @@ import Script from "next/script";
 const siteUrl = "https://zealcoder.vercel.app";
 
 export const metadata = {
-  // ... metadata satırlarının tamamı ...
+  title: "ZealCoder | Gizem Gülcü",
+  description:
+    "Building intelligent solutions through data, machine learning and artificial intelligence.",
+  // ... diğer metadata ...
 };
 
 export const viewport = {
@@ -19,8 +22,26 @@ export const viewport = {
   colorScheme: "dark",
 };
 
-const personSchema = { /* ... */ };
-const websiteSchema = { /* ... */ };
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Gizem Gülcü",
+  url: siteUrl,
+  image: `${siteUrl}/assets/zealcoder-logo.png`,
+  jobTitle: "AI Engineer & Data Scientist",
+  description:
+    "AI Engineer and Data Scientist building intelligent systems through data, analytics and machine learning.",
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "ZealCoder",
+  url: siteUrl,
+  description:
+    "AI Engineering, Data Science, Learning Resources and Technical Portfolio.",
+  inLanguage: ["tr", "en"],
+};
 
 export default function RootLayout({ children }) {
   return (

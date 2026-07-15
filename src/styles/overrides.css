@@ -1,10 +1,11 @@
 :root {
   --bg: #020617;
-  --surface: rgba(8, 12, 24, 0.82);
-  --text: #e2e8f0;
+  --surface: rgba(10, 14, 28, 0.88);
+  --surface-strong: rgba(15, 23, 43, 0.95);
+  --text: #f8fafc;
   --muted: #94a3b8;
   --accent: #38bdf8;
-  --accent-2: #a855f7;
+  --accent-2: #8b5cf6;
 }
 
 html {
@@ -16,24 +17,39 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font-family: Inter, system-ui, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
   line-height: 1.6;
 }
 
-h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
+main,
+section,
+article,
+header,
+footer {
+  width: min(1200px, 100%);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 2.5vw, 3rem);
+}
+
+h1,
+.hero-title,
+.page-title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
   line-height: 1.05;
-  margin: 0 0 0.8rem;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
 }
 
 h2 {
-  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
-  margin: 0 0 0.6rem;
+  font-size: clamp(1.15rem, 2.4vw, 1.75rem);
+  line-height: 1.2;
+  margin: 0 0 0.85rem;
 }
 
 h3 {
-  font-size: clamp(1rem, 1.8vw, 1.3rem);
-  margin: 0 0 0.5rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  margin: 0 0 0.75rem;
 }
 
 p,
@@ -49,59 +65,60 @@ a {
 }
 
 a:hover {
-  opacity: 0.85;
-}
-
-section,
-main,
-article,
-header,
-footer {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem 1rem 2rem;
+  opacity: 0.9;
 }
 
 .card,
 [class*="rounded-"],
 .rounded-3xl {
   background: var(--surface);
-  border: 1px solid rgba(148, 163, 184, 0.08);
-  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 18px !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
 }
 
 .shadow-lg,
 .shadow-xl,
 .shadow-2xl {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22) !important;
 }
 
 [class*="bg-[radial-gradient"],
 .hero-gradient,
 .absolute.inset-0 {
-  opacity: 0.3 !important;
+  opacity: 0.2 !important;
+  filter: none !important;
 }
 
 [class*="tracking-"],
 .uppercase {
-  letter-spacing: 0.03em !important;
+  letter-spacing: normal !important;
   text-transform: none !important;
 }
 
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
 @media (max-width: 768px) {
-  section,
   main,
+  section,
   article,
   header,
   footer {
-    padding: 1rem 0.75rem 1.5rem;
+    padding-inline: 1rem;
   }
 
-  h1 {
-    font-size: 1.9rem;
+  h1,
+  .hero-title,
+  .page-title {
+    font-size: 2rem !important;
   }
 
   h2 {
-    font-size: 1.25rem;
+    font-size: 1.35rem !important;
   }
 }
