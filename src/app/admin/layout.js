@@ -3,14 +3,10 @@ export const metadata = {
   description: "ZealCoder Yönetim Paneli",
 };
 
-export default function AdminLayout({
-  children,
-}) {
+export default function AdminLayout({ children }) {
   return (
-    <html lang="tr">
-      <body className="bg-slate-950 text-white antialiased">
-        {children}
-      </body>
-    </html>
+    <main className="min-h-screen bg-slate-950 text-slate-100 antialiased">
+      {children}
+    </main>
   );
 }
