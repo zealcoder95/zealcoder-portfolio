@@ -127,45 +127,9 @@ button {
   background: var(--primary);
 }
 
-/* =========================================================
-   Typography - Consistent Scale
-========================================================= */
-
-h1 {
-  font-size: clamp(2.5rem, 8vw, 4rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-h2 {
-  font-size: clamp(1.8rem, 6vw, 2.8rem);
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-
-h3 {
-  font-size: clamp(1.3rem, 4vw, 1.8rem);
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-p {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.7;
-}
-
-small {
-  font-size: 0.85rem;
-  color: var(--text-muted);
+/* Tailwind typography utilities control component sizing and colours. */
+h1, h2, h3, h4, p {
+  margin: 0;
 }
 
 /* =========================================================
