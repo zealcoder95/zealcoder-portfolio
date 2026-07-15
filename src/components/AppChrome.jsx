@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import FloatingAssistant from "@/components/FloatingAssistant";
 
 export default function AppChrome({
   children,
@@ -32,7 +31,6 @@ export default function AppChrome({
 
       <Footer />
 
-      <FloatingAssistant />
     </>
   );
 }
