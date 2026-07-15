@@ -1,55 +1,100 @@
 :root{
-  --accent-cyan: #34d3e8;
-  --accent-purple: #8b5cf6;
-  --card-bg: rgba(15,17,23,0.75);
+  --accent-cyan: #26b7c9; /* daha yumuşak */
+  --accent-purple: #7c4ef0;
+  --card-bg: rgba(8,10,14,0.75);
+  --muted-text: #9aa6b2;
 }
 
-main h1, .page-title, .hero-title {
-  font-size: clamp(1.8rem, 5vw, 2.6rem) !important;
-  line-height: 1.05 !important;
-  max-width: 68ch !important;
-  font-weight: 800 !important;
+/* Temel yazı / düzen */
+html, body {
+  font-size: 16px;
+  color: #dbe7ee;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: auto;
 }
-main h2, h3 {
-  font-size: clamp(1.1rem, 2.8vw, 1.6rem) !important;
+
+/* Başlık boyutları sadeleştirildi */
+h1, .hero-title, .page-title {
+  font-size: clamp(1.6rem, 4.2vw, 2.4rem) !important;
+  line-height: 1.06 !important;
+  max-width: 64ch !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+h2 {
+  font-size: clamp(1.05rem, 2.6vw, 1.4rem) !important;
   line-height: 1.2 !important;
   font-weight: 700 !important;
 }
+h3 {
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem) !important;
+  line-height: 1.25 !important;
+}
 
+/* Linkler ve neon renkler yumuşatıldı */
 a, .text-cyan-300, .text-cyan-400, .text-cyan-500 {
   color: var(--accent-cyan) !important;
   text-shadow: none !important;
-  opacity: 0.95 !important;
+  opacity: 0.92 !important;
 }
+a:hover { opacity: 1 !important; }
 
+/* Arkaplan gradyanlarının yoğunluğunu azalt */
 [class*="bg-[radial-gradient"], .hero-gradient, .absolute.inset-0 {
-  opacity: 0.45 !important;
+  opacity: 0.35 !important;
+  filter: blur(0.2px) !important;
+  pointer-events: none !important;
 }
 
-[class*="rounded-[28px]"], [class*="rounded-[32px]"], .rounded-3xl {
+/* Kart stillerini sadeleştir */
+[class*="rounded-"], .rounded-3xl, [class*="rounded-[28px]"], [class*="rounded-[32px]"] {
   border-radius: 12px !important;
   background: var(--card-bg) !important;
-  padding: 1rem !important;
+  padding: 0.9rem !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
 }
 
+/* Gölge azaltıldı */
 .shadow-lg, .shadow-xl, .shadow-2xl {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.35) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.34) !important;
 }
 
-[class*="bg-cyan-400/10"], [class*="bg-cyan-300"] {
-  background-color: rgba(52,211,235,0.06) !important;
+/* Rozetler / etiketler */
+[class*="bg-cyan-400/10"], .badge, .tag {
+  background-color: rgba(38,183,201,0.06) !important;
   color: var(--accent-cyan) !important;
+  text-shadow: none !important;
+  font-weight: 600 !important;
 }
 
+/* Büyük tracking/uppercase azalt */
 [class*="tracking-"], .uppercase {
-  letter-spacing: normal !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
 }
 
-[class*="grid"].md\:grid-cols-2, [class*="grid"].xl\:grid-cols-3 {
+/* Grid spacing daha kompakt */
+.grid, .container, .max-w-7xl {
   gap: 1rem !important;
+  max-width: 1200px !important;
+  margin-inline: auto !important;
+  padding-inline: 1rem !important;
 }
 
-@media (max-width: 640px) {
-  main h1, .hero-title { font-size: 1.6rem !important; }
-  [class*="rounded-"] { padding: 0.75rem !important; }
+/* Footer / nav renk dengesi */
+footer, nav, .site-header {
+  background: linear-gradient(180deg, rgba(3,6,10,0.6), rgba(3,6,10,0.45)) !important;
+}
+
+/* Küçük ekranlarda daha sıkı düzen */
+@media (max-width: 768px) {
+  h1, .hero-title { font-size: 1.5rem !important; }
+  [class*="rounded-"] { padding: 0.6rem !important; }
+  .max-w-7xl { padding-inline: 0.75rem !important; }
+}
+
+/* Son: aşırı parlak öğeleri kapat */
+*[style*="filter:"] {
+  filter: none !important;
+  mix-blend-mode: normal !important;
 }
