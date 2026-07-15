@@ -19,7 +19,7 @@ export default function SkillCard({ skill }) {
         </div>
 
         <p className="text-sm leading-6 text-slate-400">
-          Notes, projects, exercises and resources will be collected here as this learning path grows.
+          {skill.description}
         </p>
       </div>
     </div>

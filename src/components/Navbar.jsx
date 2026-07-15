@@ -13,6 +13,8 @@ export default function Navbar() {
     { href: "/about", label: t?.nav?.about || "About" },
     { href: "/projects", label: t?.nav?.projects || "Projects" },
     { href: "/learning", label: t?.nav?.learning || "Learning" },
+    { href: "/certificates", label: lang === "en" ? "Certificates" : "Sertifikalar" },
+    { href: "/ai-lab", label: "AI Lab" },
     { href: "/resume", label: lang === "en" ? "Resume" : "Özgeçmiş" },
     { href: "/contact", label: t?.nav?.contact || "Contact" },
   ];

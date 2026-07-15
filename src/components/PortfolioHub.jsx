@@ -5,10 +5,10 @@ import { projects } from "@/data/projects";
 import { resources } from "@/data/resources";
 
 const profiles = [
-  { name: "GitHub", handle: "@zealcoder95", href: "https://github.com/zealcoder95", mark: "GH", tone: "from-violet-500/20 to-slate-900" },
-  { name: "Kaggle", handle: "@gizemglc", href: "https://www.kaggle.com/gizemglc", mark: "K", tone: "from-cyan-400/20 to-slate-900" },
-  { name: "LinkedIn", handle: "Gizem Gülcü", href: "https://www.linkedin.com/in/gizemgulcu", mark: "in", tone: "from-blue-500/20 to-slate-900" },
-  { name: "Medium", handle: "@zealcoder", href: "https://medium.com/@zealcoder", mark: "M", tone: "from-emerald-500/20 to-slate-900" },
+  { name: "GitHub", handle: "@zealcoder95", href: "https://github.com/zealcoder95", mark: "GH", tone: "from-violet-500/20 to-slate-900", markTone: "text-slate-200" },
+  { name: "Kaggle", handle: "@gizemglc", href: "https://www.kaggle.com/gizemglc", mark: "K", tone: "from-cyan-400/20 to-slate-900", markTone: "text-cyan-300" },
+  { name: "LinkedIn", handle: "Gizem Gülcü", href: "https://www.linkedin.com/in/gizemgulcu", mark: "in", tone: "from-blue-500/20 to-slate-900", markTone: "text-blue-300" },
+  { name: "Medium", handle: "@zealcoder", href: "https://medium.com/@zealcoder", mark: "M", tone: "from-emerald-500/20 to-slate-900", markTone: "text-emerald-300" },
 ];
 
 export default function PortfolioHub({ lang }) {
@@ -43,7 +43,7 @@ export default function PortfolioHub({ lang }) {
       </section>
 
       <section className="bg-slate-950 px-6 py-28 text-white">
-        <div className="mx-auto max-w-7xl"><div className="mb-12 max-w-2xl"><p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-300">{tr ? "Takipte kal" : "Follow the work"}</p><h2 className="mt-4 text-4xl font-black leading-tight md:text-5xl">{tr ? "Çalışmaların yayınlandığı yerler." : "Where the work continues."}</h2><p className="mt-5 leading-8 text-slate-400">{tr ? "Kodlar, notebook’lar, profesyonel gelişmeler ve teknik yazılar tek bir yerde." : "Code, notebooks, professional updates and technical writing—connected in one place."}</p></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{profiles.map((profile) => <a key={profile.name} href={profile.href} target="_blank" rel="noreferrer" className={`group rounded-2xl border border-white/10 bg-linear-to-br ${profile.tone} p-6 transition hover:-translate-y-1 hover:border-white/30`}><span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-slate-950/50 font-black text-white">{profile.mark}</span><p className="mt-8 text-xl font-black text-white">{profile.name}</p><p className="mt-1 text-sm text-slate-400">{profile.handle}</p><p className="mt-6 font-bold text-cyan-200 transition group-hover:text-white">{tr ? "Profili aç" : "Visit profile"} ↗</p></a>)}</div></div>
+        <div className="mx-auto max-w-7xl"><div className="mb-12 max-w-2xl"><p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-300">{tr ? "Takipte kal" : "Follow the work"}</p><h2 className="mt-4 text-4xl font-black leading-tight md:text-5xl">{tr ? "Çalışmaların yayınlandığı yerler." : "Where the work continues."}</h2><p className="mt-5 leading-8 text-slate-400">{tr ? "Kodlar, notebook'lar, profesyonel gelişmeler ve teknik yazılar tek bir yerde." : "Code, notebooks, professional updates and technical writing—connected in one place."}</p></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{profiles.map((profile) => <a key={profile.name} href={profile.href} target="_blank" rel="noreferrer" className={`group rounded-2xl border border-white/10 bg-linear-to-br ${profile.tone} p-6 transition hover:-translate-y-1 hover:border-white/30`}><span className={`flex h-12 w-12 items-center justify-center rounded-xl border border-white/15 bg-slate-950/60 text-lg font-black tracking-tight ${profile.markTone}`}>{profile.mark}</span><p className="mt-8 text-xl font-black text-white">{profile.name}</p><p className="mt-1 text-sm text-slate-400">{profile.handle}</p><p className="mt-6 font-bold text-cyan-200 transition group-hover:text-white">{tr ? "Profili aç" : "Visit profile"} ↗</p></a>)}</div></div>
       </section>
     </>
   );
