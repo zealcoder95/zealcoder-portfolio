@@ -1,32 +1,6 @@
 import Link from "next/link";
-import { getSocialLinks } from "@/content/settings";
-
-const heroCopy = {
-  en: {
-    eyebrow: "Gizem Gülcü · AI Engineering Journey",
-    title: "Building toward AI Engineering, one real project at a time.",
-    journey:
-      "From Electrical & Electronics Engineering to programming, data, machine learning and AI Engineering—ZealCoder documents the work, questions and lessons along the way.",
-    profilesLabel: "Follow the work",
-    projectsLabel: "View Projects",
-    learningLabel: "Learning Journey",
-    continueLabel: "Explore current focus",
-  },
-  tr: {
-    eyebrow: "Gizem Gülcü · AI Engineering Yolculuğu",
-    title: "AI Engineering yolunda, gerçek projelerle ilerliyorum.",
-    journey:
-      "Elektrik-Elektronik Mühendisliğinden programlama, veri, makine öğrenmesi ve AI Engineering'e uzanan bu yolculuk; yapılan çalışmaları, soruları ve öğrenilenleri belgeliyor.",
-    profilesLabel: "Çalışmaları takip et",
-    projectsLabel: "Projeleri Gör",
-    learningLabel: "Öğrenme Yolculuğu",
-    continueLabel: "Mevcut odağı keşfet",
-  },
-};
-
-export default function Hero({ lang }) {
-  const copy = heroCopy[lang] || heroCopy.en;
-  const profiles = getSocialLinks().filter((link) => link.platform !== "email");
+export default function Hero({ data }) {
+  const { profiles, ...copy } = data;
 
   return (
     <section className="relative overflow-hidden bg-slate-950 text-white">
