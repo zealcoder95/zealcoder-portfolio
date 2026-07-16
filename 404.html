@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="notfound.meta.title">Sayfa bulunamadı — zealcoder</title>
+<meta name="description" data-i18n-content="notfound.meta.desc" content="Aradığınız sayfa bulunamadı.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#050611">
+<link rel="manifest" href="site.webmanifest">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.github.com">
+<link rel="preconnect" href="https://api.rss2json.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
+<canvas id="circuit-bg"></canvas>
+<nav>
+  <a class="brand" href="index.html">
+    <img src="assets/zealcoder-logo.png" alt="zealcoder logosu">
+    <span><span class="tag-open">&lt;</span>zealcoder<span class="tag-close">/&gt;</span></span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a><a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a><a href="projeler.html" data-i18n="nav.projects">Projeler</a><a href="yazilar.html" data-i18n="nav.writing">Yazılar</a><a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a><a href="gunluk.html" data-i18n="nav.journal">Günlük</a><a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Dil seçimi / Language">
+      <button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a>
+  <a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a>
+  <a href="projeler.html" data-i18n="nav.projects">Projeler</a>
+  <a href="yazilar.html" data-i18n="nav.writing">Yazılar</a>
+  <a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a>
+  <a href="gunluk.html" data-i18n="nav.journal">Günlük</a>
+  <a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+</div>
+<main id="main-content">
+
+<section class="page-hero container" style="min-height:70vh; display:flex; flex-direction:column; justify-content:center;">
+  <div class="eyebrow" data-i18n="notfound.eyebrow">404 / bulunamadı</div>
+  <h1 data-i18n="notfound.h1">Bu devrede bir kopukluk var</h1>
+  <p data-i18n="notfound.sub">Aradığınız sayfa taşınmış, kaldırılmış ya da hiç var olmamış olabilir.</p>
+  <div class="hero-actions" style="justify-content:flex-start; margin-top:1.6rem;">
+    <a class="btn btn-primary" href="index.html" data-i18n="notfound.btn.home">Anasayfaya dön</a>
+    <a class="btn btn-ghost" href="projeler.html" data-i18n="notfound.btn.projects">Projelere git</a>
+  </div>
+</section>
+
+</main>
+<footer>
+  <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu">zealcoder — Gizem Gülcü</span>
+  <span data-i18n="footer.location">Adana, Türkiye</span>
+</footer>
+<script src="js/site.js" defer></script>
+<script src="js/i18n.js" defer></script>
+</body>
+</html>

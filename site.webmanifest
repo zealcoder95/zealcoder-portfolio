@@ -1,0 +1,15 @@
+{
+  "name": "zealcoder — Gizem Gülcü",
+  "short_name": "zealcoder",
+  "description": "Data Scientist & Electrical-Electronics Engineer portfolio.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#050611",
+  "theme_color": "#050611",
+  "icons": [
+    { "src": "assets/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "assets/favicon-64.png", "sizes": "64x64", "type": "image/png" },
+    { "src": "assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

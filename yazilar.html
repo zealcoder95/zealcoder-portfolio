@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="writing.meta.title">Yazılar — zealcoder</title>
+<meta name="description" data-i18n-content="writing.meta.desc" content="Gizem Gülcü'nün Medium'da yayımladığı veri bilimi ve mühendislik yazıları.">
+<link rel="canonical" href="https://zealcoder95.github.io/zealcoder-portfolio/yazilar.html">
+<meta name="theme-color" content="#050611">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="zealcoder">
+<meta property="og:url" content="https://zealcoder95.github.io/zealcoder-portfolio/yazilar.html">
+<meta property="og:title" content="Yazılar — zealcoder">
+<meta property="og:description" content="Gizem Gülcü'nün Medium'da yayımladığı veri bilimi ve mühendislik yazıları.">
+<meta property="og:image" content="https://zealcoder95.github.io/zealcoder-portfolio/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Yazılar — zealcoder">
+<meta name="twitter:description" content="Gizem Gülcü'nün Medium'da yayımladığı veri bilimi ve mühendislik yazıları.">
+<meta name="twitter:image" content="https://zealcoder95.github.io/zealcoder-portfolio/assets/og-image.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.github.com">
+<link rel="preconnect" href="https://api.rss2json.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/zealcoder-feeds.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
+<canvas id="circuit-bg"></canvas>
+<div class="spine" aria-hidden="true">
+  <div class="spine-fill" id="spineFill"></div>
+  <div class="spine-node" data-pct="5" style="top:5%"></div>
+  <div class="spine-node" data-pct="25" style="top:25%"></div>
+  <div class="spine-node" data-pct="45" style="top:45%"></div>
+  <div class="spine-node" data-pct="65" style="top:65%"></div>
+  <div class="spine-node" data-pct="85" style="top:85%"></div>
+</div>
+<nav>
+  <a class="brand" href="index.html">
+    <img src="assets/zealcoder-logo.png" alt="zealcoder logosu">
+    <span><span class="tag-open">&lt;</span>zealcoder<span class="tag-close">/&gt;</span></span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a><a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a><a href="projeler.html" data-i18n="nav.projects">Projeler</a><a href="yazilar.html" class="active" aria-current="page" data-i18n="nav.writing">Yazılar</a><a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a><a href="gunluk.html" data-i18n="nav.journal">Günlük</a><a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Dil seçimi / Language">
+      <button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a>
+  <a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a>
+  <a href="projeler.html" data-i18n="nav.projects">Projeler</a>
+  <a href="yazilar.html" class="active" aria-current="page" data-i18n="nav.writing">Yazılar</a>
+  <a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a>
+  <a href="gunluk.html" data-i18n="nav.journal">Günlük</a>
+  <a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+</div>
+<main id="main-content">
+
+<section class="page-hero container">
+  <div class="eyebrow" data-i18n="writing.eyebrow">04 / yazılar</div>
+  <h1 data-i18n="writing.h1">Medium'da paylaşımlar</h1>
+  <p data-i18n="writing.sub">Veri bilimi ve mühendislik yolculuğuma dair yazılarımın durumu.</p>
+</section>
+
+<section class="container feed-section" aria-labelledby="medium-feed-heading">
+  <div class="section-head">
+    <div>
+      <div class="section-num" data-i18n="writing.feed.eyebrow">canlı akış</div>
+      <h2 id="medium-feed-heading" data-i18n="writing.feed.title">Medium'dan son yazılar</h2>
+    </div>
+    <span class="feed-live-tag"><span class="feed-live-dot" aria-hidden="true"></span><span data-i18n="writing.feed.livetag">medium.com/@zealcoder'den gerçek zamanlı</span></span>
+  </div>
+  <div class="feed-grid feed-grid-single">
+    <div class="feed-col">
+      <div class="feed-col-head">
+        <h3 data-i18n="writing.feed.col.title">Son paylaşımlar</h3>
+        <a class="feed-source-link" href="https://medium.com/@zealcoder" target="_blank" rel="noopener" data-i18n="writing.feed.col.all">profili gör →</a>
+      </div>
+      <div id="medium-feed-full" data-feed="medium" data-count="8">
+        <div class="feed-skel"></div><div class="feed-skel"></div><div class="feed-skel"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>
+  <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu">zealcoder — Gizem Gülcü</span>
+  <span data-i18n="footer.location">Adana, Türkiye</span>
+</footer>
+<script src="js/site.js" defer></script>
+<script src="js/zealcoder-feeds.js" defer></script>
+<script src="js/i18n.js" defer></script>
+</body>
+</html>

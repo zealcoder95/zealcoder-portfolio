@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="resources.meta.title">Kaynaklar — zealcoder</title>
+<meta name="description" data-i18n-content="resources.meta.desc" content="Gizem Gülcü'nün önerdiği kitaplar, kurslar ve kullandığı araçların derlendiği kaynak sayfası.">
+<link rel="canonical" href="https://zealcoder95.github.io/zealcoder-portfolio/kaynaklar.html">
+<meta name="theme-color" content="#050611">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="zealcoder">
+<meta property="og:url" content="https://zealcoder95.github.io/zealcoder-portfolio/kaynaklar.html">
+<meta property="og:title" content="Kaynaklar — zealcoder">
+<meta property="og:description" content="Gizem Gülcü'nün önerdiği kitaplar, kurslar ve kullandığı araçların derlendiği kaynak sayfası.">
+<meta property="og:image" content="https://zealcoder95.github.io/zealcoder-portfolio/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kaynaklar — zealcoder">
+<meta name="twitter:description" content="Gizem Gülcü'nün önerdiği kitaplar, kurslar ve kullandığı araçların derlendiği kaynak sayfası.">
+<meta name="twitter:image" content="https://zealcoder95.github.io/zealcoder-portfolio/assets/og-image.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.github.com">
+<link rel="preconnect" href="https://api.rss2json.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
+<canvas id="circuit-bg"></canvas>
+<div class="spine" aria-hidden="true">
+  <div class="spine-fill" id="spineFill"></div>
+  <div class="spine-node" data-pct="5" style="top:5%"></div>
+  <div class="spine-node" data-pct="25" style="top:25%"></div>
+  <div class="spine-node" data-pct="45" style="top:45%"></div>
+  <div class="spine-node" data-pct="65" style="top:65%"></div>
+  <div class="spine-node" data-pct="85" style="top:85%"></div>
+</div>
+<nav>
+  <a class="brand" href="index.html">
+    <img src="assets/zealcoder-logo.png" alt="zealcoder logosu">
+    <span><span class="tag-open">&lt;</span>zealcoder<span class="tag-close">/&gt;</span></span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a><a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a><a href="projeler.html" data-i18n="nav.projects">Projeler</a><a href="yazilar.html" data-i18n="nav.writing">Yazılar</a><a href="kaynaklar.html" class="active" aria-current="page" data-i18n="nav.resources">Kaynaklar</a><a href="gunluk.html" data-i18n="nav.journal">Günlük</a><a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Dil seçimi / Language">
+      <button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a>
+  <a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a>
+  <a href="projeler.html" data-i18n="nav.projects">Projeler</a>
+  <a href="yazilar.html" data-i18n="nav.writing">Yazılar</a>
+  <a href="kaynaklar.html" class="active" aria-current="page" data-i18n="nav.resources">Kaynaklar</a>
+  <a href="gunluk.html" data-i18n="nav.journal">Günlük</a>
+  <a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+</div>
+<main id="main-content">
+
+<section class="page-hero container">
+  <div class="eyebrow" data-i18n="resources.eyebrow">05 / kaynaklar</div>
+  <h1 data-i18n="resources.h1">Öğrenirken kullandığım ve önerdiğim kaynaklar</h1>
+  <p data-i18n="resources.sub">Bu bölüm yalnızca isim listesi olmayacak — her kaynağın neden faydalı olduğunu ve hangi aşamada işime yaradığını da içerecek.</p>
+</section>
+
+<section class="container">
+  <div class="section-head">
+    <div>
+      <div class="section-num" data-i18n="resources.cat.books.eyebrow">kitaplığım</div>
+      <h2 data-i18n="resources.cat.books.title">Kitaplar</h2>
+    </div>
+  </div>
+  <div class="project-grid">
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b1.tag">Chip Huyen · MLOps &amp; Sistem Tasarımı</span>
+      <h3 data-i18n="resources.b1.title">Designing Machine Learning Systems</h3>
+      <p data-i18n="resources.b1.desc">Üretime hazır ML sistemleri kurma sürecini uçtan uca ele alan, veri toplamadan izlemeye kadar mühendislik kararlarını tartışan bir kaynak.</p>
+      <a class="project-link" href="https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b2.tag">Bruce, Bruce &amp; Gedeck · İstatistik</span>
+      <h3 data-i18n="resources.b2.title">Practical Statistics for Data Scientists</h3>
+      <p data-i18n="resources.b2.desc">Python ile keşifsel veri analizi, örnekleme ve istatistiksel çıkarımı veri bilimi perspektifinden ele alan başucu kaynağım.</p>
+      <a class="project-link" href="https://www.oreilly.com/library/view/practical-statistics-for/9781492072935/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b3.tag">Pant &amp; Mukhiya · İstatistik</span>
+      <h3 data-i18n="resources.b3.title">Statistics for Data Scientists and Analysts</h3>
+      <p data-i18n="resources.b3.desc">Veriye dayalı karar verme için istatistiksel yaklaşımları Python üzerinden pekiştirdiğim bir diğer kaynak.</p>
+      <a class="project-link" href="https://in.bpbonline.com/products/statistics-for-data-scientists-and-analysts" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b4.tag">Tarek A. Atwan · Zaman Serisi</span>
+      <h3 data-i18n="resources.b4.title">Time Series Analysis with Python Cookbook</h3>
+      <p data-i18n="resources.b4.desc">Zaman serisi verisinde keşifsel analiz, hazırlık ve tahminleme için pratik tarifler içeren bir kaynak.</p>
+      <a class="project-link" href="https://www.packtpub.com/en-us/product/time-series-analysis-with-python-cookbook-9781801075541" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b5.tag">Vishwas &amp; Macharla · Zaman Serisi</span>
+      <h3 data-i18n="resources.b5.title">Time Series Forecasting Using Generative AI</h3>
+      <p data-i18n="resources.b5.desc">Klasik zaman serisi yöntemlerini üretken yapay zeka teknikleriyle birleştiren güncel bir yaklaşım.</p>
+      <a class="project-link" href="https://link.springer.com/book/10.1007/979-8-8688-1276-7" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b6.tag">Vincent Vandenbussche · Makine Öğrenmesi</span>
+      <h3 data-i18n="resources.b6.title">The Regularization Cookbook</h3>
+      <p data-i18n="resources.b6.desc">Doğrusal modellerden derin öğrenmeye uzanan regularizasyon tekniklerini pratik örneklerle anlatıyor.</p>
+      <a class="project-link" href="https://www.packtpub.com/en-us/product/the-regularization-cookbook-9781837634088" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b7.tag">Gallatin &amp; Albon · Makine Öğrenmesi</span>
+      <h3 data-i18n="resources.b7.title">Machine Learning with Python Cookbook</h3>
+      <p data-i18n="resources.b7.desc">Ön işlemeden derin öğrenmeye kadar günlük iş akışımda başvurduğum, tarif odaklı bir referans.</p>
+      <a class="project-link" href="https://www.oreilly.com/library/view/machine-learning-with/9781098135713/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b8.tag">Ian Pointer · Derin Öğrenme</span>
+      <h3 data-i18n="resources.b8.title">Programming PyTorch for Deep Learning</h3>
+      <p data-i18n="resources.b8.desc">PyTorch ile derin öğrenme uygulamaları kurma ve devreye alma üzerine adım adım bir kaynak.</p>
+      <a class="project-link" href="https://www.oreilly.com/library/view/programming-pytorch-for/9781492045342/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b9.tag">Daniel Y. Chen · Veri Analizi</span>
+      <h3 data-i18n="resources.b9.title">Pandas for Everyone</h3>
+      <p data-i18n="resources.b9.desc">Veri temizleme, düzenleme ve modelleme öncesi hazırlık adımlarında sürekli döndüğüm bir Pandas kaynağı.</p>
+      <a class="project-link" href="https://www.pearson.com/en-us/subject-catalog/p/pandas-for-everyone-python-data-analysis/P200000007264/9780137891054" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b10.tag">Gift &amp; Deza · MLOps</span>
+      <h3 data-i18n="resources.b10.title">Practical MLOps</h3>
+      <p data-i18n="resources.b10.desc">Makine öğrenmesi modellerini üretime alma ve izleme pratiklerini DevOps perspektifinden ele alıyor.</p>
+      <a class="project-link" href="https://www.oreilly.com/library/view/practical-mlops/9781098103002/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b11.tag">Mona Khalil · Veri Analizi</span>
+      <h3 data-i18n="resources.b11.title">Think Like a Data Analyst</h3>
+      <p data-i18n="resources.b11.desc">Teknik beceriyi iş sonuçlarına dönüştürme sürecinde bir analistin bakış açısını anlamama yardımcı oldu.</p>
+      <a class="project-link" href="https://www.manning.com/books/think-like-a-data-analyst" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b12.tag">Deepak K. Kanungo · Makine Öğrenmesi</span>
+      <h3 data-i18n="resources.b12.title">Probabilistic Machine Learning for Finance and Investing</h3>
+      <p data-i18n="resources.b12.desc">Belirsizliği modelleyen, kararlarını şeffaf biçimde açıklayabilen olasılıksal ML yaklaşımlarına giriş.</p>
+      <a class="project-link" href="https://www.amazon.com/Probabilistic-Machine-Learning-Finance-Investing/dp/1492097675" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b13.tag">Eric Matthes · Python</span>
+      <h3 data-i18n="resources.b13.title">Python Crash Course</h3>
+      <p data-i18n="resources.b13.desc">Python temellerini sağlamlaştırmak için zaman zaman geri döndüğüm bir referans kitap.</p>
+      <a class="project-link" href="https://nostarch.com/python-crash-course-3rd-edition" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b14.tag">Varoquaux ve katkıda bulunanlar · Python</span>
+      <h3 data-i18n="resources.b14.title">Scientific Python Lectures</h3>
+      <p data-i18n="resources.b14.desc">NumPy, Matplotlib ve SciPy'ı bilimsel hesaplama bağlamında derinlemesine öğrendiğim, açık kaynaklı bir ders notu.</p>
+      <a class="project-link" href="https://lectures.scientific-python.org/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-tag" data-i18n="resources.b15.tag">Veri Analizi · Aykırı Değer Analizi</span>
+      <h3 data-i18n="resources.b15.title">Outlier Detection in Python</h3>
+      <p data-i18n="resources.b15.desc">Aykırı değer tespitine farklı yöntemlerle yaklaşan, günlükteki ilgili girişimde de faydalandığım bir kaynak.</p>
+      <a class="project-link" href="https://www.manning.com/books/outlier-detection-in-python" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="section-head">
+    <div>
+      <div class="section-num" data-i18n="resources.cat.courses.eyebrow">tamamladığım eğitimler</div>
+      <h2 data-i18n="resources.cat.courses.title">Kurslar &amp; Sertifikalar</h2>
+    </div>
+  </div>
+  <div class="board">
+    <div class="board-cell">
+      <h3>Miuul</h3>
+      <p data-i18n="resources.course.miuul.desc">Veri Bilimi İçin Python Programlama, Feature Engineering, Machine Learning, HERDataCamp ve Data Scientist Mini Bootcamp eğitimleri.</p>
+    </div>
+    <div class="board-cell">
+      <h3>Dataquest.io</h3>
+      <p data-i18n="resources.course.dataquest.desc">Data Cleaning and Analysis, Advanced Data Cleaning ve Intermediate Python for Data Science kursları.</p>
+    </div>
+    <div class="board-cell">
+      <h3>Kodluyoruz</h3>
+      <p data-i18n="resources.course.kodluyoruz.desc">YGK — Veri Bilimi ve Yapay Zeka programı ve W-Code Programı.</p>
+    </div>
+    <div class="board-cell">
+      <h3>Techcareer.net</h3>
+      <p data-i18n="resources.course.techcareer.desc">Kadınlara özel Data Science with Python Bootcamp.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="journal-empty">
+    <h3 data-i18n="resources.empty.title">Liste büyümeye devam edecek</h3>
+    <p data-i18n="resources.empty.desc">Bu bölüm okudukça ve tamamladıkça güncellenecek. O zamana kadar GitHub ve Medium'daki güncel çalışmalarımı takip edebilirsiniz.</p>
+    <a href="yazilar.html" data-i18n="resources.empty.cta">Yazılara git →</a>
+  </div>
+</section>
+
+</main>
+<footer>
+  <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu">zealcoder — Gizem Gülcü</span>
+  <span data-i18n="footer.location">Adana, Türkiye</span>
+</footer>
+<script src="js/site.js" defer></script>
+<script src="js/zealcoder-feeds.js" defer></script>
+<script src="js/i18n.js" defer></script>
+</body>
+</html>

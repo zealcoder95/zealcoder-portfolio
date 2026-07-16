@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="journal.meta.title">Mühendislik Günlüğü — zealcoder</title>
+<meta name="description" data-i18n-content="journal.meta.desc" content="Gizem Gülcü'nün mühendislik kararlarını, karşılaştığı zorlukları ve çıkardığı dersleri paylaştığı günlük.">
+<link rel="canonical" href="https://zealcoder95.github.io/zealcoder-portfolio/gunluk.html">
+<meta name="theme-color" content="#050611">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="zealcoder">
+<meta property="og:url" content="https://zealcoder95.github.io/zealcoder-portfolio/gunluk.html">
+<meta property="og:title" content="Mühendislik Günlüğü — zealcoder">
+<meta property="og:description" content="Gizem Gülcü'nün mühendislik kararlarını, karşılaştığı zorlukları ve çıkardığı dersleri paylaştığı günlük.">
+<meta property="og:image" content="https://zealcoder95.github.io/zealcoder-portfolio/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mühendislik Günlüğü — zealcoder">
+<meta name="twitter:description" content="Gizem Gülcü'nün mühendislik kararlarını, karşılaştığı zorlukları ve çıkardığı dersleri paylaştığı günlük.">
+<meta name="twitter:image" content="https://zealcoder95.github.io/zealcoder-portfolio/assets/og-image.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.github.com">
+<link rel="preconnect" href="https://api.rss2json.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
+<canvas id="circuit-bg"></canvas>
+<div class="spine" aria-hidden="true">
+  <div class="spine-fill" id="spineFill"></div>
+  <div class="spine-node" data-pct="5" style="top:5%"></div>
+  <div class="spine-node" data-pct="25" style="top:25%"></div>
+  <div class="spine-node" data-pct="45" style="top:45%"></div>
+  <div class="spine-node" data-pct="65" style="top:65%"></div>
+  <div class="spine-node" data-pct="85" style="top:85%"></div>
+</div>
+<nav>
+  <a class="brand" href="index.html">
+    <img src="assets/zealcoder-logo.png" alt="zealcoder logosu">
+    <span><span class="tag-open">&lt;</span>zealcoder<span class="tag-close">/&gt;</span></span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a><a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a><a href="projeler.html" data-i18n="nav.projects">Projeler</a><a href="yazilar.html" data-i18n="nav.writing">Yazılar</a><a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a><a href="gunluk.html" class="active" aria-current="page" data-i18n="nav.journal">Günlük</a><a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Dil seçimi / Language">
+      <button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a>
+  <a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a>
+  <a href="projeler.html" data-i18n="nav.projects">Projeler</a>
+  <a href="yazilar.html" data-i18n="nav.writing">Yazılar</a>
+  <a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a>
+  <a href="gunluk.html" class="active" aria-current="page" data-i18n="nav.journal">Günlük</a>
+  <a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+</div>
+<main id="main-content">
+
+<section class="page-hero container">
+  <div class="eyebrow" data-i18n="journal.eyebrow">06 / mühendislik günlüğü</div>
+  <h1 data-i18n="journal.h1">Kararların, zorlukların ve derslerin kaydı</h1>
+  <p data-i18n="journal.sub">Projelerin sadece sonucunu değil; neden o kararın verildiğini, hangi engelle karşılaşıldığını ve oradan ne öğrenildiğini kayıt altına aldığım bölüm.</p>
+</section>
+
+<section class="container">
+  <div class="section-head">
+    <div>
+      <div class="section-num" data-i18n="journal.entries.eyebrow">son girişler</div>
+      <h2 data-i18n="journal.entries.title">Problem / Yaklaşım / Zorluk / Ders</h2>
+    </div>
+  </div>
+
+  <article class="journal-entry">
+    <div class="journal-entry-head">
+      <h3 data-i18n="journal.e1.title">Çalışan çıkış anketi veri setini temizleme ve yapılandırma</h3>
+      <span class="journal-entry-date" data-i18n="journal.e1.date">3 Mart 2026</span>
+    </div>
+    <div class="journal-fields">
+      <div class="journal-field"><h4 data-i18n="journal.format.problem.title">Problem</h4><p data-i18n="journal.e1.problem">İki farklı kurumdan birleştirilen ham çıkış anketi verisinde tutarsız kategorik kodlamalar, eşleşmeyen sütun isimleri ve "ayrılma nedeni" alanında ciddi miktarda eksik yanıt vardı — bu haliyle ne bir modele ne de bir paydaşa sunulabilecek durumdaydı.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.approach.title">Yaklaşım</h4><p data-i18n="journal.e1.approach">Kategorik değerleri standardize ettim, iki farklı anket formatını birleştirdim ve eksik yanıtları veri setinden atmak yerine ayrı bir kategori olarak ele aldım; çünkü nedeni belirtilmemiş ayrılmalar rastgele dağılmıyordu.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.challenge.title">Zorluk</h4><p data-i18n="journal.e1.challenge">Asıl zor kısım kod yazmak değildi — bazı eksik değerlerin rastgele değil anlamlı olduğunu fark etmekti; her boş değeri aynı şekilde ele alsaydım analizin söylediği şey sessizce değişecekti.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.lesson.title">Ders</h4><p data-i18n="journal.e1.lesson">Artık eksik veriyle nasıl başa çıkacağıma karar vermeden önce "bu neden eksik?" diye soruyorum — eksikliğin oranından çok arkasındaki mekanizma önemli.</p></div>
+    </div>
+  </article>
+
+  <article class="journal-entry">
+    <div class="journal-entry-head">
+      <h3 data-i18n="journal.e2.title">NYC lise verilerini analiz ederken aykırı değer tespiti</h3>
+      <span class="journal-entry-date" data-i18n="journal.e2.date">14 Nisan 2026</span>
+    </div>
+    <div class="journal-fields">
+      <div class="journal-field"><h4 data-i18n="journal.format.problem.title">Problem</h4><p data-i18n="journal.e2.problem">NYC liselerinde SAT puanlarını sosyoekonomik ve gayrimenkul verileriyle karşılaştırırken birkaç okulun SAT ortalaması beklenen aralığın çok dışındaydı ve bu durum hesapladığım korelasyon katsayılarını çarpıtıyordu.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.approach.title">Yaklaşım</h4><p data-i18n="journal.e2.approach">Tek bir yönteme güvenmek yerine IQR tabanlı ve z-skor tabanlı aykırı değer kontrollerini yan yana kullandım, işaretlenen her okulu otomatik olarak silmek yerine tek tek inceledim.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.challenge.title">Zorluk</h4><p data-i18n="journal.e2.challenge">Uç değerlerden ikisi veri girişi hatası değil, az sayıda öğrencisi olan gerçek, küçük ve özel okullar çıktı; bunları silseydim gürültüyü değil gerçek bilgiyi kaybetmiş olacaktım.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.lesson.title">Ders</h4><p data-i18n="journal.e2.lesson">Aykırı değer olmak istatistiksel bir yargıdır, olgusal bir gerçek değil — doğru tepki noktanın kökenini anlamak, refleksle silme tuşuna basmak değil.</p></div>
+    </div>
+  </article>
+
+  <article class="journal-entry">
+    <div class="journal-entry-head">
+      <h3 data-i18n="journal.e3.title">Ev fiyatı tahmin vaka çalışması için öznitelik mühendisliği</h3>
+      <span class="journal-entry-date" data-i18n="journal.e3.date">20 Mayıs 2026</span>
+    </div>
+    <div class="journal-fields">
+      <div class="journal-field"><h4 data-i18n="journal.format.problem.title">Problem</h4><p data-i18n="journal.e3.problem">Miuul makine öğrenmesi eğitimim kapsamındaki bir ev fiyatı tahmin vaka çalışmasında, ham öznitelikler (yapım yılı, arsa büyüklüğü, semt, oda sayısı) tek başına fiyatla neredeyse hiç ilişkili değildi ve temel bir doğrusal model zayıf performans gösteriyordu.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.approach.title">Yaklaşım</h4><p data-i18n="journal.e3.approach">Yapım yılı yerine bina yaşı, oda başına fiyat oranı ve semt bazlı toplulaştırılmış öznitelikler türettim; ardından düzenlileştirilmiş bir doğrusal modeli ağaç tabanlı bir modelle (CART) karşılaştırarak hangisinin yeni özniteliklerle daha iyi çalıştığına baktım.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.challenge.title">Zorluk</h4><p data-i18n="journal.e3.challenge">Semt bazlı öznitelikleri eğitim/test ayrımından önce tüm veri setinde hesaplamak, hedef bilgisinin kısa süreliğine eğitim özniteliklerine sızmasına yol açtı; doğrulama skorumun yapay şekilde şiştiğini fark edince pipeline'ı yalnızca eğitim kümesinde toplulaştırma yapacak şekilde yeniden kurdum.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.lesson.title">Ders</h4><p data-i18n="journal.e3.lesson">Veri sızıntısı genelde kendini belli etmez — sadece sonuçları biraz fazla iyi gösterir; artık beklenenden çok iyi bir skoru kutlamadan önce araştırılması gereken bir sinyal olarak görüyorum.</p></div>
+    </div>
+  </article>
+
+  <article class="journal-entry">
+    <div class="journal-entry-head">
+      <h3 data-i18n="journal.e4.title">Doğruluk skoruna güvenmek yerine modeli okumak</h3>
+      <span class="journal-entry-date" data-i18n="journal.e4.date">12 Haziran 2026</span>
+    </div>
+    <div class="journal-fields">
+      <div class="journal-field"><h4 data-i18n="journal.format.problem.title">Problem</h4><p data-i18n="journal.e4.problem">Miuul makine öğrenmesi eğitimimden bir sınıflandırma alıştırmasında makul bir doğruluk skoruna ulaştım ama doğruluk tek başına modelin mantıklı gerekçelerle mi karar verdiğini söylemiyordu.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.approach.title">Yaklaşım</h4><p data-i18n="journal.e4.approach">Lojistik regresyonun katsayılarına, karışıklık matrisine ve sınıf bazlı precision/recall değerlerine baktım; ardından aynı özniteliklerle eğitilmiş bir CART karar ağacıyla karşılaştırarak iki modelin de hangi değişkenleri önemli bulduğunu kontrol ettim.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.challenge.title">Zorluk</h4><p data-i18n="journal.e4.challenge">Bir özniteliğin katsayısı alan bilgisiyle hiç örtüşmeyecek kadar büyüktü; kökenine indiğimde bunun sonucu gerçekten etkileyen değil, modellenmemiş başka bir değişkenle ilişkili olduğunu gördüm — korelasyonu nedensellikle karıştırmanın klasik bir örneğiydi.</p></div>
+      <div class="journal-field"><h4 data-i18n="journal.format.lesson.title">Ders</h4><p data-i18n="journal.e4.lesson">İyi skor alan bir model bile yanlış gerekçelere dayanıyor olabilir; yorumlama isteğe bağlı bir ekstra adım değil, modelin gerçek bir şey mi öğrendiğini yoksa bir kestirme mi bulduğunu anlamanın tek yolu.</p></div>
+    </div>
+  </article>
+</section>
+
+<section class="container">
+  <div class="journal-empty">
+    <h3 data-i18n="journal.empty.title">Yeni girişler yolda</h3>
+    <p data-i18n="journal.empty.desc">Bu bölüm düzenli olarak güncellenecek. O zamana kadar GitHub ve Medium'daki güncel çalışmalarımı takip edebilirsiniz.</p>
+    <a href="yazilar.html" data-i18n="journal.empty.cta">Yazılara git →</a>
+  </div>
+</section>
+
+</main>
+<footer>
+  <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu">zealcoder — Gizem Gülcü</span>
+  <span data-i18n="footer.location">Adana, Türkiye</span>
+</footer>
+<script src="js/site.js" defer></script>
+<script src="js/zealcoder-feeds.js" defer></script>
+<script src="js/i18n.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="skills.meta.title">Yetenekler — zealcoder</title>
+<meta name="description" data-i18n-content="skills.meta.desc" content="Gizem Gülcü'nün veri bilimi ve mühendislik çalışmalarında kullandığı dil ve araçlar.">
+<link rel="canonical" href="https://zealcoder95.github.io/zealcoder-portfolio/yetenekler.html">
+<meta name="theme-color" content="#050611">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="zealcoder">
+<meta property="og:url" content="https://zealcoder95.github.io/zealcoder-portfolio/yetenekler.html">
+<meta property="og:title" content="Yetenekler — zealcoder">
+<meta property="og:description" content="Gizem Gülcü'nün veri bilimi ve mühendislik çalışmalarında kullandığı dil ve araçlar.">
+<meta property="og:image" content="https://zealcoder95.github.io/zealcoder-portfolio/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Yetenekler — zealcoder">
+<meta name="twitter:description" content="Gizem Gülcü'nün veri bilimi ve mühendislik çalışmalarında kullandığı dil ve araçlar.">
+<meta name="twitter:image" content="https://zealcoder95.github.io/zealcoder-portfolio/assets/og-image.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.github.com">
+<link rel="preconnect" href="https://api.rss2json.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
+<canvas id="circuit-bg"></canvas>
+<div class="spine" aria-hidden="true">
+  <div class="spine-fill" id="spineFill"></div>
+  <div class="spine-node" data-pct="5" style="top:5%"></div>
+  <div class="spine-node" data-pct="25" style="top:25%"></div>
+  <div class="spine-node" data-pct="45" style="top:45%"></div>
+  <div class="spine-node" data-pct="65" style="top:65%"></div>
+  <div class="spine-node" data-pct="85" style="top:85%"></div>
+</div>
+<nav>
+  <a class="brand" href="index.html">
+    <img src="assets/zealcoder-logo.png" alt="zealcoder logosu">
+    <span><span class="tag-open">&lt;</span>zealcoder<span class="tag-close">/&gt;</span></span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a><a href="yetenekler.html" class="active" aria-current="page" data-i18n="nav.skills">Yetenekler</a><a href="projeler.html" data-i18n="nav.projects">Projeler</a><a href="yazilar.html" data-i18n="nav.writing">Yazılar</a><a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a><a href="gunluk.html" data-i18n="nav.journal">Günlük</a><a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Dil seçimi / Language">
+      <button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a>
+  <a href="yetenekler.html" class="active" aria-current="page" data-i18n="nav.skills">Yetenekler</a>
+  <a href="projeler.html" data-i18n="nav.projects">Projeler</a>
+  <a href="yazilar.html" data-i18n="nav.writing">Yazılar</a>
+  <a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a>
+  <a href="gunluk.html" data-i18n="nav.journal">Günlük</a>
+  <a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+</div>
+<main id="main-content">
+
+<section class="page-hero container">
+  <div class="eyebrow" data-i18n="skills.eyebrow">02 / yetenekler</div>
+  <h1 data-i18n="skills.h1">Şema: kullandığım araçlar</h1>
+  <p data-i18n="skills.sub">Veriyi temizlemekten modele, modelden içgörüye giden hattaki bileşenler.</p>
+</section>
+
+<section class="container">
+  <div class="board">
+    <div class="board-cell">
+      <h3 data-i18n="skills.langs.title">Diller</h3>
+      <p data-i18n="skills.langs.desc">Analiz ve modelleme için temel yazım dillerim.</p>
+      <div class="chip-row"><span class="chip">Python</span><span class="chip">R</span><span class="chip">SQL</span></div>
+    </div>
+    <div class="board-cell">
+      <h3 data-i18n="skills.data.title">Veri Analizi</h3>
+      <p data-i18n="skills.data.desc">Ham veriyi temizleyip yapılandırmak için.</p>
+      <div class="chip-row"><span class="chip">NumPy</span><span class="chip">Pandas</span></div>
+    </div>
+    <div class="board-cell">
+      <h3 data-i18n="skills.viz.title">Görselleştirme</h3>
+      <p data-i18n="skills.viz.desc">İçgörüleri okunabilir hale getirmek için.</p>
+      <div class="chip-row"><span class="chip">Matplotlib</span><span class="chip">Seaborn</span></div>
+    </div>
+    <div class="board-cell">
+      <h3 data-i18n="skills.ml.title">Makine Öğrenmesi</h3>
+      <p data-i18n="skills.ml.desc">Sınıflandırma ve tahmin modelleri kurmak için.</p>
+      <div class="chip-row"><span class="chip">Scikit-Learn</span></div>
+    </div>
+    <div class="board-cell">
+      <h3 data-i18n="skills.dl.title">Derin Öğrenme</h3>
+      <p data-i18n="skills.dl.desc">Sinir ağı tabanlı modeller geliştirmek için.</p>
+      <div class="chip-row"><span class="chip">TensorFlow</span><span class="chip">Keras</span></div>
+    </div>
+    <div class="board-cell">
+      <h3 data-i18n="skills.vc.title">Sürüm Kontrol</h3>
+      <p data-i18n="skills.vc.desc">Projeleri düzenli ve paylaşılabilir tutmak için.</p>
+      <div class="chip-row"><span class="chip">Git</span><span class="chip">GitHub</span></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>
+  <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu">zealcoder — Gizem Gülcü</span>
+  <span data-i18n="footer.location">Adana, Türkiye</span>
+</footer>
+<script src="js/site.js" defer></script>
+<script src="js/zealcoder-feeds.js" defer></script>
+<script src="js/i18n.js" defer></script>
+</body>
+</html>
