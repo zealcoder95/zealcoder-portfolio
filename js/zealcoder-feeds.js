@@ -29,6 +29,16 @@ const ZC_CACHE_TTL_MS = 15 * 60 * 1000; // 15 min: keeps us well under GitHub's 
                                           // unauthenticated limit and rss2json's free-tier
                                           // rate limit even if several tabs/visitors overlap.
 
+/* A Medium post tagged with this word on medium.com is treated as a
+   "günlük" (journal) entry instead of a regular article: it is pulled
+   into gunluk.html and excluded from yazilar.html. Add the tag when
+   publishing on Medium — nothing else to configure. */
+const ZC_JOURNAL_TAG_WORDS = ['gunluk', 'günlük', 'journal'];
+function zcHasJournalTag(item) {
+  const cats = (item.categories || []).map(c => String(c).toLowerCase().trim());
+  return cats.some(c => ZC_JOURNAL_TAG_WORDS.includes(c));
+}
+
 /* Tiny cache wrapper around localStorage. We store the already-rendered
    HTML plus a timestamp, keyed by source+lang, so a cache hit is a pure
    synchronous render with zero network round-trip. On a cache miss (or an
@@ -68,6 +78,13 @@ const ZC_FEED_STRINGS = {
     votes: n => `${n} oy`,
     noRun: 'çalıştırılmadı',
     kgSynced: t => `Kaggle verileri ${t} güncellendi`,
+    bookLink: 'Yayıncı sayfası →',
+    booksUnavailable: 'Kitap listesi şu an yüklenemedi.',
+    skillsUnavailable: 'Yetenek listesi şu an yüklenemedi.',
+    ghLangsUnavailable: 'GitHub·dil verisi şu an alınamadı.',
+    journalPreparing: 'Yeni günlük girişleri hazırlanıyor. Medium profilimi takip ederek ilk yazıyı kaçırmayabilirsiniz.',
+    viewMediumJournal: 'Medium profilimi gör →',
+    readOnMedium: 'Medium\u2019da oku →',
     events: {
       push: n => `reposuna ${n} commit gönderdi`,
       createRepo: 'reposunu oluşturdu',
@@ -103,6 +120,13 @@ const ZC_FEED_STRINGS = {
     votes: n => `${n} vote${n === 1 ? '' : 's'}`,
     noRun: 'not run yet',
     kgSynced: t => `Kaggle data synced ${t}`,
+    bookLink: "Publisher's page →",
+    booksUnavailable: 'The book list could not be loaded right now.',
+    skillsUnavailable: 'The skills list could not be loaded right now.',
+    ghLangsUnavailable: 'GitHub language data could not be loaded right now.',
+    journalPreparing: 'New journal entries are on the way. Follow my Medium profile so you don\u2019t miss the first one.',
+    viewMediumJournal: 'View my Medium profile →',
+    readOnMedium: 'Read on Medium →',
     events: {
       push: n => `pushed ${n} commit${n === 1 ? '' : 's'} to`,
       createRepo: 'created the repo',
@@ -285,7 +309,9 @@ async function zcLoadMediumArticles(elId, count) {
     if (!res.ok) throw new Error('medium feed request failed');
     const data = await res.json();
     if (data.status !== 'ok' || !data.items || !data.items.length) throw new Error('medium feed empty');
-    const html = data.items.slice(0, count).map(item => {
+    const articleItems = data.items.filter(item => !zcHasJournalTag(item));
+    if (!articleItems.length) throw new Error('medium feed empty after journal filter');
+    const html = articleItems.slice(0, count).map(item => {
       const snippet = zcStripHtml(item.description).slice(0, 110);
       return `<div class="feed-item">
         <a href="${item.link}" target="_blank" rel="noopener">${zcEscape(item.title)}</a>
@@ -297,6 +323,56 @@ async function zcLoadMediumArticles(elId, count) {
     zcCacheSet(cacheKey, html);
   } catch (err) {
     if (!cached) zcRenderMediumFallback(elId);
+  }
+}
+
+function zcRenderJournalFallback(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
+  el.innerHTML = `
+    <div class="feed-empty">
+      ${S.journalPreparing}
+      <a href="https://medium.com/@${ZC_MEDIUM_USER}" target="_blank" rel="noopener">${S.viewMediumJournal}</a>
+    </div>`;
+}
+
+/* Reads the same Medium RSS feed as zcLoadMediumArticles, but keeps only
+   posts tagged with one of ZC_JOURNAL_TAG_WORDS on Medium — that's the
+   entire "publish workflow" for adding a new günlük entry: write the
+   post on Medium, add the tag, done. Rendered above the hand-written
+   archive entries already in gunluk.html. */
+async function zcLoadMediumJournal(elId, count) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
+  const cacheKey = `zc_cache_journal_${zcLang()}_${count}`;
+  const cached = zcCacheGet(cacheKey);
+  if (cached) el.innerHTML = cached.html;
+  if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
+  try {
+    const feedUrl = encodeURIComponent(`https://medium.com/feed/@${ZC_MEDIUM_USER}`);
+    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feedUrl}`);
+    if (!res.ok) throw new Error('medium feed request failed');
+    const data = await res.json();
+    if (data.status !== 'ok' || !data.items || !data.items.length) throw new Error('medium feed empty');
+    const journalItems = data.items.filter(zcHasJournalTag);
+    if (!journalItems.length) { if (!cached) zcRenderJournalFallback(elId); return; }
+    const html = journalItems.slice(0, count).map(item => {
+      const snippet = zcStripHtml(item.description).slice(0, 160);
+      return `<article class="journal-entry">
+        <div class="journal-entry-head">
+          <h3><a href="${item.link}" target="_blank" rel="noopener">${zcEscape(item.title)}</a></h3>
+          <span class="journal-entry-date">${zcTimeAgo(item.pubDate, S)}</span>
+        </div>
+        ${snippet ? `<p style="color:var(--text-muted);">${zcEscape(snippet)}${snippet.length >= 160 ? '…' : ''}</p>` : ''}
+        <a class="project-link" href="${item.link}" target="_blank" rel="noopener">${S.readOnMedium}</a>
+      </article>`;
+    }).join('');
+    el.innerHTML = html;
+    zcCacheSet(cacheKey, html);
+  } catch (err) {
+    if (!cached) zcRenderJournalFallback(elId);
   }
 }
 
@@ -348,6 +424,132 @@ async function zcLoadKaggleKernels(elId, count) {
   }
 }
 
+/* Books grid: reads assets/books.json (same static-file pattern as
+   assets/kaggle-feed.json) and re-uses the existing .project-card markup
+   so the filter chips / "show more" behaviour in kaynaklar.html keeps
+   working unchanged. Adding a book going forward means editing that one
+   JSON file on GitHub — no HTML or i18n edits needed. */
+let zcBooksFilterAttached = false;
+function zcBooksRender() {
+  const grid = document.getElementById('booksGrid');
+  const filterBar = document.getElementById('booksFilter');
+  const showMoreBtn = document.getElementById('booksShowMore');
+  if (!grid || !filterBar || !showMoreBtn) return;
+  const cards = Array.from(grid.querySelectorAll('.project-card'));
+  const activeChip = filterBar.querySelector('.chip.is-active');
+  const activeFilter = activeChip ? activeChip.dataset.filter : 'all';
+  const expanded = filterBar.dataset.zcExpanded === '1';
+  cards.forEach((card, i) => {
+    const matches = activeFilter === 'all' || card.dataset.cat === activeFilter;
+    if (!matches) { card.style.display = 'none'; return; }
+    card.style.display = (activeFilter === 'all' && !expanded && i >= 6) ? 'none' : '';
+  });
+  showMoreBtn.style.display = (activeFilter === 'all' && !expanded && cards.length > 6) ? '' : 'none';
+}
+function zcInitBooksFilter() {
+  const filterBar = document.getElementById('booksFilter');
+  const showMoreBtn = document.getElementById('booksShowMore');
+  if (!filterBar || !showMoreBtn) return;
+  filterBar.dataset.zcExpanded = '0';
+  zcBooksRender();
+  if (zcBooksFilterAttached) return;
+  zcBooksFilterAttached = true;
+  filterBar.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      filterBar.dataset.zcExpanded = '0';
+      filterBar.querySelectorAll('.chip').forEach(c => c.classList.toggle('is-active', c === chip));
+      zcBooksRender();
+    });
+  });
+  showMoreBtn.addEventListener('click', () => { filterBar.dataset.zcExpanded = '1'; zcBooksRender(); });
+}
+async function zcLoadBooks(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
+  const lang = zcLang();
+  const cacheKey = `zc_cache_books_${lang}`;
+  const cached = zcCacheGet(cacheKey);
+  if (cached) { el.innerHTML = cached.html; zcInitBooksFilter(); }
+  if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
+  try {
+    const res = await fetch('assets/books.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('books fetch failed');
+    const data = await res.json();
+    if (!data.items || !data.items.length) throw new Error('books empty');
+    const html = data.items.map(b => `
+      <div class="project-card" data-cat="${zcEscape(b.category)}">
+        <span class="project-tag">${zcEscape((b.tag && (b.tag[lang] || b.tag.tr)) || '')}</span>
+        <h3>${zcEscape((b.title && (b.title[lang] || b.title.tr)) || '')}</h3>
+        <p>${zcEscape((b.desc && (b.desc[lang] || b.desc.tr)) || '')}</p>
+        ${b.link ? `<a class="project-link" href="${b.link}" target="_blank" rel="noopener">${S.bookLink}</a>` : ''}
+      </div>`).join('');
+    el.innerHTML = html;
+    zcCacheSet(cacheKey, html);
+    zcInitBooksFilter();
+  } catch (err) {
+    if (!cached) el.innerHTML = `<div class="feed-empty">${S.booksUnavailable}</div>`;
+  }
+}
+
+/* Skills board: the "Diller" cell is populated live from GitHub repo
+   languages (see zcLoadGithubLanguages below); every other category
+   comes from assets/skills.json. Adding a new tool means adding one
+   entry to that JSON file on GitHub — no HTML edits. */
+async function zcLoadSkills(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
+  const lang = zcLang();
+  const cacheKey = `zc_cache_skills_${lang}`;
+  const cached = zcCacheGet(cacheKey);
+  if (cached) el.innerHTML = cached.html;
+  if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
+  try {
+    const res = await fetch('assets/skills.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('skills fetch failed');
+    const data = await res.json();
+    if (!data.categories || !data.categories.length) throw new Error('skills empty');
+    const html = data.categories.map(cat => `
+      <div class="board-cell">
+        <h3>${zcEscape((cat.title && (cat.title[lang] || cat.title.tr)) || '')}</h3>
+        <p>${zcEscape((cat.desc && (cat.desc[lang] || cat.desc.tr)) || '')}</p>
+        <div class="chip-row">${(cat.chips || []).map(c => `<span class="chip">${zcEscape(c)}</span>`).join('')}</div>
+      </div>`).join('');
+    el.innerHTML = html;
+    zcCacheSet(cacheKey, html);
+  } catch (err) {
+    if (!cached) el.innerHTML = `<div class="feed-empty">${S.skillsUnavailable}</div>`;
+  }
+}
+
+/* Auto-detects the "Diller" chips from the languages GitHub reports on
+   your public repos — add a repo in a new language and it appears here
+   next refresh, nothing to edit by hand. Falls back to a static seed
+   list only if the GitHub call fails outright. */
+async function zcLoadGithubLanguages(elId, count) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
+  const cacheKey = `zc_cache_gh-langs_${zcLang()}`;
+  const cached = zcCacheGet(cacheKey);
+  if (cached) el.innerHTML = cached.html;
+  if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
+  try {
+    const res = await fetch(`https://api.github.com/users/${ZC_GITHUB_USER}/repos?sort=pushed&per_page=100`);
+    if (!res.ok) throw new Error('github repos request failed');
+    const repos = await res.json();
+    if (!Array.isArray(repos)) throw new Error('unexpected github response');
+    const langs = [...new Set(repos.map(r => r.language).filter(Boolean))].slice(0, count);
+    if (!langs.length) throw new Error('no languages found');
+    const html = langs.map(l => `<span class="chip">${zcEscape(l)}</span>`).join('');
+    el.innerHTML = html;
+    zcCacheSet(cacheKey, html);
+  } catch (err) {
+    if (!cached) el.innerHTML = `<span class="chip">Python</span><span class="chip">R</span><span class="chip">SQL</span>`;
+  }
+}
+
 /* Re-run whatever feed loaders are active on this page when the language
    toggles, so dynamic content matches the static copy around it. */
 document.addEventListener('zc:langchange', () => {
@@ -355,4 +557,11 @@ document.addEventListener('zc:langchange', () => {
   document.querySelectorAll('[data-feed="gh-repos"]').forEach(el => zcLoadGithubRepos(el.id, +el.dataset.count || 6));
   document.querySelectorAll('[data-feed="medium"]').forEach(el => zcLoadMediumArticles(el.id, +el.dataset.count || 3));
   document.querySelectorAll('[data-feed="kaggle"]').forEach(el => zcLoadKaggleKernels(el.id, +el.dataset.count || 6));
+  document.querySelectorAll('[data-feed="books"]').forEach(el => zcLoadBooks(el.id));
+  document.querySelectorAll('[data-feed="skills"]').forEach(el => zcLoadSkills(el.id));
+  document.querySelectorAll('[data-feed="gh-langs"]').forEach(el => zcLoadGithubLanguages(el.id, +el.dataset.count || 6));
+  document.querySelectorAll('[data-feed="journal"]').forEach(el => zcLoadMediumJournal(el.id, +el.dataset.count || 6));
 });
+/* Note: initial page load is covered too — i18n.js fires zc:langchange
+   once on DOMContentLoaded while applying the saved/browser language,
+   which is what triggers the very first render of every feed above. */

@@ -77,36 +77,14 @@
 </section>
 
 <section class="container">
-  <div class="board">
+  <div class="board" id="skillsBoard">
     <div class="board-cell">
       <h3 data-i18n="skills.langs.title">Diller</h3>
       <p data-i18n="skills.langs.desc">Analiz ve modelleme için temel yazım dillerim.</p>
-      <div class="chip-row"><span class="chip">Python</span><span class="chip">R</span><span class="chip">SQL</span></div>
+      <div class="chip-row" id="skillsLangs" data-feed="gh-langs" data-count="6"><span class="chip">Python</span><span class="chip">R</span><span class="chip">SQL</span></div>
     </div>
-    <div class="board-cell">
-      <h3 data-i18n="skills.data.title">Veri Analizi</h3>
-      <p data-i18n="skills.data.desc">Ham veriyi temizleyip yapılandırmak için.</p>
-      <div class="chip-row"><span class="chip">NumPy</span><span class="chip">Pandas</span></div>
-    </div>
-    <div class="board-cell">
-      <h3 data-i18n="skills.viz.title">Görselleştirme</h3>
-      <p data-i18n="skills.viz.desc">İçgörüleri okunabilir hale getirmek için.</p>
-      <div class="chip-row"><span class="chip">Matplotlib</span><span class="chip">Seaborn</span></div>
-    </div>
-    <div class="board-cell">
-      <h3 data-i18n="skills.ml.title">Makine Öğrenmesi</h3>
-      <p data-i18n="skills.ml.desc">Sınıflandırma ve tahmin modelleri kurmak için.</p>
-      <div class="chip-row"><span class="chip">Scikit-Learn</span></div>
-    </div>
-    <div class="board-cell">
-      <h3 data-i18n="skills.dl.title">Derin Öğrenme</h3>
-      <p data-i18n="skills.dl.desc">Sinir ağı tabanlı modeller geliştirmek için.</p>
-      <div class="chip-row"><span class="chip">TensorFlow</span><span class="chip">Keras</span></div>
-    </div>
-    <div class="board-cell">
-      <h3 data-i18n="skills.vc.title">Sürüm Kontrol</h3>
-      <p data-i18n="skills.vc.desc">Projeleri düzenli ve paylaşılabilir tutmak için.</p>
-      <div class="chip-row"><span class="chip">Git</span><span class="chip">GitHub</span></div>
+    <div id="skillsFeed" data-feed="skills" style="display:contents">
+      <div class="board-cell"><div class="feed-skel"></div></div>
     </div>
   </div>
 </section>
