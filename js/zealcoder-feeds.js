@@ -67,6 +67,7 @@ const ZC_FEED_STRINGS = {
     viewKaggleProfile: 'Kaggle profilimi gör →',
     votes: n => `${n} oy`,
     noRun: 'çalıştırılmadı',
+    kgSynced: t => `Kaggle verileri ${t} güncellendi`,
     events: {
       push: n => `reposuna ${n} commit gönderdi`,
       createRepo: 'reposunu oluşturdu',
@@ -101,6 +102,7 @@ const ZC_FEED_STRINGS = {
     viewKaggleProfile: 'View my Kaggle profile →',
     votes: n => `${n} vote${n === 1 ? '' : 's'}`,
     noRun: 'not run yet',
+    kgSynced: t => `Kaggle data synced ${t}`,
     events: {
       push: n => `pushed ${n} commit${n === 1 ? '' : 's'} to`,
       createRepo: 'created the repo',
@@ -339,6 +341,8 @@ async function zcLoadKaggleKernels(elId, count) {
       </div>`).join('');
     el.innerHTML = html;
     zcCacheSet(cacheKey, html);
+    const syncEl = document.getElementById('kaggle-sync-note');
+    if (syncEl && data.updatedAt) syncEl.textContent = S.kgSynced(zcTimeAgo(data.updatedAt, S));
   } catch (err) {
     if (!cached) zcRenderKaggleFallback(elId);
   }

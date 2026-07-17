@@ -35,6 +35,7 @@
   font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--text-faint);
 }
 .feed-item .feed-tag{ color:var(--purple); }
+.feed-sync-note{ font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--text-faint); margin:-0.6rem 0 0.9rem; }
 .feed-empty{ color:var(--text-muted); font-size:0.9rem; }
 .feed-empty a{ color:var(--cyan); }
 .feed-skel{ height:0.9rem; border-radius:4px; background:linear-gradient(90deg, var(--bg-elevated), rgba(255,255,255,0.05), var(--bg-elevated)); background-size:200% 100%; animation:feedShimmer 1.4s infinite; margin-bottom:0.7rem; }
