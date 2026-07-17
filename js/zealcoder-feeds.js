@@ -5,9 +5,14 @@
  * real activity instead of hand-edited copy:
  *   - GitHub REST API  (public events / repos, no auth required)
  *   - Medium RSS via rss2json (Medium has no public JSON API / CORS)
+ *   - Kaggle kernels via assets/kaggle-feed.json, a static file refreshed
+ *     daily by a GitHub Action (see .github/workflows/kaggle-feed.yml).
+ *     Kaggle's API requires an authenticated request, which can never be
+ *     made safely from a visitor's browser, so the Action calls it
+ *     server-side with a repo secret and commits the result as plain JSON.
  *
- * Both calls are read-only, cached by the browser, and fail silently
- * into a static fallback card if the API is unreachable or rate-limited.
+ * All calls are read-only, cached by the browser, and fail silently
+ * into a static fallback card if the source is unreachable or rate-limited.
  * No LinkedIn call is made here — LinkedIn's API does not expose a
  * personal activity feed to third-party sites; see the profile badge
  * embed on the Contact page for the closest live equivalent.
@@ -19,6 +24,7 @@
 
 const ZC_GITHUB_USER = 'zealcoder95';
 const ZC_MEDIUM_USER = 'zealcoder';
+const ZC_KAGGLE_USER = 'gizemglc';
 const ZC_CACHE_TTL_MS = 15 * 60 * 1000; // 15 min: keeps us well under GitHub's 60 req/hr
                                           // unauthenticated limit and rss2json's free-tier
                                           // rate limit even if several tabs/visitors overlap.
@@ -57,6 +63,10 @@ const ZC_FEED_STRINGS = {
     viewProfile: 'Profili doğrudan görüntüle →',
     mediumPreparing: 'Yeni içerikler hazırlanıyor. Medium profilimi takip ederek ilk yazıyı kaçırmayabilirsiniz.',
     viewMediumProfile: 'Medium profilimi gör →',
+    kgUnavailable: 'Kaggle akışı şu an alınamadı.',
+    viewKaggleProfile: 'Kaggle profilimi gör →',
+    votes: n => `${n} oy`,
+    noRun: 'çalıştırılmadı',
     events: {
       push: n => `reposuna ${n} commit gönderdi`,
       createRepo: 'reposunu oluşturdu',
@@ -87,6 +97,10 @@ const ZC_FEED_STRINGS = {
     viewProfile: 'View the profile directly →',
     mediumPreparing: 'New content is on the way. Follow my Medium profile so you don\u2019t miss the first post.',
     viewMediumProfile: 'View my Medium profile →',
+    kgUnavailable: 'The Kaggle feed could not be loaded right now.',
+    viewKaggleProfile: 'View my Kaggle profile →',
+    votes: n => `${n} vote${n === 1 ? '' : 's'}`,
+    noRun: 'not run yet',
     events: {
       push: n => `pushed ${n} commit${n === 1 ? '' : 's'} to`,
       createRepo: 'created the repo',
@@ -284,10 +298,57 @@ async function zcLoadMediumArticles(elId, count) {
   }
 }
 
+function zcRenderKaggleFallback(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
+  el.innerHTML = `
+    <div class="feed-empty">
+      ${S.kgUnavailable}
+      <a href="https://www.kaggle.com/${ZC_KAGGLE_USER}" target="_blank" rel="noopener">${S.viewKaggleProfile}</a>
+    </div>`;
+}
+
+/* Unlike the GitHub/Medium feeds above, Kaggle's API requires an
+   authenticated request, which can never happen safely from the visitor's
+   browser (the key would be exposed to anyone). Instead, a scheduled
+   GitHub Action calls the Kaggle API server-side and commits the result
+   to assets/kaggle-feed.json — this function just reads that static,
+   same-origin file. See .github/workflows/kaggle-feed.yml. */
+async function zcLoadKaggleKernels(elId, count) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
+  const cacheKey = `zc_cache_kaggle_${zcLang()}_${count}`;
+  const cached = zcCacheGet(cacheKey);
+  if (cached) el.innerHTML = cached.html;
+  if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
+  try {
+    const res = await fetch('assets/kaggle-feed.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('kaggle feed request failed');
+    const data = await res.json();
+    if (!data.items || !data.items.length) throw new Error('kaggle feed empty');
+    const html = data.items.slice(0, count).map(item => `
+      <div class="feed-item">
+        <a href="${item.url}" target="_blank" rel="noopener">${zcEscape(item.title)}</a>
+        <div class="feed-meta">
+          <span class="feed-tag">Kaggle</span>
+          <span>${S.votes(item.totalVotes || 0)}</span>
+          <span>${item.lastRunTime ? zcTimeAgo(item.lastRunTime, S) : S.noRun}</span>
+        </div>
+      </div>`).join('');
+    el.innerHTML = html;
+    zcCacheSet(cacheKey, html);
+  } catch (err) {
+    if (!cached) zcRenderKaggleFallback(elId);
+  }
+}
+
 /* Re-run whatever feed loaders are active on this page when the language
    toggles, so dynamic content matches the static copy around it. */
 document.addEventListener('zc:langchange', () => {
   document.querySelectorAll('[data-feed="gh-activity"]').forEach(el => zcLoadGithubActivity(el.id, +el.dataset.count || 4));
   document.querySelectorAll('[data-feed="gh-repos"]').forEach(el => zcLoadGithubRepos(el.id, +el.dataset.count || 6));
   document.querySelectorAll('[data-feed="medium"]').forEach(el => zcLoadMediumArticles(el.id, +el.dataset.count || 3));
+  document.querySelectorAll('[data-feed="kaggle"]').forEach(el => zcLoadKaggleKernels(el.id, +el.dataset.count || 6));
 });
