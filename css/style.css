@@ -240,6 +240,33 @@ button.chip{ cursor:pointer; }
 .project-link:hover{ text-decoration:underline; }
 .project-tag{ font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; }
 
+.project-chart-trigger{
+  display:block; border:1px solid var(--line); border-radius:8px; overflow:hidden;
+  background:#f4f5fb; padding:0; cursor:zoom-in; order:-1;
+  transition:border-color 0.25s ease, transform 0.25s ease;
+}
+.project-chart-trigger:hover{ border-color:var(--cyan); transform:translateY(-2px); }
+.project-chart-trigger img{ width:100%; height:150px; object-fit:cover; object-position:top; display:block; }
+.project-chart-caption{
+  font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--text-faint);
+  padding:0.5rem 0.7rem; background:var(--bg-elevated); border-top:1px solid var(--line);
+}
+
+.chart-lightbox{
+  position:fixed; inset:0; z-index:200; background:rgba(5,6,17,0.92);
+  display:none; align-items:center; justify-content:center; padding:2rem; cursor:zoom-out;
+}
+.chart-lightbox.is-open{ display:flex; }
+.chart-lightbox img{
+  max-width:min(900px,92vw); max-height:88vh; border-radius:10px; background:#f4f5fb;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.chart-lightbox-close{
+  position:absolute; top:1.4rem; right:1.6rem; width:40px; height:40px; border-radius:50%;
+  background:var(--bg-card); border:1px solid var(--line); color:var(--text); font-size:1.3rem;
+  display:flex; align-items:center; justify-content:center;
+}
+
 .writing-card{
   background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:2.4rem;
   display:flex; justify-content:space-between; align-items:center; gap:2rem; flex-wrap:wrap;

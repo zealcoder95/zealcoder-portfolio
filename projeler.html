@@ -85,6 +85,9 @@
       <h3 data-i18n="projects.p1.title">Çalışan Çıkış Anketleri Analizi</h3>
       <p data-i18n="projects.p1.desc">Queensland (Avustralya) eğitim kurumlarından iki farklı çıkış anketini (DETE ve TAFE) birleştirip temizleyerek işten ayrılma nedenlerine dair anlamlı içgörüler çıkardığım bir proje.</p>
       <a class="project-link" href="https://www.kaggle.com/code/gizemglc/clean-and-analyze-employee-exit-surveys-1-0" target="_blank" rel="noopener" data-i18n="projects.p1.cta">Kaggle'da incele →</a>
+      <button type="button" class="project-chart-trigger" data-chart-full="assets/projects/exit-survey-reasons.png" data-chart-alt="Çıkış anketi veri setinde eksik değer dağılımı ısı haritası">
+        <img src="assets/projects/exit-survey-reasons.png" alt="Çıkış anketi veri setinde eksik değer dağılımı ısı haritası" loading="lazy">
+      </button>
     </div>
     <div class="project-card">
       <div class="project-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#08090f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V3"/><path d="M3 21h18"/><circle cx="7" cy="15" r="1.4" fill="#08090f" stroke="none"/><circle cx="11" cy="9" r="1.4" fill="#08090f" stroke="none"/><circle cx="15" cy="13" r="1.4" fill="#08090f" stroke="none"/><circle cx="19" cy="6" r="1.4" fill="#08090f" stroke="none"/><path d="M6 17 L19 6" stroke-dasharray="2 2"/></svg></div>
@@ -92,6 +95,9 @@
       <h3 data-i18n="projects.p2.title">NYC Lise Verileri Analizi</h3>
       <p data-i18n="projects.p2.desc">New York liselerinde SAT puanları ile sosyoekonomik ve gayrimenkul verileri arasındaki ilişkiyi incelediğim analiz çalışması.</p>
       <a class="project-link" href="https://github.com/zealcoder95/Analyzing-NYC-High-School-Data" target="_blank" rel="noopener" data-i18n="projects.p2.cta">GitHub'da incele →</a>
+      <button type="button" class="project-chart-trigger" data-chart-full="assets/projects/nyc-sat-scatter.png" data-chart-alt="Emlak fiyatları ile SAT puanları arasındaki ilişkiyi gösteren dağılım grafiği">
+        <img src="assets/projects/nyc-sat-scatter.png" alt="Emlak fiyatları ile SAT puanları arasındaki ilişkiyi gösteren dağılım grafiği" loading="lazy">
+      </button>
     </div>
     <div class="project-card">
       <div class="project-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#08090f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C10 4 4 10 4 18c0 1.1.9 2 2 2 8 0 14-6 14-16z"/><path d="M6 20c4-6 8-10 14-14"/></svg></div>
@@ -106,6 +112,9 @@
       <h3 data-i18n="projects.p4.title">Adidas ABD Satış Analizi</h3>
       <p data-i18n="projects.p4.desc">Adidas'ın ABD'deki satış verilerini analiz ederek öne çıkan trendleri ve içgörüleri ortaya koyduğum çalışma.</p>
       <a class="project-link" href="https://www.kaggle.com/code/gizemglc/adidas-us-sales-analysis" target="_blank" rel="noopener" data-i18n="projects.p4.cta">Kaggle'da incele →</a>
+      <button type="button" class="project-chart-trigger" data-chart-full="assets/projects/adidas-sales-trend.png" data-chart-alt="Bölgelere göre aylık toplam satış trendini gösteren çizgi grafiği">
+        <img src="assets/projects/adidas-sales-trend.png" alt="Bölgelere göre aylık toplam satış trendini gösteren çizgi grafiği" loading="lazy">
+      </button>
     </div>
   </div>
 </section>
@@ -131,6 +140,12 @@
   </div>
 </section>
 
+
+<div class="chart-lightbox" id="chartLightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <button type="button" class="chart-lightbox-close" id="chartLightboxClose" aria-label="Kapat">&times;</button>
+  <img id="chartLightboxImg" src="" alt="">
+</div>
+
 </main>
 <footer>
   <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu">zealcoder — Gizem Gülcü</span>
@@ -139,5 +154,32 @@
 <script src="js/site.js" defer></script>
 <script src="js/zealcoder-feeds.js" defer></script>
 <script src="js/i18n.js" defer></script>
+<script>
+(function(){
+  var lb = document.getElementById('chartLightbox');
+  var lbImg = document.getElementById('chartLightboxImg');
+  var lbClose = document.getElementById('chartLightboxClose');
+  if(!lb) return;
+  function openLightbox(src, alt){
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    lb.classList.add('is-open');
+    lb.setAttribute('aria-hidden','false');
+  }
+  function closeLightbox(){
+    lb.classList.remove('is-open');
+    lb.setAttribute('aria-hidden','true');
+    lbImg.src = '';
+  }
+  document.querySelectorAll('.project-chart-trigger').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      openLightbox(btn.getAttribute('data-chart-full'), btn.getAttribute('data-chart-alt'));
+    });
+  });
+  lbClose.addEventListener('click', closeLightbox);
+  lb.addEventListener('click', function(e){ if(e.target === lb) closeLightbox(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLightbox(); });
+})();
+</script>
 </body>
 </html>
