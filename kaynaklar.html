@@ -83,97 +83,110 @@
       <h2 data-i18n="resources.cat.books.title">Kitaplar</h2>
     </div>
   </div>
-  <div class="project-grid">
-    <div class="project-card">
+  <div class="chip-row books-filter" id="booksFilter" role="group" aria-label="Kaynak kategorisi filtrele">
+    <button type="button" class="chip is-active" data-filter="all" data-i18n="resources.filter.all">Tümü</button>
+    <button type="button" class="chip" data-filter="python" data-i18n="resources.filter.python">Python</button>
+    <button type="button" class="chip" data-filter="istatistik" data-i18n="resources.filter.stats">İstatistik</button>
+    <button type="button" class="chip" data-filter="makine-ogrenmesi" data-i18n="resources.filter.ml">Makine Öğrenmesi</button>
+    <button type="button" class="chip" data-filter="derin-ogrenme" data-i18n="resources.filter.dl">Derin Öğrenme</button>
+    <button type="button" class="chip" data-filter="zaman-serisi" data-i18n="resources.filter.ts">Zaman Serisi</button>
+    <button type="button" class="chip" data-filter="ml-ops" data-i18n="resources.filter.mlops">MLOps</button>
+    <button type="button" class="chip" data-filter="veri-analizi" data-i18n="resources.filter.analysis">Veri Analizi</button>
+  </div>
+  <div class="project-grid" id="booksGrid">
+    <div class="project-card" data-cat="ml-ops">
       <span class="project-tag" data-i18n="resources.b1.tag">Chip Huyen · MLOps &amp; Sistem Tasarımı</span>
       <h3 data-i18n="resources.b1.title">Designing Machine Learning Systems</h3>
       <p data-i18n="resources.b1.desc">Üretime hazır ML sistemleri kurma sürecini uçtan uca ele alan, veri toplamadan izlemeye kadar mühendislik kararlarını tartışan bir kaynak.</p>
       <a class="project-link" href="https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="istatistik">
       <span class="project-tag" data-i18n="resources.b2.tag">Bruce, Bruce &amp; Gedeck · İstatistik</span>
       <h3 data-i18n="resources.b2.title">Practical Statistics for Data Scientists</h3>
       <p data-i18n="resources.b2.desc">Python ile keşifsel veri analizi, örnekleme ve istatistiksel çıkarımı veri bilimi perspektifinden ele alan başucu kaynağım.</p>
       <a class="project-link" href="https://www.oreilly.com/library/view/practical-statistics-for/9781492072935/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="istatistik">
       <span class="project-tag" data-i18n="resources.b3.tag">Pant &amp; Mukhiya · İstatistik</span>
       <h3 data-i18n="resources.b3.title">Statistics for Data Scientists and Analysts</h3>
       <p data-i18n="resources.b3.desc">Veriye dayalı karar verme için istatistiksel yaklaşımları Python üzerinden pekiştirdiğim bir diğer kaynak.</p>
       <a class="project-link" href="https://in.bpbonline.com/products/statistics-for-data-scientists-and-analysts" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="zaman-serisi">
       <span class="project-tag" data-i18n="resources.b4.tag">Tarek A. Atwan · Zaman Serisi</span>
       <h3 data-i18n="resources.b4.title">Time Series Analysis with Python Cookbook</h3>
       <p data-i18n="resources.b4.desc">Zaman serisi verisinde keşifsel analiz, hazırlık ve tahminleme için pratik tarifler içeren bir kaynak.</p>
       <a class="project-link" href="https://www.packtpub.com/en-us/product/time-series-analysis-with-python-cookbook-9781801075541" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="zaman-serisi">
       <span class="project-tag" data-i18n="resources.b5.tag">Vishwas &amp; Macharla · Zaman Serisi</span>
       <h3 data-i18n="resources.b5.title">Time Series Forecasting Using Generative AI</h3>
       <p data-i18n="resources.b5.desc">Klasik zaman serisi yöntemlerini üretken yapay zeka teknikleriyle birleştiren güncel bir yaklaşım.</p>
       <a class="project-link" href="https://link.springer.com/book/10.1007/979-8-8688-1276-7" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="makine-ogrenmesi">
       <span class="project-tag" data-i18n="resources.b6.tag">Vincent Vandenbussche · Makine Öğrenmesi</span>
       <h3 data-i18n="resources.b6.title">The Regularization Cookbook</h3>
       <p data-i18n="resources.b6.desc">Doğrusal modellerden derin öğrenmeye uzanan regularizasyon tekniklerini pratik örneklerle anlatıyor.</p>
       <a class="project-link" href="https://www.packtpub.com/en-us/product/the-regularization-cookbook-9781837634088" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="makine-ogrenmesi" style="display:none">
       <span class="project-tag" data-i18n="resources.b7.tag">Gallatin &amp; Albon · Makine Öğrenmesi</span>
       <h3 data-i18n="resources.b7.title">Machine Learning with Python Cookbook</h3>
       <p data-i18n="resources.b7.desc">Ön işlemeden derin öğrenmeye kadar günlük iş akışımda başvurduğum, tarif odaklı bir referans.</p>
       <a class="project-link" href="https://www.oreilly.com/library/view/machine-learning-with/9781098135713/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="derin-ogrenme" style="display:none">
       <span class="project-tag" data-i18n="resources.b8.tag">Ian Pointer · Derin Öğrenme</span>
       <h3 data-i18n="resources.b8.title">Programming PyTorch for Deep Learning</h3>
       <p data-i18n="resources.b8.desc">PyTorch ile derin öğrenme uygulamaları kurma ve devreye alma üzerine adım adım bir kaynak.</p>
       <a class="project-link" href="https://www.oreilly.com/library/view/programming-pytorch-for/9781492045342/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="veri-analizi" style="display:none">
       <span class="project-tag" data-i18n="resources.b9.tag">Daniel Y. Chen · Veri Analizi</span>
       <h3 data-i18n="resources.b9.title">Pandas for Everyone</h3>
       <p data-i18n="resources.b9.desc">Veri temizleme, düzenleme ve modelleme öncesi hazırlık adımlarında sürekli döndüğüm bir Pandas kaynağı.</p>
       <a class="project-link" href="https://www.pearson.com/en-us/subject-catalog/p/pandas-for-everyone-python-data-analysis/P200000007264/9780137891054" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="ml-ops" style="display:none">
       <span class="project-tag" data-i18n="resources.b10.tag">Gift &amp; Deza · MLOps</span>
       <h3 data-i18n="resources.b10.title">Practical MLOps</h3>
       <p data-i18n="resources.b10.desc">Makine öğrenmesi modellerini üretime alma ve izleme pratiklerini DevOps perspektifinden ele alıyor.</p>
       <a class="project-link" href="https://www.oreilly.com/library/view/practical-mlops/9781098103002/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="veri-analizi" style="display:none">
       <span class="project-tag" data-i18n="resources.b11.tag">Mona Khalil · Veri Analizi</span>
       <h3 data-i18n="resources.b11.title">Think Like a Data Analyst</h3>
       <p data-i18n="resources.b11.desc">Teknik beceriyi iş sonuçlarına dönüştürme sürecinde bir analistin bakış açısını anlamama yardımcı oldu.</p>
       <a class="project-link" href="https://www.manning.com/books/think-like-a-data-analyst" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="makine-ogrenmesi" style="display:none">
       <span class="project-tag" data-i18n="resources.b12.tag">Deepak K. Kanungo · Makine Öğrenmesi</span>
       <h3 data-i18n="resources.b12.title">Probabilistic Machine Learning for Finance and Investing</h3>
       <p data-i18n="resources.b12.desc">Belirsizliği modelleyen, kararlarını şeffaf biçimde açıklayabilen olasılıksal ML yaklaşımlarına giriş.</p>
       <a class="project-link" href="https://www.amazon.com/Probabilistic-Machine-Learning-Finance-Investing/dp/1492097675" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="python" style="display:none">
       <span class="project-tag" data-i18n="resources.b13.tag">Eric Matthes · Python</span>
       <h3 data-i18n="resources.b13.title">Python Crash Course</h3>
       <p data-i18n="resources.b13.desc">Python temellerini sağlamlaştırmak için zaman zaman geri döndüğüm bir referans kitap.</p>
       <a class="project-link" href="https://nostarch.com/python-crash-course-3rd-edition" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="python" style="display:none">
       <span class="project-tag" data-i18n="resources.b14.tag">Varoquaux ve katkıda bulunanlar · Python</span>
       <h3 data-i18n="resources.b14.title">Scientific Python Lectures</h3>
       <p data-i18n="resources.b14.desc">NumPy, Matplotlib ve SciPy'ı bilimsel hesaplama bağlamında derinlemesine öğrendiğim, açık kaynaklı bir ders notu.</p>
       <a class="project-link" href="https://lectures.scientific-python.org/" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
-    <div class="project-card">
+    <div class="project-card" data-cat="veri-analizi" style="display:none">
       <span class="project-tag" data-i18n="resources.b15.tag">Veri Analizi · Aykırı Değer Analizi</span>
       <h3 data-i18n="resources.b15.title">Outlier Detection in Python</h3>
       <p data-i18n="resources.b15.desc">Aykırı değer tespitine farklı yöntemlerle yaklaşan, günlükteki ilgili girişimde de faydalandığım bir kaynak.</p>
       <a class="project-link" href="https://www.manning.com/books/outlier-detection-in-python" target="_blank" rel="noopener" data-i18n="resources.book.link">Yayıncı sayfası →</a>
     </div>
+  </div>
+  <div class="books-more-wrap">
+    <button type="button" class="btn btn-ghost" id="booksShowMore" data-i18n="resources.showmore">Daha fazla göster (+9)</button>
   </div>
 </section>
 
@@ -220,5 +233,37 @@
 <script src="js/site.js" defer></script>
 <script src="js/zealcoder-feeds.js" defer></script>
 <script src="js/i18n.js" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.getElementById('booksGrid');
+  const filterBar = document.getElementById('booksFilter');
+  const showMoreBtn = document.getElementById('booksShowMore');
+  if (!grid || !filterBar || !showMoreBtn) return;
+  const cards = Array.from(grid.querySelectorAll('.project-card'));
+  let activeFilter = 'all';
+  let expanded = false;
+
+  function render() {
+    cards.forEach((card, i) => {
+      const matches = activeFilter === 'all' || card.dataset.cat === activeFilter;
+      if (!matches) { card.style.display = 'none'; return; }
+      if (activeFilter === 'all' && !expanded && i >= 6) { card.style.display = 'none'; }
+      else { card.style.display = ''; }
+    });
+    showMoreBtn.style.display = (activeFilter === 'all' && !expanded && cards.length > 6) ? '' : 'none';
+  }
+
+  filterBar.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      activeFilter = chip.dataset.filter;
+      expanded = false;
+      filterBar.querySelectorAll('.chip').forEach(c => c.classList.toggle('is-active', c === chip));
+      render();
+    });
+  });
+  showMoreBtn.addEventListener('click', () => { expanded = true; render(); });
+  render();
+});
+</script>
 </body>
 </html>
