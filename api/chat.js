@@ -25,9 +25,9 @@
  */
 
 const MODEL_FALLBACK_CHAIN = [
-  "gemini-2.5-flash", // best quality/speed balance, tried first
-  "gemini-2.5-flash-lite", // looser rate limits, used once flash is exhausted
-  "gemini-2.0-flash", // older, kept as a last-resort third option
+  "gemini-flash-lite-latest", // Google-maintained alias, auto-updates, most generous free-tier limits
+  "gemini-flash-latest", // Google-maintained alias, auto-updates, better quality
+  "gemini-2.5-flash-lite", // pinned fallback in case the aliases above ever have an outage
 ];
 
 const MAX_MESSAGE_LENGTH = 2000;
@@ -154,12 +154,13 @@ module.exports = async (req, res) => {
       res.status(200).json({ reply });
       return;
     } catch (err) {
+      console.error(`Gemini model "${model}" failed (status ${err.status || "?"}):`, err.message);
       lastError = err;
-      // Only move to the next model for quota/rate-limit/transient server
-      // errors. Anything else (e.g. a malformed request) won't be fixed
-      // by switching models, so stop retrying and fall through below.
-      const retryable = err.status === 429 || err.status === 500 || err.status === 503;
-      if (!retryable) break;
+      // Try every remaining model regardless of the error, EXCEPT auth
+      // errors (401/403) — those mean the API key itself is bad/lacks
+      // permission, which will fail identically for every model, so
+      // there's no point burning the other attempts on it.
+      if (err.status === 401 || err.status === 403) break;
     }
   }
 

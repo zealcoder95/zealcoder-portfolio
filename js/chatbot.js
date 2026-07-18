@@ -89,6 +89,7 @@
 
     let history = []; // [{role:'user'|'assistant', text}]
     let welcomed = false;
+    let welcomeMsgEl = null;
     let sending = false;
 
     function addMessage(role, text) {
@@ -97,6 +98,7 @@
       div.innerHTML = escapeHtml(text);
       body.appendChild(div);
       body.scrollTop = body.scrollHeight;
+      return div;
     }
 
     function showTyping() {
@@ -113,15 +115,18 @@
       if (el) el.remove();
     }
 
-    function applyStrings() {
+    function applyHeaderStrings() {
       const s = STRINGS[currentLang()];
       titleEl.textContent = s.title;
       subtitleEl.textContent = s.subtitle;
       input.setAttribute("placeholder", s.placeholder);
       launcher.setAttribute("aria-label", panel.classList.contains("is-open") ? s.close : s.open);
-      if (!welcomed) {
-        addMessage("assistant", s.welcome);
-        welcomed = true;
+      // If the visitor hasn't actually said anything yet, the welcome
+      // bubble isn't "history" — keep it in sync with the language
+      // toggle instead of leaving it stuck in whatever language was
+      // active the moment the panel was first opened.
+      if (welcomeMsgEl && history.length === 0) {
+        welcomeMsgEl.innerHTML = escapeHtml(s.welcome);
       }
     }
 
@@ -129,9 +134,12 @@
       const willOpen = typeof open === "boolean" ? open : !panel.classList.contains("is-open");
       panel.classList.toggle("is-open", willOpen);
       launcher.setAttribute("aria-expanded", String(willOpen));
-      launcher.setAttribute("aria-label", STRINGS[currentLang()][willOpen ? "close" : "open"]);
+      applyHeaderStrings();
       if (willOpen) {
-        applyStrings();
+        if (!welcomed) {
+          welcomeMsgEl = addMessage("assistant", STRINGS[currentLang()].welcome);
+          welcomed = true;
+        }
         input.focus();
       }
     }
@@ -174,8 +182,8 @@
       }
     });
 
-    document.addEventListener("zc:langchange", applyStrings);
-    applyStrings();
+    document.addEventListener("zc:langchange", applyHeaderStrings);
+    applyHeaderStrings();
   }
 
   if (document.readyState === "loading") {
