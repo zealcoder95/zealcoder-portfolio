@@ -17,7 +17,7 @@
   --purple-deep:#5a1fc9;
   --text:#eceeff;
   --text-muted:#9295b8;
-  --text-faint:#5c6088;
+  --text-faint:#7276a0;
   --line:rgba(150,150,200,0.16);
   --gradient:linear-gradient(120deg, var(--cyan) 0%, var(--blue) 28%, var(--indigo) 55%, var(--purple) 80%, var(--magenta) 100%);
   --gradient-vert:linear-gradient(180deg, var(--cyan), var(--blue) 32%, var(--indigo) 60%, var(--purple) 82%, var(--magenta));
