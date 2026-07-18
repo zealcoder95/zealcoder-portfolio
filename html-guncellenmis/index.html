@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="home.meta.title">zealcoder — Gizem Gülcü | Veri Bilimci &amp; Elektrik-Elektronik Mühendisi</title>
+<meta name="description" data-i18n-content="home.meta.desc" content="Adana merkezli Veri Bilimci ve Elektrik-Elektronik Mühendisi Gizem Gülcü'nün (zealcoder) kişisel portföy sitesi.">
+<link rel="canonical" href="https://zealcoder-portfolio.vercel.app/">
+<meta name="theme-color" content="#050611">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="zealcoder">
+<meta property="og:url" content="https://zealcoder-portfolio.vercel.app/">
+<meta property="og:title" content="zealcoder — Gizem Gülcü | Veri Bilimci & Elektrik-Elektronik Mühendisi">
+<meta property="og:description" content="Adana merkezli Veri Bilimci ve Elektrik-Elektronik Mühendisi Gizem Gülcü'nün (zealcoder) kişisel portföy sitesi.">
+<meta property="og:image" content="https://zealcoder-portfolio.vercel.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zealcoder — Gizem Gülcü | Veri Bilimci & Elektrik-Elektronik Mühendisi">
+<meta name="twitter:description" content="Adana merkezli Veri Bilimci ve Elektrik-Elektronik Mühendisi Gizem Gülcü'nün (zealcoder) kişisel portföy sitesi.">
+<meta name="twitter:image" content="https://zealcoder-portfolio.vercel.app/assets/og-image.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.github.com">
+<link rel="preconnect" href="https://api.rss2json.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/zealcoder-feeds.css">
+<link rel="stylesheet" href="css/chatbot.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Gizem Gülcü",
+  "alternateName": "zealcoder",
+  "url": "https://zealcoder-portfolio.vercel.app/",
+  "image": "https://zealcoder-portfolio.vercel.app/assets/zealcoder-logo.png",
+  "jobTitle": "Data Scientist",
+  "description": "Electrical-Electronics Engineer transitioning into Data Science, Machine Learning and AI Engineering.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Adana",
+    "addressCountry": "TR"
+  },
+  "alumniOf": {
+    "@type": "CollegeOrUniversity",
+    "name": "İskenderun Technical University"
+  },
+  "sameAs": [
+    "https://github.com/zealcoder95",
+    "https://www.linkedin.com/in/gizemgulcu/",
+    "https://medium.com/@zealcoder",
+    "https://www.kaggle.com/gizemglc"
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
+<canvas id="circuit-bg"></canvas>
+<div class="spine" aria-hidden="true">
+  <div class="spine-fill" id="spineFill"></div>
+  <div class="spine-node" data-pct="5" style="top:5%"></div>
+  <div class="spine-node" data-pct="25" style="top:25%"></div>
+  <div class="spine-node" data-pct="45" style="top:45%"></div>
+  <div class="spine-node" data-pct="65" style="top:65%"></div>
+  <div class="spine-node" data-pct="85" style="top:85%"></div>
+</div>
+<nav>
+  <a class="brand" href="index.html">
+    <img src="assets/zealcoder-logo.png" alt="zealcoder logosu">
+    <span><span class="tag-open">&lt;</span>zealcoder<span class="tag-close">/&gt;</span></span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a><a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a><a href="projeler.html" data-i18n="nav.projects">Projeler</a><a href="yazilar.html" data-i18n="nav.writing">Yazılar</a><a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a><a href="gunluk.html" data-i18n="nav.journal">Günlük</a><a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Dil seçimi / Language">
+      <button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a>
+  <a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a>
+  <a href="projeler.html" data-i18n="nav.projects">Projeler</a>
+  <a href="yazilar.html" data-i18n="nav.writing">Yazılar</a>
+  <a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a>
+  <a href="gunluk.html" data-i18n="nav.journal">Günlük</a>
+  <a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+</div>
+<main id="main-content">
+
+<section class="hero container" id="top">
+  <div class="hero-mark">
+    <svg class="mark-traces" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#464b72" stroke-width="1.4" fill="none" opacity="0.75">
+        <path d="M0,40 H110 L140,70 H235" />
+        <path d="M0,220 H100 L130,190 H225" />
+        <path d="M600,50 H510 L480,80 H400" />
+        <path d="M600,210 H520 L490,180 H410" />
+      </g>
+      <g>
+        <circle cx="0" cy="40" r="4" fill="#22d3f5"/>
+        <circle cx="0" cy="220" r="4" fill="#8b3ef0"/>
+        <circle cx="600" cy="50" r="4" fill="#22d3f5"/>
+        <circle cx="600" cy="210" r="4" fill="#c144f7"/>
+      </g>
+    </svg>
+    <img class="mark-logo" src="assets/zealcoder-logo.png" alt="zealcoder logosu — dairesel devre motifli mor-mavi Z amblemi">
+  </div>
+  <div class="eyebrow hero-eyebrow" data-i18n="home.eyebrow">devsel_kimlik.baslat()</div>
+  <h1><span data-i18n="home.hero.line1">Elektrik mühendisliğinden veriye:</span><br><span class="grad" data-i18n="home.hero.line2">zealcoder — Gizem Gülcü</span></h1>
+  <p class="hero-sub" data-i18n="home.hero.sub">Adana merkezli Veri Bilimci ve Elektrik-Elektronik Mühendisi. Devreleri okuduğum gözle şimdi veriyi okuyorum — Python, makine öğrenmesi ve derin öğrenme ile gerçek dünya problemlerine çözüm üretiyorum.</p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="https://github.com/zealcoder95" target="_blank" rel="noopener" data-i18n="home.btn.github">GitHub'ı gör</a>
+    <a class="btn btn-ghost" href="https://www.linkedin.com/in/gizemgulcu/" target="_blank" rel="noopener" data-i18n="home.btn.linkedin">LinkedIn'i gör</a>
+    <a class="btn btn-ghost" href="projeler.html" data-i18n="home.btn.projects">Projelere göz at</a>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"></div>
+</section>
+
+<section class="container">
+  <div class="section-head">
+    <div>
+      <div class="section-num" data-i18n="home.sitemap.eyebrow">site haritası</div>
+      <h2 data-i18n="home.sitemap.title">Beni daha yakından tanı</h2>
+    </div>
+  </div>
+  <div class="home-links">
+    <a class="home-link-card" href="hakkimda.html">
+      <span class="section-num">01</span>
+      <h3 data-i18n="home.card.about.title">Hakkımda</h3>
+      <p data-i18n="home.card.about.desc">Elektrik-Elektronik Mühendisliğinden veri bilimine uzanan yolculuğum ve bu geçişi nasıl kurduğum.</p>
+      <span class="go" data-i18n="home.card.about.cta">Devamını oku →</span>
+    </a>
+    <a class="home-link-card" href="yetenekler.html">
+      <span class="section-num">02</span>
+      <h3 data-i18n="home.card.skills.title">Yetenekler</h3>
+      <p data-i18n="home.card.skills.desc">Veriyi temizlemekten modele, modelden içgörüye giden süreçte kullandığım diller ve araçlar.</p>
+      <span class="go" data-i18n="home.card.skills.cta">Şemaya bak →</span>
+    </a>
+    <a class="home-link-card" href="projeler.html">
+      <span class="section-num">03</span>
+      <h3 data-i18n="home.card.projects.title">Projeler</h3>
+      <p data-i18n="home.card.projects.desc">Kaggle ve GitHub'da yayınladığım veri analizi ve makine öğrenmesi çalışmalarım.</p>
+      <span class="go" data-i18n="home.card.projects.cta">Projeleri gör →</span>
+    </a>
+    <a class="home-link-card" href="yazilar.html">
+      <span class="section-num">04</span>
+      <h3 data-i18n="home.card.writing.title">Yazılar</h3>
+      <p data-i18n="home.card.writing.desc">Medium'da paylaştığım veri bilimi ve mühendislik yazılarımın durumu.</p>
+      <span class="go" data-i18n="home.card.writing.cta">Yazılara git →</span>
+    </a>
+    <a class="home-link-card" href="kaynaklar.html">
+      <span class="section-num">05</span>
+      <h3 data-i18n="home.card.resources.title">Kaynaklar</h3>
+      <p data-i18n="home.card.resources.desc">Okuduğum kitaplar, takip ettiğim kaynaklar ve kullandığım araçların derlendiği bölüm.</p>
+      <span class="go" data-i18n="home.card.resources.cta">Kaynaklara git →</span>
+    </a>
+    <a class="home-link-card" href="gunluk.html">
+      <span class="section-num">06</span>
+      <h3 data-i18n="home.card.journal.title">Mühendislik Günlüğü</h3>
+      <p data-i18n="home.card.journal.desc">Projelerin arkasındaki kararları, zorlukları ve dersleri kaydettiğim bölüm.</p>
+      <span class="go" data-i18n="home.card.journal.cta">Günlüğe git →</span>
+    </a>
+    <a class="home-link-card" href="iletisim.html">
+      <span class="section-num">07</span>
+      <h3 data-i18n="home.card.contact.title">İletişim</h3>
+      <p data-i18n="home.card.contact.desc">Bir proje mi konuşmak istiyorsun, yoksa sadece merhaba mı demek istiyorsun — buradan ulaş.</p>
+      <span class="go" data-i18n="home.card.contact.cta">İletişime geç →</span>
+    </a>
+  </div>
+</section>
+
+<section class="container feed-section" aria-labelledby="feed-heading">
+  <div class="section-head">
+    <div>
+      <div class="section-num" data-i18n="home.feed.eyebrow">canlı akış</div>
+      <h2 id="feed-heading" data-i18n="home.feed.title">Şu anda üzerinde çalıştıklarım</h2>
+    </div>
+    <span class="feed-live-tag"><span class="feed-live-dot" aria-hidden="true"></span><span data-i18n="home.feed.livetag">GitHub ve Medium'dan gerçek zamanlı çekiliyor</span></span>
+  </div>
+  <div class="feed-grid">
+    <div class="feed-col">
+      <div class="feed-col-head">
+        <h3 data-i18n="home.feed.gh.title">Üzerinde çalıştığım depolar</h3>
+        <a class="feed-source-link" href="https://github.com/zealcoder95" target="_blank" rel="noopener" data-i18n="home.feed.gh.all">tümü →</a>
+      </div>
+      <div id="gh-feed" data-feed="gh-repos" data-count="3">
+        <div class="feed-skel"></div><div class="feed-skel"></div><div class="feed-skel"></div>
+      </div>
+    </div>
+    <div class="feed-col">
+      <div class="feed-col-head">
+        <h3 data-i18n="home.feed.medium.title">Medium'da son yazılar</h3>
+        <a class="feed-source-link" href="https://medium.com/@zealcoder" target="_blank" rel="noopener" data-i18n="home.feed.medium.all">tümü →</a>
+      </div>
+      <div id="medium-feed-home" data-feed="medium" data-count="3">
+        <div class="feed-skel"></div><div class="feed-skel"></div><div class="feed-skel"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>
+  <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu">zealcoder — Gizem Gülcü</span>
+  <span data-i18n="footer.location">Adana, Türkiye</span>
+</footer>
+<script src="js/site.js" defer></script>
+<script src="js/zealcoder-feeds.js" defer></script>
+<script src="js/i18n.js" defer></script>
+<script src="js/chatbot.js" defer></script>
+</body>
+</html>

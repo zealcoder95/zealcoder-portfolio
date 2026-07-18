@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="projects.meta.title">Projeler — zealcoder</title>
+<meta name="description" data-i18n-content="projects.meta.desc" content="Gizem Gülcü'nün Kaggle ve GitHub üzerinde yayınladığı veri analizi ve makine öğrenmesi projeleri.">
+<link rel="canonical" href="https://zealcoder-portfolio.vercel.app/projeler.html">
+<meta name="theme-color" content="#050611">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="zealcoder">
+<meta property="og:url" content="https://zealcoder-portfolio.vercel.app/projeler.html">
+<meta property="og:title" content="Projeler — zealcoder">
+<meta property="og:description" content="Gizem Gülcü'nün Kaggle ve GitHub üzerinde yayınladığı veri analizi ve makine öğrenmesi projeleri.">
+<meta property="og:image" content="https://zealcoder-portfolio.vercel.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Projeler — zealcoder">
+<meta name="twitter:description" content="Gizem Gülcü'nün Kaggle ve GitHub üzerinde yayınladığı veri analizi ve makine öğrenmesi projeleri.">
+<meta name="twitter:image" content="https://zealcoder-portfolio.vercel.app/assets/og-image.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.github.com">
+<link rel="preconnect" href="https://api.rss2json.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/zealcoder-feeds.css">
+<link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
+<canvas id="circuit-bg"></canvas>
+<div class="spine" aria-hidden="true">
+  <div class="spine-fill" id="spineFill"></div>
+  <div class="spine-node" data-pct="5" style="top:5%"></div>
+  <div class="spine-node" data-pct="25" style="top:25%"></div>
+  <div class="spine-node" data-pct="45" style="top:45%"></div>
+  <div class="spine-node" data-pct="65" style="top:65%"></div>
+  <div class="spine-node" data-pct="85" style="top:85%"></div>
+</div>
+<nav>
+  <a class="brand" href="index.html">
+    <img src="assets/zealcoder-logo.png" alt="zealcoder logosu">
+    <span><span class="tag-open">&lt;</span>zealcoder<span class="tag-close">/&gt;</span></span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a><a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a><a href="projeler.html" class="active" aria-current="page" data-i18n="nav.projects">Projeler</a><a href="yazilar.html" data-i18n="nav.writing">Yazılar</a><a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a><a href="gunluk.html" data-i18n="nav.journal">Günlük</a><a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Dil seçimi / Language">
+      <button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a>
+  <a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a>
+  <a href="projeler.html" class="active" aria-current="page" data-i18n="nav.projects">Projeler</a>
+  <a href="yazilar.html" data-i18n="nav.writing">Yazılar</a>
+  <a href="kaynaklar.html" data-i18n="nav.resources">Kaynaklar</a>
+  <a href="gunluk.html" data-i18n="nav.journal">Günlük</a>
+  <a href="iletisim.html" data-i18n="nav.contact">İletişim</a>
+</div>
+<main id="main-content">
+
+<section class="page-hero container">
+  <div class="eyebrow" data-i18n="projects.eyebrow">03 / projeler</div>
+  <h1 data-i18n-html="projects.h1">Kaggle &amp; GitHub üzerindeki çalışmalarım</h1>
+  <p data-i18n="projects.sub">Veri temizlemeden analiz sonuçlarına uzanan, yayında olan çalışmalarım.</p>
+</section>
+
+<section class="container">
+  <div class="project-grid" id="projectsGrid" data-feed="projects">
+    <div class="feed-skel"></div><div class="feed-skel"></div><div class="feed-skel"></div>
+  </div>
+  <div class="books-more-wrap">
+    <button type="button" class="btn btn-ghost" id="projectsShowMore" style="display:none"></button>
+  </div>
+</section>
+
+<section class="container feed-section" aria-labelledby="repo-feed-heading">
+  <div class="section-head">
+    <div>
+      <div class="section-num" data-i18n="projects.feed.eyebrow">canlı depo</div>
+      <h2 id="repo-feed-heading" data-i18n="projects.feed.title">GitHub &amp; Kaggle'da en son güncellenenler</h2>
+    </div>
+    <span class="feed-live-tag"><span class="feed-live-dot" aria-hidden="true"></span><span data-i18n="projects.feed.livetag">gerçek zamanlı akış</span></span>
+  </div>
+  <div class="feed-grid">
+    <div class="feed-col">
+      <div class="feed-col-head">
+        <h3 data-i18n="projects.feed.col.title">Son commit alan depolar</h3>
+        <a class="feed-source-link" href="https://github.com/zealcoder95?tab=repositories" target="_blank" rel="noopener" data-i18n="projects.feed.col.all">tüm depolar →</a>
+      </div>
+      <div id="gh-repo-feed" data-feed="gh-repos" data-count="6">
+        <div class="feed-skel"></div><div class="feed-skel"></div><div class="feed-skel"></div>
+      </div>
+    </div>
+    <div class="feed-col">
+      <div class="feed-col-head">
+        <h3 data-i18n="projects.feed.col2.title">Son çalıştırılan Kaggle notebook'ları</h3>
+        <a class="feed-source-link" href="https://www.kaggle.com/gizemglc" target="_blank" rel="noopener" data-i18n="projects.feed.col2.all">tüm notebook'lar →</a>
+      </div>
+      <div class="feed-sync-note" id="kaggle-sync-note"></div>
+      <div id="kaggle-feed" data-feed="kaggle" data-count="6">
+        <div class="feed-skel"></div><div class="feed-skel"></div><div class="feed-skel"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="chart-lightbox" id="chartLightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <button type="button" class="chart-lightbox-close" id="chartLightboxClose" aria-label="Kapat">&times;</button>
+  <img id="chartLightboxImg" src="" alt="">
+</div>
+
+</main>
+<footer>
+  <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu">zealcoder — Gizem Gülcü</span>
+  <span data-i18n="footer.location">Adana, Türkiye</span>
+</footer>
+<script src="js/site.js" defer></script>
+<script src="js/zealcoder-feeds.js" defer></script>
+<script src="js/zealcoder-comments.js" defer></script>
+<script src="js/i18n.js" defer></script>
+<script>
+(function(){
+  var lb = document.getElementById('chartLightbox');
+  var lbImg = document.getElementById('chartLightboxImg');
+  var lbClose = document.getElementById('chartLightboxClose');
+  if(!lb) return;
+  function openLightbox(src, alt){
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    lb.classList.add('is-open');
+    lb.setAttribute('aria-hidden','false');
+  }
+  function closeLightbox(){
+    lb.classList.remove('is-open');
+    lb.setAttribute('aria-hidden','true');
+    lbImg.src = '';
+  }
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.project-chart-trigger');
+    if(!btn) return;
+    openLightbox(btn.getAttribute('data-chart-full'), btn.getAttribute('data-chart-alt'));
+  });
+  lbClose.addEventListener('click', closeLightbox);
+  lb.addEventListener('click', function(e){ if(e.target === lb) closeLightbox(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLightbox(); });
+})();
+</script>
+<script src="js/chatbot.js" defer></script>
+</body>
+</html>
