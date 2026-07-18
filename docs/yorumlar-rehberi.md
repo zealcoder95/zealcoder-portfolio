@@ -10,9 +10,30 @@ kalmaya devam ediyor, ekstra bir sunucu yok.
 - Her kart/yazının altında **"💬 Yorumlar"** butonu var, tıklanınca yorumlar
   ve bir "yorum yap" formu açılıyor.
 - Kim olursa olsun (hesap gerekmez) isim + yorum yazıp gönderebilir.
-- Gönderilen her yorum **onaysız** olarak kaydedilir ve siz onaylamadan
-  sitede **görünmez** — spam'in doğrudan sitede görünmesini engelleyen tek
-  mekanizma bu.
+- Gönderilen her yorum veritabanı tarafında otomatik olarak taranıyor
+  (bkz. "Otomatik filtre" bölümü). **Temiz** görünen yorumlar anında
+  yayınlanıyor. **Şüpheli** görünenler (link, e-posta, telefon numarası,
+  bilinen spam/kumar/reklam kelimeleri, aşırı tekrarlanan karakter)
+  onaysız kalıyor ve siz onaylamadan sitede görünmüyor.
+
+## Otomatik filtre
+
+`comments_moderate` adlı bir veritabanı trigger'ı, her yeni yorumda
+`is_approved` alanını kendisi hesaplıyor — istemci tarafından gönderilen
+değeri (varsa) tamamen görmezden geliyor, yani anon anahtarla biri
+`is_approved: true` göndermeye çalışsa bile bu işe yaramıyor.
+
+Şüpheli sayan durumlar:
+- Herhangi bir link (`http(s)://`, `www.`, ya da `.com/.net/.xyz` gibi bir uzantı)
+- E-posta adresi
+- Uzun bir rakam dizisi (telefon numarası / promosyon kodu görünümü)
+- Aynı karakterin art arda 6+ kez tekrarı (`aaaaaa`, `!!!!!!`)
+- Bilinen spam/kumar/reklam kelimeleri (bahis, kripto kazan, takipçi satın al, vb. — liste `comments_moderate` fonksiyonunun içinde, ihtiyaç oldukça genişletilebilir)
+
+Bu filtre yanılabilir — meşru bir yorum yanlışlıkla onaya düşebilir
+(ör. birisi linkli bir kaynak paylaşırsa). O yüzden "Yeni yorumları
+onaylama" adımı hâlâ geçerli, sadece artık çoğu temiz yorum için
+gerekmiyor.
 
 ## Yeni yorumları onaylama
 
