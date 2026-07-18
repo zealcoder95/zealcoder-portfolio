@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://zealcoder95.github.io/zealcoder-portfolio/</loc>
+    <loc>https://zealcoder-portfolio.vercel.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://zealcoder95.github.io/zealcoder-portfolio/hakkimda.html</loc>
+    <loc>https://zealcoder-portfolio.vercel.app/hakkimda.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://zealcoder95.github.io/zealcoder-portfolio/yetenekler.html</loc>
+    <loc>https://zealcoder-portfolio.vercel.app/yetenekler.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://zealcoder95.github.io/zealcoder-portfolio/projeler.html</loc>
+    <loc>https://zealcoder-portfolio.vercel.app/projeler.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://zealcoder95.github.io/zealcoder-portfolio/yazilar.html</loc>
+    <loc>https://zealcoder-portfolio.vercel.app/yazilar.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://zealcoder95.github.io/zealcoder-portfolio/kaynaklar.html</loc>
+    <loc>https://zealcoder-portfolio.vercel.app/kaynaklar.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://zealcoder95.github.io/zealcoder-portfolio/gunluk.html</loc>
+    <loc>https://zealcoder-portfolio.vercel.app/gunluk.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://zealcoder95.github.io/zealcoder-portfolio/iletisim.html</loc>
+    <loc>https://zealcoder-portfolio.vercel.app/iletisim.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>

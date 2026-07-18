@@ -52,7 +52,7 @@ Bana yeni kitapların/kursların/günlük girişlerinin gerçek başlıklarını
 
 ## Yayına almadan önce yapılacaklar
 
-1. **Domain**: Tüm `<link rel="canonical">`, Open Graph/Twitter meta etiketleri, `sitemap.xml` ve `robots.txt` şu an `https://zealcoder95.github.io/zealcoder-portfolio/` varsayıyor. GitHub Pages'i bu repodan yayınlayacaksanız doğru; özel bir alan adı bağlarsanız bu dosyalardaki URL'leri güncelleyin (`grep -rl "zealcoder95.github.io" .` ile hepsini bulabilirsiniz).
+1. **Domain**: Tüm `<link rel="canonical">`, Open Graph/Twitter meta etiketleri, `sitemap.xml` ve `robots.txt` artık gerçek yayın adresi olan `https://zealcoder-portfolio.vercel.app/` üzerinden ayarlı. Özel bir alan adı bağlarsanız bu dosyalardaki URL'leri güncelleyin (`grep -rl "zealcoder-portfolio.vercel.app" .` ile hepsini bulabilirsiniz).
 2. **GitHub Pages**: Repo ayarlarından *Settings → Pages → Deploy from branch → main / (root)* seçin; birkaç dakika içinde site yayında olur.
 3. **Google Search Console**: Yayınlandıktan sonra domaini doğrulayıp `sitemap.xml`'i gönderin, böylece arama sonuçlarına daha hızlı girer.
 4. **og:image**: `assets/og-image.png` (1200×630, site paletiyle üretilmiş özel bir paylaşım görseli) tüm sayfalarda tanımlı — ayrıca bir görsel hazırlamana gerek yok. Marka veya vurgu rengini değiştirirsen `assets/og-image.png`'yi de yeniden üretmen gerekir.

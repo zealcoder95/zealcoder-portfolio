@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zealcoder95.github.io/zealcoder-portfolio/sitemap.xml
+Sitemap: https://zealcoder-portfolio.vercel.app/sitemap.xml
