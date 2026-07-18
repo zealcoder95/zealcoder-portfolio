@@ -39,7 +39,20 @@ geç 15 dakika içinde (cache TTL) yeni satırı gösterir; sert yenilemeyle hem
   olarak yakalıyor (CSV sanıp bozuk göstermek yerine JSON yedeğine düşüyor).
 - `node --check` ile tüm dosyanın söz dizimi doğrulandı.
 
+## Ek: kitap kapak görselleri
+`assets/books.json`'daki her kitaba artık bir `cover` alanı eklendi — Open Library'nin
+ücretsiz kapak servisinden (ISBN üzerinden) çekiliyor, ayrı bir görsel yüklemenize
+gerek yok. Sheet'ten kitap eklerken de `cover` kolonuna aynı şekilde bir
+`https://covers.openlibrary.org/b/isbn/<ISBN>-L.jpg` linki (ya da başka bir kapak
+görseli URL'si) yazabilirsiniz — boş bırakırsanız kart sadece kapaksız görünür,
+hata vermez. 2 kitapta (Manning MEAP / henüz ISBN'i olmayan "Think Like a Data
+Analyst" ve `lectures.scientific-python.org`'daki ücretsiz ders notu) uygun bir
+ISBN bulunamadığı için kapak eklenmedi. Open Library'de bazı baskılar taranmamış
+olabilir — siteyi deploy ettikten sonra Kaynaklar sayfasını gözden geçirip boş/gri
+kapak çıkan olursa haber verin, değiştiririm.
+
 ## Yapmanız gereken
-1. Bu pakette `js/zealcoder-feeds.js` dosyasını repo kökünüzdeki `js/` klasörünün üzerine kopyalayın.
+1. Bu pakette `js/zealcoder-feeds.js`, `css/style.css`, `assets/books.json` ve
+   `kitaplar_template.csv` dosyalarını repo kökünüzdeki karşılıklarının üzerine kopyalayın.
 2. Yukarıdaki Sheet kurulum adımlarını tamamlayın.
-3. `git add -A && git commit -m "feat: kitap/sertifika Google Sheet'ten besleniyor" && git push`
+3. `git add -A && git commit -m "feat: kitap/sertifika Google Sheet'ten besleniyor + kitap kapakları" && git push`

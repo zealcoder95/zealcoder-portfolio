@@ -91,7 +91,7 @@ async function zcFetchSheetTab(tab) {
 async function zcFetchBooksFromSheet() {
   const rows = await zcFetchSheetTab(ZC_BOOKS_SHEET_TAB);
   return rows.filter(r => r.title_tr || r.title_en).map(r => ({
-    id: r.id, category: r.category, link: r.link,
+    id: r.id, category: r.category, link: r.link, cover: r.cover,
     tag: { tr: r.tag_tr, en: r.tag_en || r.tag_tr },
     title: { tr: r.title_tr || r.title_en, en: r.title_en || r.title_tr },
     desc: { tr: r.desc_tr, en: r.desc_en || r.desc_tr },
@@ -579,6 +579,7 @@ async function zcLoadBooks(elId) {
     }
     const html = items.map(b => `
       <div class="project-card" data-cat="${zcEscape(b.category)}">
+        ${b.cover ? `<img class="book-cover" src="${b.cover}" alt="${zcEscape((b.title && (b.title[lang] || b.title.tr)) || '')}" loading="lazy" onerror="this.remove()">` : ''}
         <span class="project-tag">${zcEscape((b.tag && (b.tag[lang] || b.tag.tr)) || '')}</span>
         <h3>${zcEscape((b.title && (b.title[lang] || b.title.tr)) || '')}</h3>
         <p>${zcEscape((b.desc && (b.desc[lang] || b.desc.tr)) || '')}</p>
