@@ -26,6 +26,8 @@
 .feed-col-head h3{ font-size:0.95rem; }
 .feed-col-head .feed-source-link{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:0.76rem; color:var(--text-faint); }
 .feed-col-head .feed-source-link:hover{ color:var(--cyan); }
+.section-head .feed-source-link{ font-family:'JetBrains Mono',monospace; font-size:0.76rem; color:var(--text-faint); }
+.section-head .feed-source-link:hover{ color:var(--cyan); }
 .feed-item{ padding:0.85rem 0; border-top:1px solid var(--line); }
 .feed-item:first-child{ border-top:none; padding-top:0; }
 .feed-item a{ display:block; font-size:0.92rem; color:var(--text); }
