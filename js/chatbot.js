@@ -57,8 +57,8 @@
     const wrap = document.createElement("div");
     wrap.innerHTML = `
       <button type="button" class="zc-chat-launcher" aria-expanded="false" aria-controls="zcChatPanel">
-        <svg class="zc-chat-icon-open" viewBox="0 0 24 24" fill="none" stroke="#08090f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        <svg class="zc-chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="#08090f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        <img class="zc-chat-icon-open" src="assets/zealcoder-logo.png" alt="">
+        <svg class="zc-chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="#eceeff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
       <div class="zc-chat-panel" id="zcChatPanel" role="dialog" aria-label="Chat">
         <div class="zc-chat-head">
