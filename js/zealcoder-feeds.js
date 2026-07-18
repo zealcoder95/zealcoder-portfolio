@@ -299,7 +299,8 @@ async function zcLoadMediumArticles(elId, count) {
   const el = document.getElementById(elId);
   if (!el) return;
   const S = ZC_FEED_STRINGS[zcLang()];
-  const cacheKey = `zc_cache_medium_${zcLang()}_${count}`;
+  const withComments = el.dataset.comments === '1';
+  const cacheKey = `zc_cache_medium_${zcLang()}_${count}_${withComments ? 'c' : 'n'}`;
   const cached = zcCacheGet(cacheKey);
   if (cached) el.innerHTML = cached.html;
   if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
@@ -317,6 +318,7 @@ async function zcLoadMediumArticles(elId, count) {
         <a href="${item.link}" target="_blank" rel="noopener">${zcEscape(item.title)}</a>
         ${snippet ? `<p style="color:var(--text-muted);font-size:0.85rem;margin-top:0.3rem;">${zcEscape(snippet)}${snippet.length >= 110 ? '…' : ''}</p>` : ''}
         <div class="feed-meta"><span>${zcTimeAgo(item.pubDate, S)}</span></div>
+        ${withComments && typeof zcCommentsWidgetHTML === 'function' ? zcCommentsWidgetHTML('post', item.link) : ''}
       </div>`;
     }).join('');
     el.innerHTML = html;
@@ -367,6 +369,7 @@ async function zcLoadMediumJournal(elId, count) {
         </div>
         ${snippet ? `<p style="color:var(--text-muted);">${zcEscape(snippet)}${snippet.length >= 160 ? '…' : ''}</p>` : ''}
         <a class="project-link" href="${item.link}" target="_blank" rel="noopener">${S.readOnMedium}</a>
+        ${typeof zcCommentsWidgetHTML === 'function' ? zcCommentsWidgetHTML('post', item.link) : ''}
       </article>`;
     }).join('');
     el.innerHTML = html;
@@ -483,6 +486,7 @@ async function zcLoadBooks(elId) {
         <h3>${zcEscape((b.title && (b.title[lang] || b.title.tr)) || '')}</h3>
         <p>${zcEscape((b.desc && (b.desc[lang] || b.desc.tr)) || '')}</p>
         ${b.link ? `<a class="project-link" href="${b.link}" target="_blank" rel="noopener">${S.bookLink}</a>` : ''}
+        ${typeof zcCommentsWidgetHTML === 'function' && b.id ? zcCommentsWidgetHTML('book', b.id) : ''}
       </div>`).join('');
     el.innerHTML = html;
     zcCacheSet(cacheKey, html);

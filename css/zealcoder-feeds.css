@@ -38,6 +38,36 @@
 .feed-sync-note{ font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--text-faint); margin:-0.6rem 0 0.9rem; }
 .feed-empty{ color:var(--text-muted); font-size:0.9rem; }
 .feed-empty a{ color:var(--cyan); }
+
+/* ---- Comments widget (books / projects / posts) ---- */
+.zc-comments{ margin-top:1.1rem; padding-top:0.9rem; border-top:1px solid var(--line); }
+.zc-comments-toggle{
+  background:none; border:none; padding:0; cursor:pointer;
+  font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-faint);
+  transition:color 0.2s;
+}
+.zc-comments-toggle:hover{ color:var(--cyan); }
+.zc-comments-panel{ margin-top:0.9rem; }
+.zc-comments-list{ display:flex; flex-direction:column; gap:0.8rem; margin-bottom:1rem; max-height:280px; overflow-y:auto; }
+.zc-comment{ background:var(--bg-elevated); border:1px solid var(--line); border-radius:10px; padding:0.7rem 0.9rem; }
+.zc-comment-head{ display:flex; justify-content:space-between; gap:0.6rem; margin-bottom:0.3rem; }
+.zc-comment-author{ font-size:0.84rem; font-weight:600; color:var(--text); }
+.zc-comment-date{ font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--text-faint); flex-shrink:0; }
+.zc-comment-body{ font-size:0.88rem; color:var(--text-muted); line-height:1.55; white-space:pre-wrap; }
+.zc-comments-empty{ color:var(--text-faint); font-size:0.85rem; }
+.zc-comments-form{ display:flex; flex-direction:column; gap:0.55rem; }
+.zc-comments-name, .zc-comments-body{
+  width:100%; background:var(--bg-elevated); border:1px solid var(--line); border-radius:8px;
+  padding:0.6rem 0.75rem; color:var(--text); font-family:'Inter',sans-serif; font-size:0.88rem;
+  resize:vertical;
+}
+.zc-comments-name:focus, .zc-comments-body:focus{ outline:none; border-color:var(--cyan); }
+.zc-comments-body{ min-height:5.5rem; }
+.zc-hp{ position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
+.zc-comments-form-row{ display:flex; align-items:center; gap:0.9rem; }
+.zc-comments-submit{ font-size:0.82rem; padding:0.5rem 1.1rem; }
+.zc-comments-status{ font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:var(--text-faint); }
+.zc-comments-status.is-error{ color:var(--magenta); }
 .feed-skel{ height:0.9rem; border-radius:4px; background:linear-gradient(90deg, var(--bg-elevated), rgba(255,255,255,0.05), var(--bg-elevated)); background-size:200% 100%; animation:feedShimmer 1.4s infinite; margin-bottom:0.7rem; }
 .feed-skel:nth-child(2){ width:70%; }
 @keyframes feedShimmer{ 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
