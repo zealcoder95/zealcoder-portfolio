@@ -1,4 +1,21 @@
 {
-  "updatedAt": null,
-  "items": []
+  "updatedAt": "2026-07-18T00:00:00Z",
+  "items": [
+    {
+      "title": "Adidas US Sales Analysis",
+      "ref": "gizemglc/adidas-us-sales-analysis",
+      "url": "https://www.kaggle.com/code/gizemglc/adidas-us-sales-analysis",
+      "lastRunTime": null,
+      "totalVotes": 0,
+      "language": "python"
+    },
+    {
+      "title": "Analyzing NYC High School Data",
+      "ref": "gizemglc/analyzing-nyc-high-school-data",
+      "url": "https://www.kaggle.com/code/gizemglc/analyzing-nyc-high-school-data",
+      "lastRunTime": null,
+      "totalVotes": 0,
+      "language": "python"
+    }
+  ]
 }
