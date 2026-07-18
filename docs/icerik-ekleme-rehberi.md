@@ -1,16 +1,19 @@
 # İçerik ekleme rehberi
 
-Bu değişiklikten sonra site artık şu 7 kaynaktan **kendi kendini besliyor**:
+Site artık şu kaynaklardan **kendi kendini besliyor**:
 
 | Bölüm | Kaynak | Siz ne yaparsınız |
 |---|---|---|
+| Projeler (kart grid) | `assets/projects.json` | O dosyayı GitHub'da düzenleyin |
 | Projeler (alt akış) | GitHub API | Hiçbir şey — repo attıkça otomatik görünür |
-| Yazılar | Medium RSS | Medium'da yazı yayınlayın, otomatik görünür |
+| Yazılar | Medium RSS | Medium'da yazı yayınlayın, otomatik görünür (6'dan fazlası "profili gör" linkiyle Medium'a yönlenir) |
 | Kaggle akışı | `assets/kaggle-feed.json` | Hiçbir şey — GitHub Action günlük günceller |
 | **Yetenekler → Diller** | GitHub API (repo dilleri) | Hiçbir şey — yeni dilde repo açtıkça otomatik görünür |
 | **Yetenekler → diğer kategoriler** | `assets/skills.json` | O dosyayı GitHub'da düzenleyin |
 | **Kitaplar** | `assets/books.json` | O dosyayı GitHub'da düzenleyin |
-| **Günlük** | Medium RSS (`gunluk` etiketli yazılar) | Medium'da yazıp "gunluk" etiketini ekleyin |
+| **Kurslar & Sertifikalar** | `assets/courses.json` | O dosyayı GitHub'da düzenleyin |
+| **Günlük** | Medium RSS (`gunluk` etiketli yazılar) | Medium'da yazıp "gunluk" etiketini ekleyin (6'dan fazlası "profili gör" linkiyle Medium'a yönlenir) |
+| **Yorumlar** | Supabase | Hiçbir şey — her kart zaten kaydırılabilir, gönderi başına yorum sayısı sınırsız |
 
 Hiçbirinde artık HTML veya i18n dosyasına dokunmanız gerekmiyor.
 
@@ -37,7 +40,53 @@ Hiçbirinde artık HTML veya i18n dosyasına dokunmanız gerekmiyor.
 
 Kaydedin (commit), Vercel otomatik deploy eder — kitap Kaynaklar sayfasında görünür.
 
-## 2. Yeni yetenek/araç eklemek
+## 2. Yeni proje eklemek
+
+`assets/projects.json` dosyasını GitHub'da açın, `items` listesinin sonuna şunu ekleyin:
+
+```json
+{
+  "id": "p5",
+  "icon": "bars",
+  "link": "https://kaggle-veya-github-linki.com",
+  "tag": { "tr": "Kaggle · Kategori", "en": "Kaggle · Category" },
+  "title": { "tr": "Proje Adı", "en": "Project Title" },
+  "desc": {
+    "tr": "1-2 cümlelik Türkçe açıklama.",
+    "en": "1-2 sentence English description."
+  },
+  "chart": {
+    "img": "assets/projects/gorsel-adi.png",
+    "alt": { "tr": "Görselin Türkçe açıklaması", "en": "Image description in English" }
+  }
+}
+```
+
+- `icon`, şu hazır ikonlardan biri olabilir: `survey`, `network`, `leaf`, `bars`, `code`. Belirtmezseniz veya listede olmayan bir şey yazarsanız otomatik olarak `code` ikonu kullanılır.
+- `link` alanına Kaggle veya GitHub linki koyarsanız buton metni ("Kaggle'da incele →" / "GitHub'da incele →") otomatik seçilir; başka bir site ise genel "İncele →" metni kullanılır.
+- `chart` isteğe bağlıdır — görsel/grafik eklemek istemiyorsanız bu alanı tamamen çıkarabilirsiniz; görseli önce `assets/projects/` klasörüne yükleyin.
+- 6'dan fazla proje olduğunda otomatik olarak "Daha fazla göster" butonu çıkar, kalan sayıyı kendisi hesaplar.
+
+Kaydedin (commit), Vercel otomatik deploy eder — proje Projeler sayfasında görünür.
+
+## 3. Yeni kurs/sertifika eklemek
+
+`assets/courses.json` dosyasını GitHub'da açın, `items` listesinin sonuna şunu ekleyin:
+
+```json
+{
+  "id": "c5",
+  "provider": "Kurum/Platform Adı",
+  "desc": {
+    "tr": "Alınan eğitimlerin Türkçe listesi/açıklaması.",
+    "en": "English list/description of the trainings taken."
+  }
+}
+```
+
+Kaydedin (commit), Vercel otomatik deploy eder — Kaynaklar sayfasındaki "Kurslar & Sertifikalar" bölümünde görünür.
+
+## 4. Yeni yetenek/araç eklemek
 
 - **Programlama dili** ise: hiçbir şey yapmanıza gerek yok, o dilde bir repo GitHub'da göründüğü an otomatik çıkar.
 - **Kütüphane/araç** (örn. Tableau, Power BI, yeni bir kütüphane) ise: `assets/skills.json`'ı açın, ilgili kategorinin `chips` listesine ekleyin, ya da tamamen yeni bir kategori isterseniz `categories` listesine yeni bir obje ekleyin:
@@ -51,7 +100,7 @@ Kaydedin (commit), Vercel otomatik deploy eder — kitap Kaynaklar sayfasında g
 }
 ```
 
-## 3. Yeni günlük girişi eklemek
+## 5. Yeni günlük girişi eklemek
 
 Medium'da her zamanki gibi yazın, yayınlarken etiketlere (tags) **"gunluk"** kelimesini ekleyin (Türkçe karakter yazsanız da olur, ikisi de tanınıyor).
 

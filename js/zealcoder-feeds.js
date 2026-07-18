@@ -85,6 +85,12 @@ const ZC_FEED_STRINGS = {
     journalPreparing: 'Yeni günlük girişleri hazırlanıyor. Medium profilimi takip ederek ilk yazıyı kaçırmayabilirsiniz.',
     viewMediumJournal: 'Medium profilimi gör →',
     readOnMedium: 'Medium\u2019da oku →',
+    showMore: n => `Daha fazla göster (+${n})`,
+    projectsUnavailable: 'Proje listesi şu an yüklenemedi.',
+    coursesUnavailable: 'Kurs/sertifika listesi şu an yüklenemedi.',
+    viewOnKaggle: "Kaggle'da incele →",
+    viewOnGithub: "GitHub'da incele →",
+    viewProject: 'İncele →',
     events: {
       push: n => `reposuna ${n} commit gönderdi`,
       createRepo: 'reposunu oluşturdu',
@@ -127,6 +133,12 @@ const ZC_FEED_STRINGS = {
     journalPreparing: 'New journal entries are on the way. Follow my Medium profile so you don\u2019t miss the first one.',
     viewMediumJournal: 'View my Medium profile →',
     readOnMedium: 'Read on Medium →',
+    showMore: n => `Show more (+${n})`,
+    projectsUnavailable: 'The project list could not be loaded right now.',
+    coursesUnavailable: 'The courses/certificates list could not be loaded right now.',
+    viewOnKaggle: 'View on Kaggle →',
+    viewOnGithub: 'View on GitHub →',
+    viewProject: 'View →',
     events: {
       push: n => `pushed ${n} commit${n === 1 ? '' : 's'} to`,
       createRepo: 'created the repo',
@@ -438,6 +450,7 @@ function zcBooksRender() {
   const filterBar = document.getElementById('booksFilter');
   const showMoreBtn = document.getElementById('booksShowMore');
   if (!grid || !filterBar || !showMoreBtn) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
   const cards = Array.from(grid.querySelectorAll('.project-card'));
   const activeChip = filterBar.querySelector('.chip.is-active');
   const activeFilter = activeChip ? activeChip.dataset.filter : 'all';
@@ -447,7 +460,9 @@ function zcBooksRender() {
     if (!matches) { card.style.display = 'none'; return; }
     card.style.display = (activeFilter === 'all' && !expanded && i >= 6) ? 'none' : '';
   });
-  showMoreBtn.style.display = (activeFilter === 'all' && !expanded && cards.length > 6) ? '' : 'none';
+  const remaining = cards.length - 6;
+  showMoreBtn.textContent = S.showMore(remaining);
+  showMoreBtn.style.display = (activeFilter === 'all' && !expanded && remaining > 0) ? '' : 'none';
 }
 function zcInitBooksFilter() {
   const filterBar = document.getElementById('booksFilter');
@@ -493,6 +508,124 @@ async function zcLoadBooks(elId) {
     zcInitBooksFilter();
   } catch (err) {
     if (!cached) el.innerHTML = `<div class="feed-empty">${S.booksUnavailable}</div>`;
+  }
+}
+
+/* Project card icons: a small fixed set of hand-drawn glyphs keyed by
+   name, so assets/projects.json only needs to reference an icon by
+   string (e.g. "chart") instead of embedding raw SVG markup. Unknown
+   or missing icon keys fall back to a generic "code" glyph, so a new
+   project entry always renders something reasonable even before
+   anyone picks a matching icon. */
+const ZC_PROJECT_ICONS = {
+  survey: '<path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>',
+  network: '<path d="M3 21V3"/><path d="M3 21h18"/><circle cx="7" cy="15" r="1.4" fill="currentColor" stroke="none"/><circle cx="11" cy="9" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.4" fill="currentColor" stroke="none"/><circle cx="19" cy="6" r="1.4" fill="currentColor" stroke="none"/><path d="M6 17 L19 6" stroke-dasharray="2 2"/>',
+  leaf: '<path d="M20 4C10 4 4 10 4 18c0 1.1.9 2 2 2 8 0 14-6 14-16z"/><path d="M6 20c4-6 8-10 14-14"/>',
+  bars: '<path d="M3 21h18"/><rect x="5" y="14" width="3" height="7" fill="currentColor" stroke="none"/><rect x="10.5" y="10" width="3" height="11" fill="currentColor" stroke="none"/><rect x="16" y="5" width="3" height="16" fill="currentColor" stroke="none"/><path d="M4 12l5-4 4 2 6-6"/>',
+  code: '<path d="M8 6 3 12l5 6"/><path d="M16 6l5 6-5 6"/>'
+};
+function zcProjectIconSvg(key) {
+  const d = ZC_PROJECT_ICONS[key] || ZC_PROJECT_ICONS.code;
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+}
+/* CTA label is derived from the link's domain rather than stored per
+   item, so a new project entry in the JSON only needs a URL — no
+   per-language button text to fill in. */
+function zcProjectLinkLabel(link, S) {
+  if (!link) return '';
+  if (link.includes('kaggle.com')) return S.viewOnKaggle;
+  if (link.includes('github.com')) return S.viewOnGithub;
+  return S.viewProject;
+}
+
+/* Projects grid: reads assets/projects.json (same static-file pattern
+   as assets/books.json). Adding a project going forward means editing
+   that one JSON file on GitHub — no HTML edits needed. Shows the first
+   6 by default with a "show more" button once there are more, mirroring
+   the books section. */
+let zcProjectsShowMoreAttached = false;
+function zcProjectsRender() {
+  const grid = document.getElementById('projectsGrid');
+  const showMoreBtn = document.getElementById('projectsShowMore');
+  if (!grid || !showMoreBtn) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
+  const cards = Array.from(grid.querySelectorAll('.project-card'));
+  const expanded = grid.dataset.zcExpanded === '1';
+  cards.forEach((card, i) => { card.style.display = (!expanded && i >= 6) ? 'none' : ''; });
+  const remaining = cards.length - 6;
+  showMoreBtn.textContent = S.showMore(remaining);
+  showMoreBtn.style.display = (!expanded && remaining > 0) ? '' : 'none';
+}
+function zcInitProjectsShowMore() {
+  const grid = document.getElementById('projectsGrid');
+  const showMoreBtn = document.getElementById('projectsShowMore');
+  if (!grid || !showMoreBtn) return;
+  grid.dataset.zcExpanded = '0';
+  zcProjectsRender();
+  if (zcProjectsShowMoreAttached) return;
+  zcProjectsShowMoreAttached = true;
+  showMoreBtn.addEventListener('click', () => { grid.dataset.zcExpanded = '1'; zcProjectsRender(); });
+}
+async function zcLoadProjects(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
+  const lang = zcLang();
+  const cacheKey = `zc_cache_projects_${lang}`;
+  const cached = zcCacheGet(cacheKey);
+  if (cached) { el.innerHTML = cached.html; zcInitProjectsShowMore(); }
+  if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
+  try {
+    const res = await fetch('assets/projects.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('projects fetch failed');
+    const data = await res.json();
+    if (!data.items || !data.items.length) throw new Error('projects empty');
+    const html = data.items.map(p => `
+      <div class="project-card">
+        <div class="project-icon" aria-hidden="true">${zcProjectIconSvg(p.icon)}</div>
+        <span class="project-tag">${zcEscape((p.tag && (p.tag[lang] || p.tag.tr)) || '')}</span>
+        <h3>${zcEscape((p.title && (p.title[lang] || p.title.tr)) || '')}</h3>
+        <p>${zcEscape((p.desc && (p.desc[lang] || p.desc.tr)) || '')}</p>
+        ${p.link ? `<a class="project-link" href="${p.link}" target="_blank" rel="noopener">${zcProjectLinkLabel(p.link, S)}</a>` : ''}
+        ${p.chart ? `<button type="button" class="project-chart-trigger" data-chart-full="${p.chart.img}" data-chart-alt="${zcEscape((p.chart.alt && (p.chart.alt[lang] || p.chart.alt.tr)) || '')}">
+          <img src="${p.chart.img}" alt="${zcEscape((p.chart.alt && (p.chart.alt[lang] || p.chart.alt.tr)) || '')}" loading="lazy">
+        </button>` : ''}
+        ${typeof zcCommentsWidgetHTML === 'function' && p.id ? zcCommentsWidgetHTML('project', p.id) : ''}
+      </div>`).join('');
+    el.innerHTML = html;
+    zcCacheSet(cacheKey, html);
+    zcInitProjectsShowMore();
+  } catch (err) {
+    if (!cached) el.innerHTML = `<div class="feed-empty">${S.projectsUnavailable}</div>`;
+  }
+}
+
+/* Courses/certificates board: reads assets/courses.json and reuses the
+   .board-cell markup already used by the skills board. Adding a new
+   course means editing that one JSON file — no HTML edits needed. */
+async function zcLoadCourses(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const S = ZC_FEED_STRINGS[zcLang()];
+  const lang = zcLang();
+  const cacheKey = `zc_cache_courses_${lang}`;
+  const cached = zcCacheGet(cacheKey);
+  if (cached) el.innerHTML = cached.html;
+  if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
+  try {
+    const res = await fetch('assets/courses.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('courses fetch failed');
+    const data = await res.json();
+    if (!data.items || !data.items.length) throw new Error('courses empty');
+    const html = data.items.map(c => `
+      <div class="board-cell">
+        <h3>${zcEscape(c.provider || '')}</h3>
+        <p>${zcEscape((c.desc && (c.desc[lang] || c.desc.tr)) || '')}</p>
+      </div>`).join('');
+    el.innerHTML = html;
+    zcCacheSet(cacheKey, html);
+  } catch (err) {
+    if (!cached) el.innerHTML = `<div class="feed-empty">${S.coursesUnavailable}</div>`;
   }
 }
 
@@ -562,6 +695,8 @@ document.addEventListener('zc:langchange', () => {
   document.querySelectorAll('[data-feed="medium"]').forEach(el => zcLoadMediumArticles(el.id, +el.dataset.count || 3));
   document.querySelectorAll('[data-feed="kaggle"]').forEach(el => zcLoadKaggleKernels(el.id, +el.dataset.count || 6));
   document.querySelectorAll('[data-feed="books"]').forEach(el => zcLoadBooks(el.id));
+  document.querySelectorAll('[data-feed="projects"]').forEach(el => zcLoadProjects(el.id));
+  document.querySelectorAll('[data-feed="courses"]').forEach(el => zcLoadCourses(el.id));
   document.querySelectorAll('[data-feed="skills"]').forEach(el => zcLoadSkills(el.id));
   document.querySelectorAll('[data-feed="gh-langs"]').forEach(el => zcLoadGithubLanguages(el.id, +el.dataset.count || 6));
   document.querySelectorAll('[data-feed="journal"]').forEach(el => zcLoadMediumJournal(el.id, +el.dataset.count || 6));
