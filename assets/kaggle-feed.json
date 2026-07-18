@@ -1,21 +1,141 @@
 {
-  "updatedAt": "2026-07-18T00:00:00Z",
+  "updatedAt": "2026-07-18T06:48:42.527356+00:00",
   "items": [
     {
-      "title": "Adidas US Sales Analysis",
-      "ref": "gizemglc/adidas-us-sales-analysis",
-      "url": "https://www.kaggle.com/code/gizemglc/adidas-us-sales-analysis",
-      "lastRunTime": null,
+      "title": "notebook501fd8c8d4",
+      "ref": "gizemglc/notebook501fd8c8d4",
+      "url": "https://www.kaggle.com/code/gizemglc/notebook501fd8c8d4",
+      "lastRunTime": "2024-10-26T04:19:31.607Z",
       "totalVotes": 0,
-      "language": "python"
+      "language": ""
     },
     {
       "title": "Analyzing NYC High School Data",
       "ref": "gizemglc/analyzing-nyc-high-school-data",
       "url": "https://www.kaggle.com/code/gizemglc/analyzing-nyc-high-school-data",
-      "lastRunTime": null,
+      "lastRunTime": "2024-09-12T09:26:11.823Z",
+      "totalVotes": 3,
+      "language": ""
+    },
+    {
+      "title": "Global Climate Change & Renewable Energy in Adana",
+      "ref": "gizemglc/global-climate-change-renewable-energy-in-adana",
+      "url": "https://www.kaggle.com/code/gizemglc/global-climate-change-renewable-energy-in-adana",
+      "lastRunTime": "2024-08-30T15:09:14.837Z",
+      "totalVotes": 2,
+      "language": ""
+    },
+    {
+      "title": "Adidas US Sales Analysis",
+      "ref": "gizemglc/adidas-us-sales-analysis",
+      "url": "https://www.kaggle.com/code/gizemglc/adidas-us-sales-analysis",
+      "lastRunTime": "2024-08-08T09:12:41.353Z",
+      "totalVotes": 7,
+      "language": ""
+    },
+    {
+      "title": "Adidas retail strategy: An analysis of sales chann",
+      "ref": "gizemglc/adidas-retail-strategy-an-analysis-of-sales-chann",
+      "url": "https://www.kaggle.com/code/gizemglc/adidas-retail-strategy-an-analysis-of-sales-chann",
+      "lastRunTime": "2024-08-08T06:44:05.657Z",
       "totalVotes": 0,
-      "language": "python"
+      "language": ""
+    },
+    {
+      "title": "Clean and Analyze Employee Exit Surveys_1.0",
+      "ref": "gizemglc/clean-and-analyze-employee-exit-surveys-1-0",
+      "url": "https://www.kaggle.com/code/gizemglc/clean-and-analyze-employee-exit-surveys-1-0",
+      "lastRunTime": "2024-05-18T04:18:13.17Z",
+      "totalVotes": 1,
+      "language": ""
+    },
+    {
+      "title": "Clean and Analyze Employee Exit Surveys_1.1",
+      "ref": "gizemglc/clean-and-analyze-employee-exit-surveys-1-1",
+      "url": "https://www.kaggle.com/code/gizemglc/clean-and-analyze-employee-exit-surveys-1-1",
+      "lastRunTime": "2024-05-18T04:17:02.167Z",
+      "totalVotes": 2,
+      "language": ""
+    },
+    {
+      "title": "notebooke79b338368",
+      "ref": "gizemglc/notebooke79b338368",
+      "url": "https://www.kaggle.com/code/gizemglc/notebooke79b338368",
+      "lastRunTime": "2024-05-05T19:20:28.17Z",
+      "totalVotes": 0,
+      "language": ""
+    },
+    {
+      "title": "notebook7a42c1501d",
+      "ref": "gizemglc/notebook7a42c1501d",
+      "url": "https://www.kaggle.com/code/gizemglc/notebook7a42c1501d",
+      "lastRunTime": "2024-04-01T13:21:06.403Z",
+      "totalVotes": 0,
+      "language": ""
+    },
+    {
+      "title": "Renewable Energy Analysis",
+      "ref": "gizemglc/renewable-energy-analysis",
+      "url": "https://www.kaggle.com/code/gizemglc/renewable-energy-analysis",
+      "lastRunTime": "2024-01-05T16:17:35.173Z",
+      "totalVotes": 0,
+      "language": ""
+    },
+    {
+      "title": "Credit Card Fraud Data Analysis",
+      "ref": "gizemglc/credit-card-fraud-data-analysis",
+      "url": "https://www.kaggle.com/code/gizemglc/credit-card-fraud-data-analysis",
+      "lastRunTime": "2023-12-31T16:42:55.413Z",
+      "totalVotes": 0,
+      "language": ""
+    },
+    {
+      "title": "Credit Card Fraud Detection using ML",
+      "ref": "gizemglc/credit-card-fraud-detection-using-ml",
+      "url": "https://www.kaggle.com/code/gizemglc/credit-card-fraud-detection-using-ml",
+      "lastRunTime": "2023-12-31T15:25:59.68Z",
+      "totalVotes": 0,
+      "language": ""
+    },
+    {
+      "title": "US Consumer Finance Complaints Analysis",
+      "ref": "gizemglc/us-consumer-finance-complaints-analysis",
+      "url": "https://www.kaggle.com/code/gizemglc/us-consumer-finance-complaints-analysis",
+      "lastRunTime": "2023-12-29T18:14:36.873Z",
+      "totalVotes": 0,
+      "language": ""
+    },
+    {
+      "title": "notebook45f0d69122",
+      "ref": "gizemglc/notebook45f0d69122",
+      "url": "https://www.kaggle.com/code/gizemglc/notebook45f0d69122",
+      "lastRunTime": "2023-12-09T12:12:03.8Z",
+      "totalVotes": 0,
+      "language": ""
+    },
+    {
+      "title": "notebook12ab8b25c9",
+      "ref": "gizemglc/notebook12ab8b25c9",
+      "url": "https://www.kaggle.com/code/gizemglc/notebook12ab8b25c9",
+      "lastRunTime": "2023-12-09T11:56:36.217Z",
+      "totalVotes": 0,
+      "language": ""
+    },
+    {
+      "title": "seaborn_tips_",
+      "ref": "gizemglc/seaborn-tips",
+      "url": "https://www.kaggle.com/code/gizemglc/seaborn-tips",
+      "lastRunTime": "2023-08-20T15:03:53.22Z",
+      "totalVotes": 0,
+      "language": ""
+    },
+    {
+      "title": "notebookc844b4e505",
+      "ref": "gizemglc/notebookc844b4e505",
+      "url": "https://www.kaggle.com/code/gizemglc/notebookc844b4e505",
+      "lastRunTime": "2023-08-20T12:33:39.273Z",
+      "totalVotes": 0,
+      "language": ""
     }
   ]
 }
