@@ -29,6 +29,82 @@ const ZC_CACHE_TTL_MS = 15 * 60 * 1000; // 15 min: keeps us well under GitHub's 
                                           // unauthenticated limit and rss2json's free-tier
                                           // rate limit even if several tabs/visitors overlap.
 
+/* Books & Courses: primary source is a Google Sheet (edited without touching
+   code or Git), same keyless-fetch spirit as the GitHub/Medium feeds above.
+   Google Sheets has no anonymous "list rows as JSON" endpoint, but a sheet
+   shared as "Anyone with the link — Viewer" can be read as CSV via the
+   gviz endpoint below with no API key and no auth. If the sheet is
+   unreachable, empty, or a tab was renamed, we fall back to the bundled
+   assets/books.json / assets/courses.json — so editing the sheet is
+   optional, not a new single point of failure. */
+const ZC_SHEET_ID = '1l3Ya1x8NLN4NpnRk8Nq-SonQt_k4Ag51tM480spN12U';
+const ZC_BOOKS_SHEET_TAB = 'Kitaplar';
+const ZC_COURSES_SHEET_TAB = 'Sertifikalar';
+function zcSheetCsvUrl(tab) {
+  return `https://docs.google.com/spreadsheets/d/${ZC_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}`;
+}
+/* Minimal RFC4180-ish CSV parser: handles quoted fields, escaped ""
+   quotes inside a field, commas and newlines inside quoted fields.
+   Good enough for a hand-edited Sheet; not a general-purpose library. */
+function zcParseCSV(text) {
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  const s = text.replace(/\r\n/g, '\n');
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (s[i + 1] === '"') { field += '"'; i++; }
+        else { inQuotes = false; }
+      } else field += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+      else field += c;
+    }
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(r => !(r.length === 1 && r[0].trim() === ''));
+}
+function zcCSVToObjects(text) {
+  const rows = zcParseCSV(text);
+  if (!rows.length) return [];
+  const header = rows[0].map(h => h.trim());
+  return rows.slice(1).map(r => {
+    const obj = {};
+    header.forEach((h, idx) => { obj[h] = (r[idx] || '').trim(); });
+    return obj;
+  });
+}
+async function zcFetchSheetTab(tab) {
+  const res = await fetch(zcSheetCsvUrl(tab), { cache: 'no-store' });
+  if (!res.ok) throw new Error(`sheet fetch failed: ${tab}`);
+  const text = await res.text();
+  // A private/unshared sheet returns an HTML sign-in page with a 200
+  // status, not CSV — detect that case explicitly instead of rendering it.
+  if (/^\s*</.test(text)) throw new Error(`sheet not public: ${tab}`);
+  const rows = zcCSVToObjects(text);
+  if (!rows.length) throw new Error(`sheet empty: ${tab}`);
+  return rows;
+}
+async function zcFetchBooksFromSheet() {
+  const rows = await zcFetchSheetTab(ZC_BOOKS_SHEET_TAB);
+  return rows.filter(r => r.title_tr || r.title_en).map(r => ({
+    id: r.id, category: r.category, link: r.link,
+    tag: { tr: r.tag_tr, en: r.tag_en || r.tag_tr },
+    title: { tr: r.title_tr || r.title_en, en: r.title_en || r.title_tr },
+    desc: { tr: r.desc_tr, en: r.desc_en || r.desc_tr },
+  }));
+}
+async function zcFetchCoursesFromSheet() {
+  const rows = await zcFetchSheetTab(ZC_COURSES_SHEET_TAB);
+  return rows.filter(r => r.provider).map(r => ({
+    provider: r.provider,
+    desc: { tr: r.desc_tr, en: r.desc_en || r.desc_tr },
+  }));
+}
+
 /* A Medium post tagged with this word on medium.com is treated as a
    "günlük" (journal) entry instead of a regular article: it is pulled
    into gunluk.html and excluded from yazilar.html. Add the tag when
@@ -491,11 +567,17 @@ async function zcLoadBooks(elId) {
   if (cached) { el.innerHTML = cached.html; zcInitBooksFilter(); }
   if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
   try {
-    const res = await fetch('assets/books.json', { cache: 'no-store' });
-    if (!res.ok) throw new Error('books fetch failed');
-    const data = await res.json();
-    if (!data.items || !data.items.length) throw new Error('books empty');
-    const html = data.items.map(b => `
+    let items;
+    try {
+      items = await zcFetchBooksFromSheet();
+    } catch (sheetErr) {
+      const res = await fetch('assets/books.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('books fetch failed');
+      const data = await res.json();
+      if (!data.items || !data.items.length) throw new Error('books empty');
+      items = data.items;
+    }
+    const html = items.map(b => `
       <div class="project-card" data-cat="${zcEscape(b.category)}">
         <span class="project-tag">${zcEscape((b.tag && (b.tag[lang] || b.tag.tr)) || '')}</span>
         <h3>${zcEscape((b.title && (b.title[lang] || b.title.tr)) || '')}</h3>
@@ -613,11 +695,17 @@ async function zcLoadCourses(elId) {
   if (cached) el.innerHTML = cached.html;
   if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
   try {
-    const res = await fetch('assets/courses.json', { cache: 'no-store' });
-    if (!res.ok) throw new Error('courses fetch failed');
-    const data = await res.json();
-    if (!data.items || !data.items.length) throw new Error('courses empty');
-    const html = data.items.map(c => `
+    let items;
+    try {
+      items = await zcFetchCoursesFromSheet();
+    } catch (sheetErr) {
+      const res = await fetch('assets/courses.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('courses fetch failed');
+      const data = await res.json();
+      if (!data.items || !data.items.length) throw new Error('courses empty');
+      items = data.items;
+    }
+    const html = items.map(c => `
       <div class="board-cell">
         <h3>${zcEscape(c.provider || '')}</h3>
         <p>${zcEscape((c.desc && (c.desc[lang] || c.desc.tr)) || '')}</p>
