@@ -40,6 +40,13 @@
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
+<div class="zc-loader" id="zcLoader" aria-hidden="true">
+  <div class="zc-slot zc-slot--md zc-anim-idle">
+    <div class="zc-slot-grid"></div>
+    <div class="zc-slot-glow"></div>
+  </div>
+  <p class="zc-loader-text"><span>Initializing ZealCat</span><span class="zc-loader-dot">.</span><span class="zc-loader-dot">.</span><span class="zc-loader-dot">.</span></p>
+</div>
 <a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
 <canvas id="circuit-bg"></canvas>
 <div class="spine" aria-hidden="true">
@@ -85,10 +92,7 @@
 <section class="container">
   <div class="board" id="skillsBoard">
     <div class="board-cell">
-      <div class="board-cell-head">
-        <div class="board-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 3 12l5 6"/><path d="M16 6l5 6-5 6"/></svg></div>
-        <h3 data-i18n="skills.langs.title">Diller</h3>
-      </div>
+      <h3 data-i18n="skills.langs.title">Diller</h3>
       <p data-i18n="skills.langs.desc">Analiz ve modelleme için temel yazım dillerim.</p>
       <div class="chip-row" id="skillsLangs" data-feed="gh-langs" data-count="6"><span class="chip">Python</span><span class="chip">R</span><span class="chip">SQL</span></div>
     </div>
@@ -103,6 +107,7 @@
   <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu">zealcoder — Gizem Gülcü</span>
   <span data-i18n="footer.location">Adana, Türkiye</span>
 </footer>
+<script src="js/loading.js" defer></script>
 <script src="js/site.js" defer></script>
 <script src="js/zealcoder-feeds.js" defer></script>
 <script src="js/i18n.js" defer></script>

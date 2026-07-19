@@ -67,6 +67,13 @@
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
+<div class="zc-loader" id="zcLoader" aria-hidden="true">
+  <div class="zc-slot zc-slot--md zc-anim-idle">
+    <div class="zc-slot-grid"></div>
+    <div class="zc-slot-glow"></div>
+  </div>
+  <p class="zc-loader-text"><span>Initializing ZealCat</span><span class="zc-loader-dot">.</span><span class="zc-loader-dot">.</span><span class="zc-loader-dot">.</span></p>
+</div>
 <a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
 <canvas id="circuit-bg"></canvas>
 <div class="spine" aria-hidden="true">
@@ -128,9 +135,9 @@
       <h1><span data-i18n="home.hero.line1">Elektrik mühendisliğinden veriye:</span><br><span class="grad" data-i18n="home.hero.line2">zealcoder — Gizem Gülcü</span></h1>
       <p class="hero-sub" data-i18n="home.hero.sub">Adana merkezli Veri Bilimci ve Elektrik-Elektronik Mühendisi. Devreleri okuduğum gözle şimdi veriyi okuyorum — Python, makine öğrenmesi ve derin öğrenme ile gerçek dünya problemlerine çözüm üretiyorum.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="projeler.html" data-i18n="home.btn.projects">Projeleri keşfet</a>
-        <a class="btn btn-ghost" href="https://github.com/zealcoder95" target="_blank" rel="noopener" data-i18n="home.btn.github">GitHub'ı gör</a>
+        <a class="btn btn-primary" href="https://github.com/zealcoder95" target="_blank" rel="noopener" data-i18n="home.btn.github">GitHub'ı gör</a>
         <a class="btn btn-ghost" href="https://www.linkedin.com/in/gizemgulcu/" target="_blank" rel="noopener" data-i18n="home.btn.linkedin">LinkedIn'i gör</a>
+        <a class="btn btn-ghost" href="projeler.html" data-i18n="home.btn.projects">Projelere göz at</a>
       </div>
     </div>
     <div class="hero-visual" aria-hidden="true">
@@ -245,6 +252,7 @@
   <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu">zealcoder — Gizem Gülcü</span>
   <span data-i18n="footer.location">Adana, Türkiye</span>
 </footer>
+<script src="js/loading.js" defer></script>
 <script src="js/site.js" defer></script>
 <script src="js/zealcoder-feeds.js" defer></script>
 <script src="js/i18n.js" defer></script>
