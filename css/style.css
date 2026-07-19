@@ -397,16 +397,35 @@ button.chip{ cursor:pointer; }
 .writing-card h3{ font-size:1.2rem; margin-bottom:0.5rem; }
 .writing-card p{ color:var(--text-muted); max-width:420px; font-size:0.95rem; }
 
-.contact-wrap{ text-align:center; max-width:600px; margin:0 auto; }
+.contact-wrap{
+  text-align:center; max-width:640px; margin:0 auto; position:relative;
+  background:linear-gradient(160deg, rgba(16,18,42,0.55), rgba(11,13,28,0.32));
+  border:1px solid var(--line); border-radius:22px; padding:3rem 2.6rem;
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); overflow:hidden;
+  box-shadow:0 20px 60px rgba(5,6,17,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.contact-wrap::before{ content:""; position:absolute; top:0;left:0;right:0;height:2px; background:var(--gradient); }
 .contact-wrap h2{ font-size:clamp(1.8rem,4vw,2.8rem); margin-bottom:1rem; }
 .contact-wrap p{ color:var(--text-muted); margin-bottom:2.2rem; }
-.contact-links{ display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin-bottom:3rem; }
-.contact-fact{
-  display:flex; justify-content:center; gap:2.4rem; flex-wrap:wrap; margin-top:2.5rem;
-  padding-top:2.2rem; border-top:1px solid var(--line);
+.contact-links{ display:flex; justify-content:center; align-items:center; gap:0.85rem; row-gap:1.1rem; margin-bottom:0; flex-wrap:wrap; }
+.contact-links .btn-primary{
+  flex-basis:100%; max-width:300px; margin:0 auto 0.3rem; justify-content:center;
+  padding:1rem 2rem; font-size:0.92rem;
 }
-.contact-fact div{ text-align:left; }
+.contact-links .btn-ghost{ min-width:140px; justify-content:center; }
+.contact-fact{
+  display:flex; justify-content:center; gap:2.6rem; flex-wrap:wrap; margin-top:2.6rem;
+  padding-top:2.2rem; border-top:1px dashed var(--line);
+}
+.contact-fact div{ text-align:left; padding-left:0.9rem; border-left:2px solid var(--line); }
+.contact-fact div:nth-child(1){ border-left-color:var(--cyan); }
+.contact-fact div:nth-child(2){ border-left-color:var(--purple); }
 .contact-fact .fact-label{ display:block; margin-bottom:0.3rem; }
+.contact-fact .fact-value{ font-size:0.98rem; }
+@media (max-width:480px){
+  .contact-wrap{ padding:2.4rem 1.5rem; border-radius:18px; }
+  .contact-links .btn-ghost{ flex:1 1 100%; }
+}
 
 .home-links{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:1.3rem; }
 .home-link-card{
@@ -471,15 +490,27 @@ main section:has(> #journalFeed){ counter-reset:journalLog; }
 .cv-download a:hover{ text-decoration:underline; }
 
 footer{
-  border-top:1px solid var(--line); padding:2rem 6vw; display:flex; justify-content:space-between;
+  border-top:1px solid var(--line); padding:2.4rem 6vw 2.2rem; display:flex; justify-content:space-between;
   align-items:center; color:var(--text-faint); font-family:'JetBrains Mono',monospace; font-size:0.78rem;
-  position:relative; z-index:1; flex-wrap:wrap; gap:0.8rem;
+  position:relative; z-index:1; flex-wrap:wrap; gap:1rem;
+  background:linear-gradient(180deg, rgba(139,62,240,0.035), transparent 65%);
 }
-footer .foot-brand{ display:flex; align-items:center; gap:0.5rem; }
-footer .foot-brand img{ width:20px;height:20px;border-radius:5px; }
-
+footer .foot-brand{ display:flex; align-items:center; gap:0.6rem; transition:opacity 0.2s ease; }
+footer .foot-brand:hover{ opacity:0.82; }
+footer .foot-brand img{ width:22px;height:22px;border-radius:6px; }
+/* reserved slot for the future ZealCat footer mascot — swapping the
+   background-image here is all that will be needed later */
+footer > span[data-i18n="footer.location"]{ display:inline-flex; align-items:center; gap:0.7rem; }
+footer > span[data-i18n="footer.location"]::after{
+  content:""; width:34px; height:34px; border-radius:9px; flex-shrink:0;
+  border:1px dashed var(--line);
+  background:linear-gradient(160deg, rgba(16,18,42,0.6), rgba(11,13,28,0.3));
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);
+}
 @media (max-width:600px){
   .container{padding:0 5.5vw;}
   section{padding:4rem 0 1.5rem;}
   .page-hero{padding:7.5rem 0 2.5rem;}
+  footer{ justify-content:center; text-align:center; }
 }
