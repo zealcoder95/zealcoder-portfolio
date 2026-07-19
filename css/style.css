@@ -291,19 +291,48 @@ section{ padding:5.5rem 0 2rem; }
 .section-head h2{ font-size:clamp(1.7rem,3.4vw,2.4rem); margin-top:0.7rem; }
 .section-num{ font-family:'JetBrains Mono',monospace; color:var(--text-faint); font-size:0.8rem; }
 
-.about-grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:4rem; align-items:start; }
-.about-grid p{ color:var(--text-muted); margin-bottom:1.1rem; font-size:1.02rem; }
+.about-grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:4.4rem; align-items:start; }
 .about-grid strong{ color:var(--text); font-weight:600; }
+
+.about-timeline{ position:relative; }
+.timeline-item{ position:relative; padding-left:2.7rem; padding-bottom:2.2rem; }
+.timeline-item:last-child{ padding-bottom:0; }
+.timeline-item::before{
+  content:""; position:absolute; left:0; top:0.45rem; width:11px; height:11px; border-radius:50%;
+  background:var(--gradient); box-shadow:0 0 0 4px rgba(139,62,240,0.16);
+  transition:box-shadow 0.3s ease, transform 0.3s ease;
+}
+.timeline-item::after{
+  content:""; position:absolute; left:5px; top:1.6rem; bottom:0.1rem; width:1px;
+  background:linear-gradient(var(--line), rgba(150,150,200,0));
+}
+.timeline-item:last-child::after{ display:none; }
+.timeline-item:hover::before{ box-shadow:0 0 0 6px rgba(139,62,240,0.26); transform:scale(1.15); }
+.timeline-num{
+  display:block; font-family:'JetBrains Mono',monospace; font-size:0.7rem; letter-spacing:0.1em;
+  color:var(--cyan); margin-bottom:0.6rem; text-transform:uppercase;
+}
+.about-timeline p{ color:var(--text-muted); font-size:1.03rem; line-height:1.75; margin:0; transition:color 0.25s ease; }
+.timeline-item:hover p{ color:var(--text); }
+
 .fact-card{
-  background:var(--bg-card); border:1px solid var(--line); border-radius:12px;
-  padding:1.6rem 1.7rem; position:relative; overflow:hidden;
+  background:var(--bg-card); border:1px solid var(--line); border-radius:14px;
+  padding:1.8rem 1.9rem; position:relative; overflow:hidden;
+  transition:transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .fact-card::before{ content:""; position:absolute; top:0;left:0;right:0;height:2px; background:var(--gradient); }
-.fact-row{ display:flex; justify-content:space-between; padding:0.75rem 0; border-bottom:1px solid var(--line); font-size:0.92rem; gap:1rem; }
+.fact-card:hover{ transform:translateY(-3px); border-color:rgba(139,62,240,0.4); box-shadow:0 20px 40px -22px rgba(5,6,17,0.6); }
+.fact-row{
+  display:flex; justify-content:space-between; padding:0.85rem 0.4rem; margin:0 -0.4rem;
+  border-bottom:1px solid var(--line); font-size:0.92rem; gap:1rem; border-radius:6px;
+  transition:background 0.2s ease, padding-left 0.2s ease;
+}
 .fact-row:last-child{ border-bottom:none; }
+.fact-row:hover{ background:rgba(150,150,200,0.05); padding-left:0.6rem; }
 .fact-label{ color:var(--text-faint); font-family:'JetBrains Mono',monospace; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; }
 .fact-value{ color:var(--text); text-align:right; }
-@media (max-width:880px){ .about-grid{grid-template-columns:1fr; gap:2.2rem;} }
+@media (max-width:880px){ .about-grid{grid-template-columns:1fr; gap:2.4rem;} }
+
 
 .board{
   display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:1.4px;
@@ -325,6 +354,35 @@ button.chip{ cursor:pointer; }
 .chip.is-active{ background:var(--gradient); border-color:transparent; color:#08090f; font-weight:600; }
 .books-filter{ margin-bottom:1.6rem; }
 .books-more-wrap{ display:flex; justify-content:center; margin-top:1.6rem; }
+
+/* Sprint 4 — Skills page cards only. Scoped under #skillsBoard so the
+   shared .board / .board-cell / .chip classes used by the Resources
+   courses board and the Resources filter chips stay untouched. */
+#skillsBoard.board{ gap:1.5px; border-radius:16px; }
+#skillsBoard .board-cell{
+  padding:2rem 1.9rem; position:relative;
+  transition:background 0.3s ease, transform 0.3s ease;
+}
+#skillsBoard .board-cell:hover{
+  background:linear-gradient(165deg, rgba(23,25,50,0.7), var(--bg-card) 60%);
+  transform:translateY(-3px);
+}
+#skillsBoard .board-cell-head{ display:flex; align-items:center; gap:0.75rem; margin-bottom:1.1rem; }
+#skillsBoard .board-icon{
+  flex:none; width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+  background:var(--gradient); color:#08090f;
+  box-shadow:0 6px 14px -6px rgba(139,62,240,0.55);
+  transition:transform 0.3s ease;
+}
+#skillsBoard .board-icon svg{ width:18px; height:18px; }
+#skillsBoard .board-cell:hover .board-icon{ transform:rotate(-6deg) scale(1.08); }
+#skillsBoard .board-cell h3{ margin-bottom:0; }
+#skillsBoard .board-cell p{ line-height:1.6; }
+#skillsBoard .chip{
+  border-radius:20px; padding:0.4rem 0.85rem;
+  transition:transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+#skillsBoard .chip:hover{ transform:translateY(-2px); border-color:var(--cyan); color:var(--text); background:rgba(34,211,245,0.08); }
 
 .project-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:1.3rem; }
 .project-card{

@@ -760,6 +760,22 @@ async function zcLoadCourses(elId) {
    languages (see zcLoadGithubLanguages below); every other category
    comes from assets/skills.json. Adding a new tool means adding one
    entry to that JSON file on GitHub — no HTML edits. */
+/* Skill category icons: reuses ZC_PROJECT_ICONS glyphs where the
+   metaphor already fits (funnel for data cleaning, bars for viz,
+   network for ML), plus two new glyphs for DL and version control.
+   Keyed by the category "id" already present in skills.json — no new
+   JSON field needed. */
+const ZC_SKILL_ICONS = {
+  data: ZC_PROJECT_ICONS.survey,
+  viz: ZC_PROJECT_ICONS.bars,
+  ml: ZC_PROJECT_ICONS.network,
+  dl: '<circle cx="5" cy="7" r="1.7" fill="currentColor" stroke="none"/><circle cx="5" cy="17" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="5" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.7" fill="currentColor" stroke="none"/><circle cx="19" cy="9" r="1.7" fill="currentColor" stroke="none"/><circle cx="19" cy="15" r="1.7" fill="currentColor" stroke="none"/><path d="M5 7L12 5M5 7L12 12M5 17L12 12M5 17L12 19M12 5L19 9M12 12L19 9M12 12L19 15M12 19L19 15" stroke-width="1"/>',
+  vc: '<line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>'
+};
+function zcSkillIconSvg(key) {
+  const d = ZC_SKILL_ICONS[key] || ZC_PROJECT_ICONS.code;
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+}
 async function zcLoadSkills(elId) {
   const el = document.getElementById(elId);
   if (!el) return;
@@ -776,7 +792,10 @@ async function zcLoadSkills(elId) {
     if (!data.categories || !data.categories.length) throw new Error('skills empty');
     const html = data.categories.map(cat => `
       <div class="board-cell">
-        <h3>${zcEscape((cat.title && (cat.title[lang] || cat.title.tr)) || '')}</h3>
+        <div class="board-cell-head">
+          <div class="board-icon" aria-hidden="true">${zcSkillIconSvg(cat.id)}</div>
+          <h3>${zcEscape((cat.title && (cat.title[lang] || cat.title.tr)) || '')}</h3>
+        </div>
         <p>${zcEscape((cat.desc && (cat.desc[lang] || cat.desc.tr)) || '')}</p>
         <div class="chip-row">${(cat.chips || []).map(c => `<span class="chip">${zcEscape(c)}</span>`).join('')}</div>
       </div>`).join('');
