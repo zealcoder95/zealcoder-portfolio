@@ -222,6 +222,13 @@
 
     launcher.addEventListener("click", () => togglePanel());
 
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && panel.classList.contains("is-open")) {
+        togglePanel(false);
+        launcher.focus();
+      }
+    });
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const text = input.value.trim();
