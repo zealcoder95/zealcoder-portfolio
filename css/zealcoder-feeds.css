@@ -43,6 +43,7 @@
 
 /* ---- Comments widget (books / projects / posts) ---- */
 .zc-comments{ margin-top:1.1rem; padding-top:0.9rem; border-top:1px solid var(--line); }
+#projectsGrid .project-card > .zc-comments{ margin:0.4rem 1.8rem 1.7rem; }
 .zc-comments-toggle{
   background:none; border:none; padding:0; cursor:pointer;
   font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-faint);
