@@ -278,8 +278,8 @@ nav{
    artwork. Apply with the utility classes below once ZealCat's actual
    SVG/sprite lands. */
 @keyframes zcIdleFloat{
-  0%,100%{ transform:translateY(0); }
-  50%{ transform:translateY(-6px); }
+  0%,100%{ transform:translateY(0) scale(1); }
+  50%{ transform:translateY(-6px) scale(1.012); }
 }
 @keyframes zcBlink{
   0%,90%,100%{ transform:scaleY(1); }
@@ -527,6 +527,19 @@ button.chip{ cursor:pointer; }
 }
 .project-chart-trigger:hover{ border-color:var(--cyan); transform:translateY(-2px); }
 .project-chart-trigger img{ width:100%; aspect-ratio:16/9; height:auto; object-fit:cover; object-position:center; display:block; }
+/* .project-media-zoom (the small magnifying-glass affordance) had no CSS at
+   all, so its bare <svg> rendered at the browser's default replaced-element
+   size (huge, always-on) on every project thumbnail. Scoped it to a small
+   hover-only icon with a dark scrim, matching the .chart-lightbox zoom-in
+   affordance it's meant to signal. */
+.project-media{ position:relative; display:block; overflow:hidden; }
+.project-media-zoom{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(5,6,17,0.4); opacity:0; transition:opacity 0.25s ease; pointer-events:none;
+}
+.project-media-zoom svg{ width:26px; height:26px; color:#fff; }
+.project-chart-trigger:hover .project-media-zoom,
+.project-chart-trigger:focus-visible .project-media-zoom{ opacity:1; }
 .project-chart-caption{
   font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--text-faint);
   padding:0.5rem 0.7rem; background:var(--bg-elevated); border-top:1px solid var(--line);
