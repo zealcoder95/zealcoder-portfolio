@@ -326,6 +326,36 @@ nav{
 .page-hero h1{ font-size:clamp(2rem,4.6vw,3.2rem); max-width:760px; margin-bottom:1.1rem; }
 .page-hero p{ color:var(--text-muted); max-width:620px; font-size:1.04rem; }
 
+/* ==========================================================================
+   404 (Sprint 10)
+   Reuses the hero's own layout pattern (.hero-grid ⇒ .notfound-grid) and its
+   exact ZealCat placeholder artwork (.zealcat-slot, built on the Sprint 7
+   design tokens) instead of introducing new visuals — same character, same
+   glass slot, just a different tag underneath it. Copy/i18n keys (already
+   set on notfound.*) are untouched; only the section's structure/CSS changed.
+   ========================================================================== */
+.notfound-hero{ min-height:70vh; display:flex; flex-direction:column; justify-content:center; }
+.notfound-grid{
+  display:grid; grid-template-columns:1.15fr 0.85fr; gap:clamp(2rem,5vw,4rem);
+  align-items:center;
+}
+.notfound-copy{ animation:heroRise 0.8s ease both; }
+.notfound-copy .hero-actions{ margin-top:1.6rem; }
+.notfound-visual{
+  display:flex; align-items:center; justify-content:center;
+  animation:heroRise 0.9s ease 0.15s both;
+}
+
+@media (max-width:880px){
+  .notfound-grid{ grid-template-columns:1fr; }
+  .notfound-visual{ order:-1; margin-bottom:0.6rem; }
+  .notfound-visual .zealcat-slot{ max-width:220px; margin:0 auto; }
+  .notfound-copy .eyebrow{ justify-content:center; }
+  .notfound-copy h1{ text-align:center; }
+  .notfound-copy p{ text-align:center; margin-left:auto; margin-right:auto; }
+  .notfound-copy .hero-actions{ justify-content:center; }
+}
+
 .btn{
   font-family:'JetBrains Mono',monospace; font-size:0.85rem; padding:0.85rem 1.5rem;
   border-radius:8px; border:1px solid var(--line); transition:all 0.25s ease;
