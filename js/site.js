@@ -3,16 +3,52 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // ---- mobile nav toggle -------------------------------------------------
+  const navEl = document.querySelector('nav');
   const navToggle = document.getElementById('navToggle');
   const mobilePanel = document.getElementById('mobilePanel');
+
+  function closeMobilePanel() {
+    if (!mobilePanel || !mobilePanel.classList.contains('open')) return;
+    mobilePanel.classList.remove('open');
+    document.body.classList.remove('menu-open');
+    if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
+  }
+
   if (navToggle && mobilePanel) {
     navToggle.addEventListener('click', () => {
       const open = mobilePanel.classList.toggle('open');
+      document.body.classList.toggle('menu-open', open);
       navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
     mobilePanel.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => mobilePanel.classList.remove('open'));
+      a.addEventListener('click', closeMobilePanel);
     });
+    // close on outside click (tap on the dimmed backdrop area)
+    document.addEventListener('click', (e) => {
+      if (!mobilePanel.classList.contains('open')) return;
+      if (mobilePanel.contains(e.target) || navToggle.contains(e.target)) return;
+      closeMobilePanel();
+    });
+    // close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMobilePanel();
+    });
+  }
+
+  // ---- navbar shrink on scroll ----------------------------------------------
+  if (navEl) {
+    let ticking = false;
+    function updateNavState() {
+      navEl.classList.toggle('nav-scrolled', window.scrollY > 40);
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateNavState);
+        ticking = true;
+      }
+    }, { passive: true });
+    updateNavState();
   }
 
   // ---- scroll spine --------------------------------------------------------
