@@ -1,43 +1,95 @@
 /* ==========================================================================
    zealcoder — chat widget (js/chatbot.js)
    Reuses the site's existing CSS variables (css/style.css) so it never
-   looks like a bolted-on third-party widget.
+   looks like a bolted-on third-party widget. As of Sprint 9 it also reuses
+   the ZealCat Design System tokens/utilities (Sprint 7 — .zc-slot,
+   .zc-slot-grid, .zc-slot-glow, .zc-anim-idle/.zc-anim-hover) so the
+   launcher/panel read as the same placeholder character as the hero and
+   loading screen, not a separate icon. Gemini call logic in js/chatbot.js
+   is untouched by this pass — only markup/CSS around it changed.
    ========================================================================== */
 
 .zc-chat-launcher{
   position:fixed; right:1.4rem; bottom:1.4rem; z-index:80;
   width:56px; height:56px; border-radius:50%;
   background:var(--bg-elevated); border:1px solid var(--line); cursor:pointer;
+  padding:0;
   display:flex; align-items:center; justify-content:center;
   box-shadow:0 0 0 1px rgba(139,62,240,0.25), 0 8px 24px rgba(90,31,201,0.35);
   transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 .zc-chat-launcher:hover{ transform:translateY(-2px); border-color:var(--cyan); box-shadow:0 0 0 1px rgba(34,211,245,0.35), 0 12px 28px rgba(90,31,201,0.45); }
-.zc-chat-launcher img{ width:38px; height:38px; border-radius:50%; }
-.zc-chat-launcher svg{ width:22px; height:22px; }
+
+/* Launcher icon: a small ZealCat glass slot (same tokens as the hero/loading
+   placeholders) instead of the flat logo image. */
+.zc-chat-icon-open{ pointer-events:none; }
+.zc-chat-icon-open .zc-face-icon{ position:relative; z-index:1; width:66%; height:66%; }
+.zc-chat-icon-open .zc-slot-glow{ opacity:0.8; }
+.zc-chat-launcher svg.zc-chat-icon-close{ width:22px; height:22px; }
 .zc-chat-launcher .zc-chat-icon-close{ display:none; }
 .zc-chat-launcher[aria-expanded="true"] .zc-chat-icon-open{ display:none; }
 .zc-chat-launcher[aria-expanded="true"] .zc-chat-icon-close{ display:block; }
 .zc-chat-launcher[aria-expanded="true"]{ background:var(--gradient); border-color:transparent; }
 
+/* Premium glass panel — built from the same --zc-glass-* tokens as the
+   hero's ZealCat slot, so it feels like part of one system rather than a
+   generic chat-widget template. */
 .zc-chat-panel{
   position:fixed; right:1.4rem; bottom:5.2rem; z-index:80;
-  width:min(360px, calc(100vw - 2.8rem)); height:min(520px, calc(100vh - 8rem));
-  background:var(--bg-elevated); border:1px solid var(--line); border-radius:14px;
+  width:min(376px, calc(100vw - 2.8rem)); height:min(560px, calc(100vh - 8rem));
+  background:
+    var(--zc-glass-bg),
+    linear-gradient(var(--bg-elevated), var(--bg-elevated));
+  border:1px solid var(--line); border-radius:var(--zc-radius-md);
   display:flex; flex-direction:column; overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,0.5);
-  opacity:0; transform:translateY(12px) scale(0.98); pointer-events:none;
-  transition:opacity 0.2s ease, transform 0.2s ease;
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(139,62,240,0.14), var(--zc-glass-shadow);
+  opacity:0; transform:translateY(14px) scale(0.97); pointer-events:none;
+  transition:opacity 0.25s var(--zc-ease), transform 0.25s var(--zc-ease);
+}
+.zc-chat-panel::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:2px;
+  background:var(--gradient);
 }
 .zc-chat-panel.is-open{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
 
 .zc-chat-head{
-  display:flex; align-items:center; gap:0.6rem; padding:0.9rem 1rem;
-  border-bottom:1px solid var(--line); background:var(--bg-card);
+  position:relative;
+  display:flex; align-items:center; gap:0.7rem; padding:1rem 1.1rem 0.9rem;
+  border-bottom:1px solid var(--line);
 }
-.zc-chat-head img{ width:28px; height:28px; border-radius:8px; }
-.zc-chat-head .zc-chat-title{ font-family:'JetBrains Mono',monospace; font-size:0.86rem; color:var(--text); }
-.zc-chat-head .zc-chat-subtitle{ font-size:0.72rem; color:var(--text-muted); }
+.zc-chat-head-icon{
+  width:34px; height:34px; flex-shrink:0; border-radius:var(--zc-radius-sm);
+  display:flex; align-items:center; justify-content:center;
+  background:var(--zc-glass-bg); border:var(--zc-glass-border);
+}
+.zc-chat-head-icon .zc-face-icon{ width:70%; height:70%; }
+.zc-chat-head .zc-chat-title{ font-family:'JetBrains Mono',monospace; font-size:0.9rem; letter-spacing:0.02em; color:var(--text); }
+.zc-chat-head .zc-chat-subtitle{ font-size:0.74rem; color:var(--text-muted); margin-top:0.15rem; }
+
+/* Quick-action row: shortcuts to the pages/profiles the floating assistant
+   was originally meant to surface, now layered onto the existing chatbot
+   instead of replacing it. Deliberately its own class (not .chip) so it
+   stays scoped to the widget and can't be affected by chip styling used
+   elsewhere on the site (Kaynaklar filters, İletişim, etc.). */
+.zc-chat-quick{
+  display:flex; gap:0.45rem; padding:0.75rem 1rem;
+  overflow-x:auto; scrollbar-width:none;
+  border-bottom:1px solid var(--line);
+}
+.zc-chat-quick::-webkit-scrollbar{ display:none; }
+.zc-quick-btn{
+  flex-shrink:0; white-space:nowrap;
+  font-family:'JetBrains Mono',monospace; font-size:0.72rem; letter-spacing:0.01em;
+  color:var(--text-muted); text-decoration:none;
+  padding:0.4rem 0.75rem; border-radius:20px;
+  border:1px solid var(--line); background:var(--bg-card);
+  transition:border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.zc-quick-btn:hover, .zc-quick-btn:focus-visible{
+  border-color:var(--purple); color:var(--text); transform:translateY(-1px);
+  outline:none;
+}
 
 .zc-chat-body{ flex:1; overflow-y:auto; padding:1rem; display:flex; flex-direction:column; gap:0.7rem; }
 .zc-chat-msg{ max-width:85%; font-size:0.86rem; line-height:1.5; padding:0.6rem 0.8rem; border-radius:10px; white-space:pre-wrap; }
@@ -65,8 +117,9 @@
 .zc-chat-send svg{ width:16px; height:16px; }
 
 @media (prefers-reduced-motion: reduce){
-  .zc-chat-panel, .zc-chat-launcher{ transition:none; }
+  .zc-chat-panel, .zc-chat-launcher, .zc-quick-btn{ transition:none; }
   .zc-chat-typing span{ animation:none; }
+  .zc-chat-icon-open.zc-anim-idle{ animation:none; }
 }
 
 @media (max-width:480px){
