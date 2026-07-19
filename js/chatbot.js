@@ -87,23 +87,13 @@
     return div.innerHTML;
   }
 
-  // Same face motif as the hero/loading ZealCat placeholders (purple/cyan
-  // eyes, circuit-friendly line art) so the assistant reads as the same
-  // character everywhere on the site, not a separate icon.
+  // Same official ZealCat artwork as the hero/loading/404 placements (the
+  // face crop), so the assistant reads as the same character everywhere on
+  // the site rather than a separate icon.
   const ZEALCAT_FACE_SVG = `
-    <svg class="zc-face-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="url(#zc-chat-face-grad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <defs>
-        <linearGradient id="zc-chat-face-grad" x1="0" y1="0" x2="120" y2="120">
-          <stop offset="0%" stop-color="#22d3f5"/>
-          <stop offset="100%" stop-color="#8b3ef0"/>
-        </linearGradient>
-      </defs>
-      <path d="M35 50 28 22 48 38 M85 50 92 22 72 38"/>
-      <path d="M30 52C30 30 45 18 60 18 75 18 90 30 90 52 90 78 75 96 60 96 45 96 30 78 30 52Z"/>
-      <circle cx="47" cy="52" r="4.5" fill="#8b3ef0" stroke="none"/>
-      <circle cx="73" cy="52" r="4.5" fill="#22d3f5" stroke="none"/>
-      <path d="M52 68Q60 74 68 68"/>
-    </svg>`;
+    <span class="zc-art-wrap zc-art-wrap--sm">
+      <img class="zc-art" src="assets/zealcat/zealcat-face.png" alt="" width="320" height="230" loading="lazy" decoding="async">
+    </span>`;
 
   function buildWidget() {
     const wrap = document.createElement("div");

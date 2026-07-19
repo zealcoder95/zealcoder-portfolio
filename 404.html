@@ -68,19 +68,11 @@
       <div class="zealcat-slot">
         <div class="zealcat-slot-grid"></div>
         <div class="zealcat-slot-glow"></div>
-        <svg class="zealcat-slot-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="url(#zc-slot-grad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <defs>
-            <linearGradient id="zc-slot-grad" x1="0" y1="0" x2="120" y2="120">
-              <stop offset="0%" stop-color="#22d3f5"/>
-              <stop offset="100%" stop-color="#8b3ef0"/>
-            </linearGradient>
-          </defs>
-          <path d="M35 50 28 22 48 38 M85 50 92 22 72 38"/>
-          <path d="M30 52C30 30 45 18 60 18 75 18 90 30 90 52 90 78 75 96 60 96 45 96 30 78 30 52Z"/>
-          <circle cx="47" cy="52" r="4" fill="#8b3ef0" stroke="none"/>
-          <circle cx="73" cy="52" r="4" fill="#22d3f5" stroke="none"/>
-          <path d="M52 68Q60 74 68 68"/>
-        </svg>
+        <span class="zc-art-wrap">
+          <img class="zc-art zc-anim-idle zc-anim-hover" src="assets/zealcat/zealcat-full.png" alt="ZealCat — kaybolmuş görünen kibernetik kara kedi maskotu" width="760" height="727" loading="eager" decoding="async">
+          <span class="zc-eyelid zc-eyelid-l" aria-hidden="true"></span>
+          <span class="zc-eyelid zc-eyelid-r" aria-hidden="true"></span>
+        </span>
         <span class="zealcat-slot-tag">404.NOT_FOUND()</span>
       </div>
     </div>
@@ -90,7 +82,12 @@
 </main>
 <footer>
   <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu" width="22" height="22" loading="lazy" decoding="async">zealcoder — Gizem Gülcü</span>
-  <span data-i18n="footer.location">Adana, Türkiye</span>
+  <span class="foot-loc-group">
+    <span data-i18n="footer.location">Adana, Türkiye</span>
+    <span class="zc-art-wrap zc-art-wrap--sm footer-mascot" aria-hidden="true">
+      <img class="zc-art zc-anim-idle zc-anim-hover" src="assets/zealcat/zealcat-face.png" alt="" width="320" height="230" loading="lazy" decoding="async">
+    </span>
+  </span>
 </footer>
 <script src="js/site.js" defer></script>
 <script src="js/i18n.js" defer></script>

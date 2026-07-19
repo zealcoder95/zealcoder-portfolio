@@ -23,7 +23,7 @@
 /* Launcher icon: a small ZealCat glass slot (same tokens as the hero/loading
    placeholders) instead of the flat logo image. */
 .zc-chat-icon-open{ pointer-events:none; }
-.zc-chat-icon-open .zc-face-icon{ position:relative; z-index:1; width:66%; height:66%; }
+.zc-chat-icon-open .zc-art-wrap{ position:relative; z-index:1; width:80%; height:80%; }
 .zc-chat-icon-open .zc-slot-glow{ opacity:0.8; }
 .zc-chat-launcher svg.zc-chat-icon-close{ width:22px; height:22px; }
 .zc-chat-launcher .zc-chat-icon-close{ display:none; }
@@ -63,7 +63,7 @@
   display:flex; align-items:center; justify-content:center;
   background:var(--zc-glass-bg); border:var(--zc-glass-border);
 }
-.zc-chat-head-icon .zc-face-icon{ width:70%; height:70%; }
+.zc-chat-head-icon .zc-art-wrap{ width:84%; height:84%; }
 .zc-chat-head .zc-chat-title{ font-family:'JetBrains Mono',monospace; font-size:0.9rem; letter-spacing:0.02em; color:var(--text); }
 .zc-chat-head .zc-chat-subtitle{ font-size:0.74rem; color:var(--text-muted); margin-top:0.15rem; }
 
