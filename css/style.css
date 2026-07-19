@@ -21,6 +21,31 @@
   --line:rgba(150,150,200,0.16);
   --gradient:linear-gradient(120deg, var(--cyan) 0%, var(--blue) 28%, var(--indigo) 55%, var(--purple) 80%, var(--magenta) 100%);
   --gradient-vert:linear-gradient(180deg, var(--cyan), var(--blue) 32%, var(--indigo) 60%, var(--purple) 82%, var(--magenta));
+
+  /* ---- ZealCat design tokens (Sprint 7) ----------------------------------
+     Reserved for the future mascot. Nothing renders differently yet — these
+     just give every current/future ZealCat placeholder (hero, footer,
+     loading screen, assistant, 404) one shared source of truth so dropping
+     in the real artwork later is a token/asset swap, not a redesign. */
+  --zc-eye-left:var(--purple);   /* left eye, per the character sheet */
+  --zc-eye-right:var(--cyan);    /* right eye, per the character sheet */
+  --zc-glow-purple:rgba(139,62,240,0.35);
+  --zc-glow-cyan:rgba(34,211,245,0.16);
+  --zc-glow-purple-strong:rgba(139,62,240,0.5);
+  --zc-glow-cyan-strong:rgba(34,211,245,0.5);
+  --zc-glass-bg:linear-gradient(160deg, rgba(16,18,42,0.55), rgba(11,13,28,0.32));
+  --zc-glass-border:1px dashed rgba(150,150,200,0.3);
+  --zc-glass-shadow:inset 0 1px 0 rgba(255,255,255,0.04);
+  --zc-radius-sm:9px;
+  --zc-radius-md:16px;
+  --zc-radius-lg:28px;
+  /* animation tokens — durations/easing only for now; the idle/blink/hover
+     keyframes below are defined and ready but not yet attached to any real
+     character art */
+  --zc-ease:cubic-bezier(0.22, 1, 0.36, 1);
+  --zc-anim-idle:4.5s;
+  --zc-anim-blink:4s;
+  --zc-anim-hover:0.3s;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -184,11 +209,11 @@ nav{
 }
 .zealcat-slot{
   position:relative; width:100%; max-width:340px; aspect-ratio:1/1;
-  border-radius:28px; border:1px dashed rgba(150,150,200,0.3);
-  background:linear-gradient(160deg, rgba(16,18,42,0.55), rgba(11,13,28,0.32));
+  border-radius:var(--zc-radius-lg); border:var(--zc-glass-border);
+  background:var(--zc-glass-bg);
   backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
   display:flex; align-items:center; justify-content:center; overflow:hidden;
-  box-shadow:0 20px 60px rgba(5,6,17,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  box-shadow:0 20px 60px rgba(5,6,17,0.4), var(--zc-glass-shadow);
 }
 .zealcat-slot-grid{
   position:absolute; inset:0; opacity:0.55;
@@ -199,7 +224,7 @@ nav{
 }
 .zealcat-slot-glow{
   position:absolute; width:68%; height:68%; border-radius:50%;
-  background:radial-gradient(closest-side, rgba(139,62,240,0.35), rgba(34,211,245,0.16) 55%, transparent 75%);
+  background:radial-gradient(closest-side, var(--zc-glow-purple), var(--zc-glow-cyan) 55%, transparent 75%);
   filter:blur(28px); animation:markPulse 5s ease-in-out infinite;
 }
 .zealcat-slot-icon{ position:relative; width:42%; height:42%; opacity:0.85; }
@@ -209,6 +234,62 @@ nav{
   color:var(--text-faint); padding:0.34rem 0.7rem; border:1px solid var(--line); border-radius:20px;
   background:rgba(5,6,17,0.5); white-space:nowrap;
 }
+
+/* ==========================================================================
+   ZealCat Design System (Sprint 7)
+   Shared, reusable building blocks for every future ZealCat placeholder —
+   hero, footer, loading screen, floating assistant, 404. Nothing on the
+   site currently depends on these; they exist so a future sprint can drop
+   `class="zc-slot zc-slot--md"` (or similar) wherever a new slot is needed
+   instead of writing bespoke CSS again. Colors/glow/glass values come from
+   the tokens defined in :root above.
+   ========================================================================== */
+.zc-slot{
+  position:relative; display:flex; align-items:center; justify-content:center;
+  overflow:hidden; flex-shrink:0;
+  border:var(--zc-glass-border); background:var(--zc-glass-bg);
+  box-shadow:var(--zc-glass-shadow);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+.zc-slot--sm{ width:34px; height:34px; border-radius:var(--zc-radius-sm); }
+.zc-slot--md{ width:60px; height:60px; border-radius:var(--zc-radius-md); }
+.zc-slot--lg{ width:100%; max-width:340px; aspect-ratio:1/1; border-radius:var(--zc-radius-lg); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); box-shadow:0 20px 60px rgba(5,6,17,0.4), var(--zc-glass-shadow); }
+.zc-slot-grid{
+  position:absolute; inset:0; opacity:0.55;
+  background-image:
+    linear-gradient(rgba(150,150,200,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(150,150,200,0.1) 1px, transparent 1px);
+  background-size:24px 24px;
+}
+.zc-slot-glow{
+  position:absolute; width:68%; height:68%; border-radius:50%;
+  background:radial-gradient(closest-side, var(--zc-glow-purple), var(--zc-glow-cyan) 55%, transparent 75%);
+  filter:blur(28px);
+}
+
+/* Eye tokens — for whenever the real character art needs two CSS-driven
+   glow dots (e.g. an SVG that blinks) instead of a baked-in image. */
+.zc-eye-left{ color:var(--zc-eye-left); }
+.zc-eye-right{ color:var(--zc-eye-right); }
+
+/* Animation tokens: defined and ready, not yet attached to any real
+   artwork. Apply with the utility classes below once ZealCat's actual
+   SVG/sprite lands. */
+@keyframes zcIdleFloat{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-6px); }
+}
+@keyframes zcBlink{
+  0%,90%,100%{ transform:scaleY(1); }
+  95%{ transform:scaleY(0.1); }
+}
+@keyframes zcHoverGlow{
+  0%,100%{ filter:drop-shadow(0 0 12px var(--zc-glow-purple-strong)); }
+  50%{ filter:drop-shadow(0 0 22px var(--zc-glow-cyan-strong)); }
+}
+.zc-anim-idle{ animation:zcIdleFloat var(--zc-anim-idle) var(--zc-ease) infinite; }
+.zc-anim-blink{ animation:zcBlink var(--zc-anim-blink) ease-in-out infinite; transform-origin:center; }
+.zc-anim-hover:hover{ animation:zcHoverGlow var(--zc-anim-hover) ease-in-out; }
 
 @keyframes heroRise{
   from{ opacity:0; transform:translateY(18px); }
