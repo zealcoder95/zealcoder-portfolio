@@ -419,6 +419,14 @@ nav{
    34px–60px they'd be sub-pixel — but keep the breathing idle motion. */
 .zc-art-wrap--sm .zc-eyelid{ display:none; }
 
+/* Rive rig hookup (Path B, inert until js/zealcat-rive.js finds a real
+   .riv file — see ZealCat-Rive-Rig-Spec.md). When it does mount, it adds
+   .zc-rive-active to the wrap and this hides the PNG/eyelid fallback so
+   the two systems never render on top of each other. */
+.zc-rive-canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+.zc-art-wrap.zc-rive-active .zc-art,
+.zc-art-wrap.zc-rive-active .zc-eyelid{ display:none; }
+
 @keyframes heroRise{
   from{ opacity:0; transform:translateY(18px); }
   to{ opacity:1; transform:translateY(0); }

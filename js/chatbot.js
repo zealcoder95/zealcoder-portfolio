@@ -204,12 +204,19 @@
     // Panel header pose swap: face (default) <-> wave (open), a plain
     // crossfade between two official crops — see css/chatbot.css.
     const headIcon = wrap.querySelector(".zc-chat-head-icon .zc-art");
+    const headIconWrap = wrap.querySelector(".zc-chat-head-icon .zc-art-wrap");
 
     // One-shot soft glow when a real assistant reply lands — the same
     // .zc-ack-glow used for the hero/404 hover-dwell and click reactions
     // (see css/style.css), never a transform. Off under reduced motion.
     const reduceMotionChat = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     function ackReplyGlow() {
+      // Always announce the event — js/zealcat-rive.js listens for this
+      // to fire its own chatReplyArrived input once a real rig is mounted.
+      document.dispatchEvent(new CustomEvent("zc:chatreplyarrived"));
+      // If Rive owns this icon now, it handles the visual — skip the
+      // PNG glow so the two systems never render on top of each other.
+      if (headIconWrap && headIconWrap.classList.contains("zc-rive-active")) return;
       if (reduceMotionChat || !headIcon) return;
       headIcon.classList.remove("zc-ack-glow");
       void headIcon.offsetWidth; // restart if a previous glow just finished
@@ -222,7 +229,9 @@
       panel.classList.toggle("is-open", willOpen);
       launcher.setAttribute("aria-expanded", String(willOpen));
       applyHeaderStrings();
-      if (headIcon) headIcon.src = willOpen ? ZEALCAT_WAVE_SRC : ZEALCAT_FACE_SRC;
+      if (headIcon && !(headIconWrap && headIconWrap.classList.contains("zc-rive-active"))) {
+        headIcon.src = willOpen ? ZEALCAT_WAVE_SRC : ZEALCAT_FACE_SRC;
+      }
       if (willOpen) {
         if (!welcomed) {
           welcomeMsgEl = addMessage("assistant", STRINGS[currentLang()].welcome);
