@@ -205,6 +205,18 @@
     // crossfade between two official crops — see css/chatbot.css.
     const headIcon = wrap.querySelector(".zc-chat-head-icon .zc-art");
 
+    // One-shot soft glow when a real assistant reply lands — the same
+    // .zc-ack-glow used for the hero/404 hover-dwell and click reactions
+    // (see css/style.css), never a transform. Off under reduced motion.
+    const reduceMotionChat = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function ackReplyGlow() {
+      if (reduceMotionChat || !headIcon) return;
+      headIcon.classList.remove("zc-ack-glow");
+      void headIcon.offsetWidth; // restart if a previous glow just finished
+      headIcon.classList.add("zc-ack-glow");
+      setTimeout(() => headIcon.classList.remove("zc-ack-glow"), 820);
+    }
+
     function togglePanel(open) {
       const willOpen = typeof open === "boolean" ? open : !panel.classList.contains("is-open");
       panel.classList.toggle("is-open", willOpen);
@@ -250,6 +262,7 @@
         const reply = data && data.reply ? data.reply : STRINGS[currentLang()].error;
         addMessage("assistant", reply);
         history.push({ role: "assistant", text: reply });
+        ackReplyGlow();
       } catch (err) {
         hideTyping();
         addMessage("assistant", STRINGS[currentLang()].error);

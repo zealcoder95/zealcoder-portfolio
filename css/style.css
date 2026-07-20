@@ -318,16 +318,29 @@ nav{
   50%{ filter:drop-shadow(0 0 22px var(--zc-glow-cyan-strong)); }
 }
 
-/* One-shot: hero greeting nod. Plays exactly once, only on a visitor's
-   first-ever visit (js/site.js checks localStorage), then the .zc-anim-greet
-   class is removed and .zc-anim-breathe takes back over. A real "hello",
-   not ambient decoration. */
-@keyframes zcGreetNod{
-  0%,100%{ transform:translateY(0) rotate(0deg) scale(1); }
-  30%{ transform:translateY(-10px) rotate(-1.5deg) scale(1.02); }
-  60%{ transform:translateY(-3px) rotate(1deg) scale(1.008); }
+/* One-shot: hero greeting, once per browser session (js/site.js uses
+   sessionStorage). A real pose change — Standing crossfades to the
+   official Wave crop and back — never a transform on the same image.
+   The two images are stacked in the same box; only opacity moves. */
+.zc-pose-wave{
+  position:absolute; inset:0; opacity:0; transition:opacity 0.7s ease;
+  pointer-events:none;
 }
-.zc-anim-greet{ animation:zcGreetNod 1.7s var(--zc-ease) 1; transform-origin:center bottom; }
+.zc-pose-standing{ transition:opacity 0.7s ease; }
+.zc-art-wrap.zc-greeting .zc-pose-wave{ opacity:1; }
+.zc-art-wrap.zc-greeting .zc-pose-standing{ opacity:0; }
+/* eyelid coordinates are measured against the Standing pose only */
+.zc-art-wrap.zc-greeting .zc-eyelid{ display:none; }
+
+/* One-shot acknowledgement glow — shared by the hover-dwell reaction,
+   the click/tap reaction, and the chatbot's "reply arrived" beat. Never a
+   transform on the body: filter only, so it never implies motion that
+   isn't backed by real artwork. */
+@keyframes zcAckGlow{
+  0%,100%{ filter:drop-shadow(0 0 10px var(--zc-glow-purple-strong)); }
+  50%{ filter:drop-shadow(0 0 16px var(--zc-glow-cyan-strong)); }
+}
+.zc-art.zc-ack-glow{ animation:zcAckGlow 0.8s ease-in-out 1; }
 
 /* One-shot: 404 "looking around for the missing page". Plays once on
    landing, then settles into the same breathe state as everywhere else —
@@ -340,6 +353,11 @@ nav{
   90%{ transform:rotate(0deg); }
 }
 .zc-anim-search-once{ animation:zcSearchTilt 3.4s ease-in-out 1; transform-origin:center bottom; }
+
+@media (prefers-reduced-motion: reduce){
+  .zc-pose-wave, .zc-pose-standing{ transition:none; }
+  .zc-art.zc-ack-glow{ animation:none; }
+}
 
 /* Loader-only motion: the boot screen is on screen for as little as
    350ms (js/loading.js), far shorter than one cycle of zcIdleFloat

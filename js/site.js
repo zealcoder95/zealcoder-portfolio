@@ -68,15 +68,42 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  // ---- ZealCat: randomized blink (one of only two permanent idle motions,
-  // the other being the CSS breathing loop). Runs independently per
-  // art instance (hero, 404) with a jittered interval so it never reads as
-  // a metronome. Off entirely under reduced motion. ------------------------
-  (function randomBlink() {
+  // ==========================================================================
+  // ZealCat — reaction system (Phase 1, final)
+  //
+  // Idle layer (permanent, the only thing allowed to loop forever):
+  //   - breathing (CSS-only, .zc-anim-breathe)
+  //   - randomized blinking (jittered so it never reads as a metronome)
+  //
+  // Reaction layer (single-shot, cause-driven, one at a time): a shared
+  // per-instance lock means a new trigger while a reaction is already
+  // playing is simply dropped, never queued or stacked. Nothing here is a
+  // body transform — reactions are either a real pose swap (Standing/Wave,
+  // the only two official art crops we have) or a soft glow.
+  //   - session greet   (hero only, once per browser session)
+  //   - hover-dwell      (~600ms rest, not continuous tracking)
+  //   - click/tap
+  //   - chat reply beat  (see js/chatbot.js)
+  // ==========================================================================
+  (function zealcatReactions() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    document.querySelectorAll('.zc-art-wrap:not(.zc-art-wrap--sm)').forEach((wrap) => {
+    const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+    // per-instance lock: withLock(wrap, fn) runs fn(release) only if wrap
+    // isn't already mid-reaction; fn must call release() when it's done.
+    const locked = new WeakMap();
+    function withLock(wrap, fn) {
+      if (locked.get(wrap)) return; // already reacting — drop this trigger
+      locked.set(wrap, true);
+      fn(() => locked.set(wrap, false));
+    }
+
+    // idle blink stays independent of the lock — it's presence, not a
+    // reaction — but is exposed so a hover "blink pair" can reuse the exact
+    // same mechanism instead of inventing a second blink implementation.
+    function armIdleBlink(wrap) {
       const lids = wrap.querySelectorAll('.zc-eyelid');
-      if (!lids.length) return;
+      if (!lids.length) return null;
       function blinkOnce() {
         lids.forEach((lid, i) => {
           setTimeout(() => {
@@ -85,118 +112,104 @@ document.addEventListener('DOMContentLoaded', () => {
           }, i * 40);
         });
       }
-      function scheduleBlink() {
+      function schedule() {
         const delay = 3200 + Math.random() * 4200; // ~3.2s-7.4s, deliberately irregular
         setTimeout(() => {
           if (document.visibilityState === 'visible') blinkOnce();
-          scheduleBlink();
+          schedule();
         }, delay);
       }
-      scheduleBlink();
-    });
-  })();
-
-  // ---- shared: wait for the boot loader to actually be gone -------------
-  // A one-shot animation timed to start on DOMContentLoaded races the
-  // #zcLoader boot screen, which can legitimately stay up for anywhere from
-  // ~350ms to 4s — on a fast load the whole animation can play and finish
-  // completely hidden behind it. Anything that needs to be *seen* the
-  // moment the page becomes visible should wait for js/loading.js's
-  // 'zc:loaderhidden' event instead of guessing a delay. Pages with no
-  // loader in the DOM (404.html) resolve immediately.
-  function whenLoaderGone(cb) {
-    if (!document.getElementById('zcLoader')) { cb(); return; }
-    let done = false;
-    function fire() {
-      if (done) return;
-      done = true;
-      cb();
+      schedule();
+      return blinkOnce;
     }
-    document.addEventListener('zc:loaderhidden', fire, { once: true });
-    // safety net: if loading.js didn't run for some reason, don't strand
-    // the greeting forever behind a loader that's never coming down.
-    setTimeout(fire, 4700);
-  }
 
-  // ---- hero ZealCat: first-visit greeting, then settle into stillness -----
-  // Plays once per visitor (localStorage-gated) as a real "hello", then rests
-  // in the same quiet breathing state as every other visit. Returning
-  // visitors and reduced-motion users skip straight to breathing. Waits for
-  // the loader to be genuinely gone (see whenLoaderGone above) so the
-  // greeting is actually visible instead of finishing behind the boot screen.
-  (function heroGreet() {
-    const wrap = document.querySelector('.hero-visual .zc-art-wrap');
-    if (!wrap) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    let firstVisit = false;
-    try {
-      firstVisit = !localStorage.getItem('zcGreeted');
-      if (firstVisit) localStorage.setItem('zcGreeted', '1');
-    } catch (e) {
-      firstVisit = false; // storage blocked (private mode etc.) — just breathe
+    function blinkPairReaction(blinkOnce, release) {
+      if (!blinkOnce) { release(); return; }
+      blinkOnce();
+      setTimeout(() => { blinkOnce(); release(); }, 260);
     }
-    if (!firstVisit) return;
-    whenLoaderGone(() => {
-      wrap.classList.remove('zc-anim-breathe');
-      wrap.classList.add('zc-anim-greet');
-      wrap.addEventListener('animationend', function onEnd(e) {
-        if (e.animationName !== 'zcGreetNod') return;
-        wrap.classList.remove('zc-anim-greet');
-        wrap.classList.add('zc-anim-breathe');
-      }, { once: true });
-    });
-  })();
 
-  // ---- 404 ZealCat: one-shot "looking around for the missing page" --------
-  // Plays once on landing, then settles — it does not tilt for as long as
-  // the visitor stays reading the page.
-  (function notFoundLook() {
-    const wrap = document.querySelector('.notfound-visual .zc-art-wrap');
-    if (!wrap) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    wrap.classList.remove('zc-anim-breathe');
-    wrap.classList.add('zc-anim-search-once');
-    wrap.addEventListener('animationend', function onEnd(e) {
-      if (e.animationName !== 'zcSearchTilt') return;
-      wrap.classList.remove('zc-anim-search-once');
-      wrap.classList.add('zc-anim-breathe');
-    }, { once: true });
-  })();
+    function glowReaction(art, release) {
+      if (!art) { release(); return; }
+      art.classList.remove('zc-ack-glow');
+      void art.offsetWidth; // restart the animation if it's being reused
+      art.classList.add('zc-ack-glow');
+      setTimeout(() => { art.classList.remove('zc-ack-glow'); release(); }, 820);
+    }
 
-  // ---- hero ZealCat: subtle cursor-follow tilt ------------------------------
-  // Calm and premium by design: max ~2deg, mouse-only (skipped on touch),
-  // and off entirely under reduced motion. This is a proxy for a head-turn —
-  // the artwork is a single flattened image with no separate head layer, so
-  // the whole glass card leans very slightly toward the pointer instead.
-  (function heroTilt() {
-    const slot = document.querySelector('.hero-visual .zealcat-slot');
-    if (!slot) return;
-    const reduceMotionTilt = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-    if (reduceMotionTilt || isTouch) return;
+    // ---- wait for the boot loader to actually be gone --------------------
+    // A one-shot reaction timed to start on DOMContentLoaded races the
+    // #zcLoader boot screen (up to ~4s) — on a fast load it can finish
+    // entirely hidden behind it. Pages with no loader (404.html) resolve
+    // immediately.
+    function whenLoaderGone(cb) {
+      if (!document.getElementById('zcLoader')) { cb(); return; }
+      let done = false;
+      function fire() {
+        if (done) return;
+        done = true;
+        cb();
+      }
+      document.addEventListener('zc:loaderhidden', fire, { once: true });
+      setTimeout(fire, 4700); // safety net if loading.js never fires
+    }
 
-    const MAX_DEG = 2;
-    let raf = null;
+    // ---- set up hover-dwell + click on every large ZealCat instance ------
+    // (hero + 404 — the small footer/loader/chat crops opt out via
+    // .zc-art-wrap--sm and don't get eyelids or these reactions.)
+    document.querySelectorAll('.zc-art-wrap:not(.zc-art-wrap--sm)').forEach((wrap) => {
+      const blinkOnce = armIdleBlink(wrap);
+      const art = wrap.querySelector('.zc-art.zc-pose-standing') || wrap.querySelector('.zc-art');
+      let dwellTimer = null;
 
-    function onMove(e) {
-      const rect = slot.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (e.clientX - cx) / (rect.width / 2);
-      const dy = (e.clientY - cy) / (rect.height / 2);
-      const rotY = Math.max(-1, Math.min(1, dx)) * MAX_DEG;
-      const rotX = Math.max(-1, Math.min(1, dy)) * -MAX_DEG;
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        slot.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      if (!isTouch) {
+        wrap.addEventListener('mouseenter', () => {
+          dwellTimer = setTimeout(() => {
+            withLock(wrap, (release) => blinkPairReaction(blinkOnce, release));
+          }, 600);
+        });
+        wrap.addEventListener('mouseleave', () => {
+          if (dwellTimer) { clearTimeout(dwellTimer); dwellTimer = null; }
+        });
+      }
+
+      wrap.addEventListener('click', () => {
+        withLock(wrap, (release) => glowReaction(art, release));
       });
-    }
-    function onLeave() {
-      if (raf) cancelAnimationFrame(raf);
-      slot.style.transform = '';
-    }
-    document.querySelector('.hero-visual').addEventListener('mousemove', onMove);
-    document.querySelector('.hero-visual').addEventListener('mouseleave', onLeave);
+
+      // ---- hero: once-per-session greeting, real pose change -------------
+      if (wrap.closest('.hero-visual')) {
+        let firstThisSession = false;
+        try {
+          firstThisSession = !sessionStorage.getItem('zcGreeted');
+          if (firstThisSession) sessionStorage.setItem('zcGreeted', '1');
+        } catch (e) {
+          firstThisSession = false; // storage blocked (private mode etc.)
+        }
+        if (firstThisSession) {
+          whenLoaderGone(() => {
+            withLock(wrap, (release) => {
+              wrap.classList.add('zc-greeting');
+              setTimeout(() => {
+                wrap.classList.remove('zc-greeting');
+                setTimeout(release, 700); // let the crossfade back finish first
+              }, 1600);
+            });
+          });
+        }
+      }
+
+      // ---- 404: one-shot "looking around for the missing page" -----------
+      if (wrap.closest('.notfound-visual')) {
+        wrap.classList.remove('zc-anim-breathe');
+        wrap.classList.add('zc-anim-search-once');
+        wrap.addEventListener('animationend', function onEnd(e) {
+          if (e.animationName !== 'zcSearchTilt') return;
+          wrap.classList.remove('zc-anim-search-once');
+          wrap.classList.add('zc-anim-breathe');
+        }, { once: true });
+      }
+    });
   })();
 
   // ---- animated circuit background -----------------------------------------
