@@ -96,10 +96,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   })();
 
+  // ---- shared: wait for the boot loader to actually be gone -------------
+  // A one-shot animation timed to start on DOMContentLoaded races the
+  // #zcLoader boot screen, which can legitimately stay up for anywhere from
+  // ~350ms to 4s — on a fast load the whole animation can play and finish
+  // completely hidden behind it. Anything that needs to be *seen* the
+  // moment the page becomes visible should wait for js/loading.js's
+  // 'zc:loaderhidden' event instead of guessing a delay. Pages with no
+  // loader in the DOM (404.html) resolve immediately.
+  function whenLoaderGone(cb) {
+    if (!document.getElementById('zcLoader')) { cb(); return; }
+    let done = false;
+    function fire() {
+      if (done) return;
+      done = true;
+      cb();
+    }
+    document.addEventListener('zc:loaderhidden', fire, { once: true });
+    // safety net: if loading.js didn't run for some reason, don't strand
+    // the greeting forever behind a loader that's never coming down.
+    setTimeout(fire, 4700);
+  }
+
   // ---- hero ZealCat: first-visit greeting, then settle into stillness -----
   // Plays once per visitor (localStorage-gated) as a real "hello", then rests
   // in the same quiet breathing state as every other visit. Returning
-  // visitors and reduced-motion users skip straight to breathing.
+  // visitors and reduced-motion users skip straight to breathing. Waits for
+  // the loader to be genuinely gone (see whenLoaderGone above) so the
+  // greeting is actually visible instead of finishing behind the boot screen.
   (function heroGreet() {
     const wrap = document.querySelector('.hero-visual .zc-art-wrap');
     if (!wrap) return;
@@ -112,13 +136,15 @@ document.addEventListener('DOMContentLoaded', () => {
       firstVisit = false; // storage blocked (private mode etc.) — just breathe
     }
     if (!firstVisit) return;
-    wrap.classList.remove('zc-anim-breathe');
-    wrap.classList.add('zc-anim-greet');
-    wrap.addEventListener('animationend', function onEnd(e) {
-      if (e.animationName !== 'zcGreetNod') return;
-      wrap.classList.remove('zc-anim-greet');
-      wrap.classList.add('zc-anim-breathe');
-    }, { once: true });
+    whenLoaderGone(() => {
+      wrap.classList.remove('zc-anim-breathe');
+      wrap.classList.add('zc-anim-greet');
+      wrap.addEventListener('animationend', function onEnd(e) {
+        if (e.animationName !== 'zcGreetNod') return;
+        wrap.classList.remove('zc-anim-greet');
+        wrap.classList.add('zc-anim-breathe');
+      }, { once: true });
+    });
   })();
 
   // ---- 404 ZealCat: one-shot "looking around for the missing page" --------

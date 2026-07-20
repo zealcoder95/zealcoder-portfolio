@@ -9,14 +9,22 @@
   var MIN_VISIBLE_MS = 350; // keep it on-screen just long enough to read, never longer
   var shownAt = Date.now();
   var hidden = false;
+  var cleaned = false;
+
+  function cleanup() {
+    if (cleaned) return; // transitionend + the fallback timer can both fire
+    cleaned = true;
+    if (loader.parentNode) loader.parentNode.removeChild(loader);
+    // Announce that the boot screen is truly gone, so anything timed to
+    // play right after it (e.g. the hero's first-visit greeting) can wait
+    // for this instead of guessing a delay and racing the fade-out.
+    document.dispatchEvent(new CustomEvent('zc:loaderhidden'));
+  }
 
   function reveal() {
     if (hidden) return;
     hidden = true;
     loader.classList.add('is-hidden');
-    var cleanup = function () {
-      if (loader.parentNode) loader.parentNode.removeChild(loader);
-    };
     loader.addEventListener('transitionend', cleanup, { once: true });
     // fallback in case transitionend never fires (e.g. reduced-motion collapses
     // the transition duration to ~0 before the listener can catch it)
