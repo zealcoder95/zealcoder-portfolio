@@ -68,6 +68,75 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  // ---- ZealCat: randomized blink (one of only two permanent idle motions,
+  // the other being the CSS breathing loop). Runs independently per
+  // art instance (hero, 404) with a jittered interval so it never reads as
+  // a metronome. Off entirely under reduced motion. ------------------------
+  (function randomBlink() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('.zc-art-wrap:not(.zc-art-wrap--sm)').forEach((wrap) => {
+      const lids = wrap.querySelectorAll('.zc-eyelid');
+      if (!lids.length) return;
+      function blinkOnce() {
+        lids.forEach((lid, i) => {
+          setTimeout(() => {
+            lid.classList.add('zc-blink-now');
+            setTimeout(() => lid.classList.remove('zc-blink-now'), 260);
+          }, i * 40);
+        });
+      }
+      function scheduleBlink() {
+        const delay = 3200 + Math.random() * 4200; // ~3.2s-7.4s, deliberately irregular
+        setTimeout(() => {
+          if (document.visibilityState === 'visible') blinkOnce();
+          scheduleBlink();
+        }, delay);
+      }
+      scheduleBlink();
+    });
+  })();
+
+  // ---- hero ZealCat: first-visit greeting, then settle into stillness -----
+  // Plays once per visitor (localStorage-gated) as a real "hello", then rests
+  // in the same quiet breathing state as every other visit. Returning
+  // visitors and reduced-motion users skip straight to breathing.
+  (function heroGreet() {
+    const wrap = document.querySelector('.hero-visual .zc-art-wrap');
+    if (!wrap) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let firstVisit = false;
+    try {
+      firstVisit = !localStorage.getItem('zcGreeted');
+      if (firstVisit) localStorage.setItem('zcGreeted', '1');
+    } catch (e) {
+      firstVisit = false; // storage blocked (private mode etc.) — just breathe
+    }
+    if (!firstVisit) return;
+    wrap.classList.remove('zc-anim-breathe');
+    wrap.classList.add('zc-anim-greet');
+    wrap.addEventListener('animationend', function onEnd(e) {
+      if (e.animationName !== 'zcGreetNod') return;
+      wrap.classList.remove('zc-anim-greet');
+      wrap.classList.add('zc-anim-breathe');
+    }, { once: true });
+  })();
+
+  // ---- 404 ZealCat: one-shot "looking around for the missing page" --------
+  // Plays once on landing, then settles — it does not tilt for as long as
+  // the visitor stays reading the page.
+  (function notFoundLook() {
+    const wrap = document.querySelector('.notfound-visual .zc-art-wrap');
+    if (!wrap) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    wrap.classList.remove('zc-anim-breathe');
+    wrap.classList.add('zc-anim-search-once');
+    wrap.addEventListener('animationend', function onEnd(e) {
+      if (e.animationName !== 'zcSearchTilt') return;
+      wrap.classList.remove('zc-anim-search-once');
+      wrap.classList.add('zc-anim-breathe');
+    }, { once: true });
+  })();
+
   // ---- hero ZealCat: subtle cursor-follow tilt ------------------------------
   // Calm and premium by design: max ~2deg, mouse-only (skipped on touch),
   // and off entirely under reduced motion. This is a proxy for a head-turn —

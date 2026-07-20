@@ -217,47 +217,10 @@
           welcomed = true;
         }
         input.focus();
-        stopIdlePing();
-      } else {
-        startIdlePing();
       }
     }
 
     launcher.addEventListener("click", () => togglePanel());
-
-    // ---- idle ping ---------------------------------------------------------
-    // Every ~25-30s while the launcher is closed, a single soft glow pulse
-    // (see @keyframes zcChatPing) — a quiet "still here" cue, not a loop and
-    // not a badge. Paused while the tab is hidden and skipped entirely under
-    // reduced motion, matching the rest of the site's motion policy.
-    const reduceMotionChat = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let idlePingTimer = null;
-
-    function scheduleIdlePing() {
-      const delay = 25000 + Math.random() * 5000;
-      idlePingTimer = setTimeout(() => {
-        if (!panel.classList.contains("is-open") && document.visibilityState === "visible") {
-          launcher.classList.add("zc-ping");
-          setTimeout(() => launcher.classList.remove("zc-ping"), 1400);
-        }
-        scheduleIdlePing();
-      }, delay);
-    }
-    function startIdlePing() {
-      if (reduceMotionChat || idlePingTimer) return;
-      scheduleIdlePing();
-    }
-    function stopIdlePing() {
-      if (idlePingTimer) {
-        clearTimeout(idlePingTimer);
-        idlePingTimer = null;
-      }
-    }
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "hidden") stopIdlePing();
-      else if (!panel.classList.contains("is-open")) startIdlePing();
-    });
-    startIdlePing();
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && panel.classList.contains("is-open")) {

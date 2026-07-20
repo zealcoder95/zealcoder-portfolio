@@ -44,6 +44,7 @@
      character art */
   --zc-ease:cubic-bezier(0.22, 1, 0.36, 1);
   --zc-anim-idle:4.5s;
+  --zc-anim-breathe:6.2s;
   --zc-anim-blink:4s;
   --zc-anim-hover:0.3s;
 }
@@ -280,42 +281,57 @@ nav{
 .zc-eye-left{ color:var(--zc-eye-left); }
 .zc-eye-right{ color:var(--zc-eye-right); }
 
-/* Animation tokens: defined and ready, not yet attached to any real
-   artwork. Apply with the utility classes below once ZealCat's actual
-   SVG/sprite lands. */
-@keyframes zcIdleFloat{
-  0%,100%{ transform:translateY(0) scale(1); }
-  50%{ transform:translateY(-6px) scale(1.012); }
+/* ==========================================================================
+   Phase 1 — behavior-driven, not animation-driven (see project notes).
+   Only two motions are allowed to run forever, and both are close to
+   imperceptible on their own: a tiny breathing scale, and blinking. Every
+   other mascot motion below is single-shot — it plays once, for a real
+   reason (first visit, landing on a missing page, opening the chat), and
+   then the character settles back into the same quiet breathing state.
+   Nothing here loops indefinitely except breathe + blink.
+   ========================================================================== */
+
+/* The two permanent idle behaviors --------------------------------------- */
+@keyframes zcBreathe{
+  0%,100%{ transform:scale(1); }
+  50%{ transform:scale(1.008); }
 }
-@keyframes zcBlink{
-  0%,90%,100%{ transform:scaleY(1); }
-  95%{ transform:scaleY(0.1); }
+.zc-anim-breathe{ animation:zcBreathe var(--zc-anim-breathe) ease-in-out infinite; transform-origin:center bottom; }
+/* small-icon variant (footer/chat launcher) — kept as its own class name
+   for backward compatibility with existing markup; same breathing motion,
+   just without a bottom-anchored origin since those icons are centered. */
+.zc-anim-idle{ animation:zcBreathe var(--zc-anim-idle) ease-in-out infinite; }
+
+/* Blinking is now triggered from JS at randomized (non-metronomic)
+   intervals — see js/site.js — rather than running as a fixed-period CSS
+   loop, so it never reads as mechanical on close attention. Each eyelid
+   just gets a short one-shot animation when the .zc-blink-now class lands. */
+@keyframes zcBlinkOnce{
+  0%,100%{ transform:scaleY(0); }
+  45%{ transform:scaleY(1); }
 }
+.zc-eyelid.zc-blink-now{ animation:zcBlinkOnce 0.22s ease-in-out; }
+
+.zc-anim-hover:hover{ animation:zcHoverGlow var(--zc-anim-hover) ease-in-out; }
 @keyframes zcHoverGlow{
   0%,100%{ filter:drop-shadow(0 0 12px var(--zc-glow-purple-strong)); }
   50%{ filter:drop-shadow(0 0 22px var(--zc-glow-cyan-strong)); }
 }
-.zc-anim-idle{ animation:zcIdleFloat var(--zc-anim-idle) var(--zc-ease) infinite; }
-.zc-anim-blink{ animation:zcBlink var(--zc-anim-blink) ease-in-out infinite; transform-origin:center; }
-.zc-anim-hover:hover{ animation:zcHoverGlow var(--zc-anim-hover) ease-in-out; }
 
-/* Hero-only motion: zcIdleFloat's 6px/4.5s drift reads fine on a 34-56px
-   footer/chat icon but is nearly invisible on the 760px hero mascot —
-   at a glance it looks completely still. This is a bigger, faster,
-   two-axis loop (float + gentle sway + breathing scale) sized for the
-   large hero placement specifically. */
-@keyframes zcAliveFloat{
+/* One-shot: hero greeting nod. Plays exactly once, only on a visitor's
+   first-ever visit (js/site.js checks localStorage), then the .zc-anim-greet
+   class is removed and .zc-anim-breathe takes back over. A real "hello",
+   not ambient decoration. */
+@keyframes zcGreetNod{
   0%,100%{ transform:translateY(0) rotate(0deg) scale(1); }
-  25%{ transform:translateY(-9px) rotate(-1.3deg) scale(1.015); }
-  50%{ transform:translateY(-16px) rotate(0deg) scale(1.03); }
-  75%{ transform:translateY(-9px) rotate(1.3deg) scale(1.015); }
+  30%{ transform:translateY(-10px) rotate(-1.5deg) scale(1.02); }
+  60%{ transform:translateY(-3px) rotate(1deg) scale(1.008); }
 }
-.zc-anim-alive{ animation:zcAliveFloat 3.2s ease-in-out infinite; transform-origin:center bottom; }
+.zc-anim-greet{ animation:zcGreetNod 1.7s var(--zc-ease) 1; transform-origin:center bottom; }
 
-/* 404-only motion: a slow side-to-side tilt, distinct in both shape and
-   pace from the hero's float/breathe loop, reading as "scanning the room
-   for the missing page" rather than reusing the hero's calmer idle. Same
-   official Standing-pose artwork — only the motion is different. */
+/* One-shot: 404 "looking around for the missing page". Plays once on
+   landing, then settles into the same breathe state as everywhere else —
+   it does not loop for as long as the visitor stays on the page. */
 @keyframes zcSearchTilt{
   0%,100%{ transform:rotate(0deg); }
   18%{ transform:rotate(-4deg); }
@@ -323,7 +339,7 @@ nav{
   72%{ transform:rotate(4deg); }
   90%{ transform:rotate(0deg); }
 }
-.zc-anim-search{ animation:zcSearchTilt 6.5s ease-in-out infinite; transform-origin:center bottom; }
+.zc-anim-search-once{ animation:zcSearchTilt 3.4s ease-in-out 1; transform-origin:center bottom; }
 
 /* Loader-only motion: the boot screen is on screen for as little as
    350ms (js/loading.js), far shorter than one cycle of zcIdleFloat
@@ -376,16 +392,12 @@ nav{
 .zc-eyelid{
   position:absolute; width:6.4%; height:4.2%; border-radius:50%;
   background:#0b0c14; transform:scaleY(0); transform-origin:center;
-  pointer-events:none; animation:zcEyelidBlink var(--zc-anim-blink) ease-in-out infinite;
+  pointer-events:none;
 }
 .zc-eyelid-l{ left:34.9%; top:28%; }
-.zc-eyelid-r{ left:59.7%; top:28.2%; animation-delay:0.04s; }
-@keyframes zcEyelidBlink{
-  0%,88%,100%{ transform:scaleY(0); }
-  92%{ transform:scaleY(1); }
-}
+.zc-eyelid-r{ left:59.7%; top:28.2%; }
 /* Small (footer/loader/chat) instances: skip the eyelid dots — at
-   34px–60px they'd be sub-pixel — but keep idle float + hover glow. */
+   34px–60px they'd be sub-pixel — but keep the breathing idle motion. */
 .zc-art-wrap--sm .zc-eyelid{ display:none; }
 
 @keyframes heroRise{
