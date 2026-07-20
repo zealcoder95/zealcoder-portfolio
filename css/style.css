@@ -293,6 +293,24 @@ nav{
 .zc-anim-blink{ animation:zcBlink var(--zc-anim-blink) ease-in-out infinite; transform-origin:center; }
 .zc-anim-hover:hover{ animation:zcHoverGlow var(--zc-anim-hover) ease-in-out; }
 
+/* Loader-only motion: the boot screen is on screen for as little as
+   350ms (js/loading.js), far shorter than one cycle of zcIdleFloat
+   (4.5s) — so on a fast page load the mascot never visibly moves at
+   all before it's removed. This is a dedicated, much quicker loop
+   (~0.9s) so at least one full pulse reads even on the shortest visit,
+   instead of reusing the slow idle-float token meant for
+   persistently-visible placements (hero/footer/chat). */
+@keyframes zcLoaderPulse{
+  0%,100%{ transform:scale(1) rotate(0deg); }
+  50%{ transform:scale(1.1) rotate(-4deg); }
+}
+@keyframes zcLoaderGlow{
+  0%,100%{ opacity:0.55; transform:scale(1); }
+  50%{ opacity:1; transform:scale(1.15); }
+}
+.zc-anim-loader{ animation:zcLoaderPulse 0.9s ease-in-out infinite; }
+.zc-anim-loader .zc-slot-glow{ animation:zcLoaderGlow 0.9s ease-in-out infinite; }
+
 /* ==========================================================================
    ZealCat — real artwork (character bible PNGs, alpha-cut)
    Drop-in replacement for the old line-art placeholders. .zc-art-wrap sits
