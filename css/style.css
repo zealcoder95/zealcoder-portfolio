@@ -215,6 +215,12 @@ nav{
   backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
   display:flex; align-items:center; justify-content:center; overflow:hidden;
   box-shadow:0 20px 60px rgba(5,6,17,0.4), var(--zc-glass-shadow);
+  /* Cursor-follow tilt (js/site.js, hero only) — capped at ~2deg so the
+     card leans toward the pointer without the character's body ever
+     looking unstable. Transition smooths continuous mousemove updates
+     and eases back to neutral on mouseleave. */
+  transition:transform 0.35s var(--zc-ease);
+  will-change:transform;
 }
 .zealcat-slot-grid{
   position:absolute; inset:0; opacity:0.55;
@@ -293,86 +299,65 @@ nav{
 .zc-anim-blink{ animation:zcBlink var(--zc-anim-blink) ease-in-out infinite; transform-origin:center; }
 .zc-anim-hover:hover{ animation:zcHoverGlow var(--zc-anim-hover) ease-in-out; }
 
-/* Hero-only motion: calm continuous "breathing" baseline — always running,
-   kept small/slow on purpose so it reads as alive without ever competing
-   for attention with the page content. */
+/* Hero-only motion: zcIdleFloat's 6px/4.5s drift reads fine on a 34-56px
+   footer/chat icon but is nearly invisible on the 760px hero mascot —
+   at a glance it looks completely still. This is a bigger, faster,
+   two-axis loop (float + gentle sway + breathing scale) sized for the
+   large hero placement specifically. */
 @keyframes zcAliveFloat{
   0%,100%{ transform:translateY(0) rotate(0deg) scale(1); }
-  50%{ transform:translateY(-6px) rotate(0.4deg) scale(1.012); }
+  25%{ transform:translateY(-9px) rotate(-1.3deg) scale(1.015); }
+  50%{ transform:translateY(-16px) rotate(0deg) scale(1.03); }
+  75%{ transform:translateY(-9px) rotate(1.3deg) scale(1.015); }
 }
-.zc-anim-alive{ animation:zcAliveFloat 4.6s ease-in-out infinite; transform-origin:center bottom; }
+.zc-anim-alive{ animation:zcAliveFloat 3.2s ease-in-out infinite; transform-origin:center bottom; }
 
-/* One-shot "action" animations — triggered from js/site.js at randomized
-   intervals (see zcMascotActions) so the mascot occasionally does something
-   distinct (look around, stretch, hop) instead of one repeating loop.
-   Each is a single play-through (not infinite); JS removes the class on
-   animationend so the calm .zc-anim-alive baseline resumes underneath.
-   Compound selector (.zc-art-wrap.zc-action-*) outranks the single-class
-   .zc-anim-alive rule above, so it fully takes over `animation` for its
-   duration without the two fighting over the transform. */
-@keyframes zcActionLookL{
-  0%,100%{ transform:translateY(0) rotate(0deg) scale(1); }
-  20%{ transform:translateY(-2px) rotate(-7deg) scale(1.01); }
-  55%{ transform:translateY(-2px) rotate(-7deg) scale(1.01); }
-  80%{ transform:translateY(0) rotate(0deg) scale(1); }
+/* 404-only motion: a slow side-to-side tilt, distinct in both shape and
+   pace from the hero's float/breathe loop, reading as "scanning the room
+   for the missing page" rather than reusing the hero's calmer idle. Same
+   official Standing-pose artwork — only the motion is different. */
+@keyframes zcSearchTilt{
+  0%,100%{ transform:rotate(0deg); }
+  18%{ transform:rotate(-4deg); }
+  50%{ transform:rotate(0.5deg); }
+  72%{ transform:rotate(4deg); }
+  90%{ transform:rotate(0deg); }
 }
-@keyframes zcActionLookR{
-  0%,100%{ transform:translateY(0) rotate(0deg) scale(1); }
-  20%{ transform:translateY(-2px) rotate(7deg) scale(1.01); }
-  55%{ transform:translateY(-2px) rotate(7deg) scale(1.01); }
-  80%{ transform:translateY(0) rotate(0deg) scale(1); }
-}
-@keyframes zcActionStretch{
-  0%,100%{ transform:translateY(0) scaleX(1) scaleY(1); }
-  35%{ transform:translateY(6px) scaleX(1.1) scaleY(0.88); }
-  65%{ transform:translateY(6px) scaleX(1.1) scaleY(0.88); }
-  85%{ transform:translateY(0) scaleX(0.98) scaleY(1.04); }
-}
-@keyframes zcActionHop{
-  0%,100%{ transform:translateY(0) rotate(0deg) scale(1); }
-  15%{ transform:translateY(3px) rotate(-2deg) scale(0.97,1.05); }
-  40%{ transform:translateY(-22px) rotate(3deg) scale(1.04,0.96); }
-  65%{ transform:translateY(0px) rotate(-1.5deg) scale(0.98,1.03); }
-  85%{ transform:translateY(-4px) rotate(0.5deg) scale(1.01); }
-}
-@keyframes zcActionSurprise{
-  0%{ transform:translateY(0) rotate(0deg) scale(1); }
-  12%{ transform:translateY(-6px) rotate(-3deg) scale(0.94,1.1); }
-  30%{ transform:translateY(-28px) rotate(6deg) scale(1.08,0.9); }
-  50%{ transform:translateY(-4px) rotate(-4deg) scale(0.95,1.06); }
-  68%{ transform:translateY(-10px) rotate(2.5deg) scale(1.03,0.97); }
-  84%{ transform:translateY(0px) rotate(-1deg) scale(1.01); }
-  100%{ transform:translateY(0) rotate(0deg) scale(1); }
-}
-.zc-art-wrap.zc-action-look-l{ animation:zcActionLookL 1.7s ease-in-out 1 both; }
-.zc-art-wrap.zc-action-look-r{ animation:zcActionLookR 1.7s ease-in-out 1 both; }
-.zc-art-wrap.zc-action-stretch{ animation:zcActionStretch 1.9s ease-in-out 1 both; }
-.zc-art-wrap.zc-action-hop{ animation:zcActionHop 1.1s ease-in-out 1 both; }
-.zc-art-wrap.zc-action-surprise{ animation:zcActionSurprise 1s cubic-bezier(0.25,0.46,0.45,0.94) 1 both; }
+.zc-anim-search{ animation:zcSearchTilt 6.5s ease-in-out infinite; transform-origin:center bottom; }
 
-
-/* Loader-only motion: a hop/run cycle (bounce + squash-stretch + lean)
-   instead of a flat pulse, so the boot screen reads as the mascot
-   "running in place" while the page loads. Fast (~0.7s) so at least one
-   full stride reads even on the shortest visits (js/loading.js shows this
-   for 350ms–4s). The glow underneath is synced as a ground-contact shadow:
-   it flattens/brightens on landing and shrinks while airborne. */
-@keyframes zcLoaderRun{
-  0%,100%{ transform:translateY(0) rotate(0deg) scale(1,1); }
-  15%{ transform:translateY(2px) rotate(-4deg) scale(1.1,0.86); }
-  40%{ transform:translateY(-11px) rotate(4deg) scale(0.92,1.12); }
-  65%{ transform:translateY(-2px) rotate(-3deg) scale(0.96,1.05); }
-  85%{ transform:translateY(0) rotate(2deg) scale(1.1,0.88); }
+/* Loader-only motion: the boot screen is on screen for as little as
+   350ms (js/loading.js), far shorter than one cycle of zcIdleFloat
+   (4.5s) — so on a fast page load the mascot never visibly moves at
+   all before it's removed. This is a dedicated, much quicker loop
+   (~0.9s) so at least one full pulse reads even on the shortest visit,
+   instead of reusing the slow idle-float token meant for
+   persistently-visible placements (hero/footer/chat). */
+@keyframes zcLoaderPulse{
+  0%,100%{ transform:scale(1) rotate(0deg); }
+  50%{ transform:scale(1.1) rotate(-4deg); }
 }
 @keyframes zcLoaderGlow{
-  0%,100%{ opacity:0.55; transform:scale(1,1); }
-  15%{ opacity:0.85; transform:scale(1.1,0.7); }
-  40%{ opacity:0.3; transform:scale(0.6,0.5); }
-  65%{ opacity:0.4; transform:scale(0.72,0.6); }
-  85%{ opacity:0.9; transform:scale(1.15,0.72); }
+  0%,100%{ opacity:0.55; transform:scale(1); }
+  50%{ opacity:1; transform:scale(1.15); }
 }
-.zc-anim-loader{ animation:zcLoaderRun 0.7s ease-in-out infinite; transform-origin:center bottom; }
-.zc-anim-loader .zc-slot-glow{ animation:zcLoaderGlow 0.7s ease-in-out infinite; }
+.zc-anim-loader{ animation:zcLoaderPulse 0.9s ease-in-out infinite; }
+.zc-anim-loader .zc-slot-glow{ animation:zcLoaderGlow 0.9s ease-in-out infinite; }
+
+/* Loading ring — the one place the Character Bible explicitly calls for
+   extra motion ("an animated ring or the tail-orb pulse as the loading
+   indicator", Section 13). A spinning conic-gradient ring in the two
+   brand colors sits just outside the face crop; it never touches or
+   distorts the artwork itself, so it adds the "most playful" beat the
+   loading screen is allowed without faking any character movement. */
+.zc-loader-ring{
+  position:absolute; inset:-7px; border-radius:50%;
+  background:conic-gradient(from 0deg, var(--purple), var(--cyan), var(--magenta), var(--purple));
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  animation:zcRingSpin 1.1s linear infinite;
+  opacity:0.9; pointer-events:none;
+}
+@keyframes zcRingSpin{ to{ transform:rotate(360deg); } }
 
 /* ==========================================================================
    ZealCat — real artwork (character bible PNGs, alpha-cut)
@@ -764,9 +749,9 @@ main section:has(> #journalFeed){ counter-reset:journalLog; }
   font-family:'JetBrains Mono',monospace; font-size:0.78rem; letter-spacing:0.1em;
   text-transform:uppercase; color:var(--text-faint); display:flex; align-items:center; gap:0.15rem;
 }
-.zc-loader-dot{ opacity:0.25; animation:zcDotPulse 0.7s ease-in-out infinite; }
-.zc-loader-dot:nth-child(2){ animation-delay:0.08s; }
-.zc-loader-dot:nth-child(3){ animation-delay:0.16s; }
+.zc-loader-dot{ opacity:0.25; animation:zcDotPulse 1.3s ease-in-out infinite; }
+.zc-loader-dot:nth-child(2){ animation-delay:0.15s; }
+.zc-loader-dot:nth-child(3){ animation-delay:0.3s; }
 @keyframes zcDotPulse{ 0%,100%{ opacity:0.25; } 50%{ opacity:1; } }
 @media (prefers-reduced-motion: reduce){
   .zc-loader{ transition:none; }

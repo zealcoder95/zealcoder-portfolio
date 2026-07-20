@@ -68,6 +68,42 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  // ---- hero ZealCat: subtle cursor-follow tilt ------------------------------
+  // Calm and premium by design: max ~2deg, mouse-only (skipped on touch),
+  // and off entirely under reduced motion. This is a proxy for a head-turn —
+  // the artwork is a single flattened image with no separate head layer, so
+  // the whole glass card leans very slightly toward the pointer instead.
+  (function heroTilt() {
+    const slot = document.querySelector('.hero-visual .zealcat-slot');
+    if (!slot) return;
+    const reduceMotionTilt = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+    if (reduceMotionTilt || isTouch) return;
+
+    const MAX_DEG = 2;
+    let raf = null;
+
+    function onMove(e) {
+      const rect = slot.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
+      const rotY = Math.max(-1, Math.min(1, dx)) * MAX_DEG;
+      const rotX = Math.max(-1, Math.min(1, dy)) * -MAX_DEG;
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        slot.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      });
+    }
+    function onLeave() {
+      if (raf) cancelAnimationFrame(raf);
+      slot.style.transform = '';
+    }
+    document.querySelector('.hero-visual').addEventListener('mousemove', onMove);
+    document.querySelector('.hero-visual').addEventListener('mouseleave', onLeave);
+  })();
+
   // ---- animated circuit background -----------------------------------------
   const canvas = document.getElementById('circuit-bg');
   if (!canvas) return;
@@ -182,104 +218,4 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(draw);
   }
   draw();
-
-  // ---- hero ZealCat idle actions -----------------------------------------
-  // Calm breathing float (.zc-anim-alive, CSS-only) runs continuously.
-  // On top of that, fire one distinct "action" animation every so often —
-  // never back-to-back, never on a fixed beat — so a visitor who lingers
-  // sees the mascot occasionally look around/stretch/hop instead of the
-  // same loop repeating. Skips entirely under prefers-reduced-motion.
-  const mascot = document.querySelector('.zealcat-slot .zc-art-wrap.zc-anim-alive');
-  const mascotSlot = document.querySelector('.zealcat-slot');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (mascot && !reducedMotion) {
-    const actions = ['zc-action-look-l', 'zc-action-look-r', 'zc-action-stretch', 'zc-action-hop'];
-    let lastAction = null;
-    let running = false;
-    let idleTimer = null;
-
-    function playAction(choice, onDone) {
-      if (running) return false;
-      lastAction = choice;
-      running = true;
-      mascot.classList.add(choice);
-      mascot.addEventListener('animationend', function onEnd() {
-        mascot.removeEventListener('animationend', onEnd);
-        mascot.classList.remove(choice);
-        running = false;
-        if (onDone) onDone();
-      }, { once: true });
-      return true;
-    }
-
-    function playRandomAction() {
-      const pool = actions.filter(a => a !== lastAction);
-      const choice = pool[Math.floor(Math.random() * pool.length)];
-      playAction(choice, scheduleNext);
-    }
-
-    function scheduleNext() {
-      clearTimeout(idleTimer);
-      const delay = 6000 + Math.random() * 9000; // 6–15s of calm float between actions
-      idleTimer = setTimeout(playRandomAction, delay);
-    }
-
-    scheduleNext();
-
-    // ---- click easter egg -------------------------------------------------
-    // Tapping/clicking the mascot interrupts whatever's scheduled and plays
-    // a distinct "startled" pop — bigger and quicker than the idle actions,
-    // so it reads as a direct reaction to the click rather than a coincidence.
-    if (mascotSlot) {
-      mascotSlot.style.cursor = 'pointer';
-      mascotSlot.addEventListener('click', () => {
-        const started = playAction('zc-action-surprise', () => { scheduleNext(); });
-        if (started) clearTimeout(idleTimer); // don't let a queued idle action fire mid-surprise
-      });
-    }
-
-    // ---- mouse-follow tilt --------------------------------------------------
-    // The whole card leans a few degrees toward the cursor, like the
-    // mascot is tracking it — always-on (not distance-faded) but capped to
-    // a small max angle so it reads as attentive, not jumpy. Runs on top of
-    // the idle/action animations without fighting them: it's applied to
-    // .zealcat-slot itself, which none of the keyframe animations above
-    // touch (they all target the inner .zc-art-wrap).
-    if (mascotSlot && window.matchMedia('(pointer: fine)').matches) {
-      const MAX_DEG = 6;
-      const MAX_TRANSLATE = 5;
-      const RANGE = 160; // px from center at which the tilt is already maxed out
-      let rafId = null, targetX = 0, targetY = 0, curX = 0, curY = 0;
-
-      function applyTilt() {
-        curX += (targetX - curX) * 0.12;
-        curY += (targetY - curY) * 0.12;
-        mascotSlot.style.transform =
-          `perspective(700px) rotateX(${(-curY * MAX_DEG).toFixed(2)}deg) rotateY(${(curX * MAX_DEG).toFixed(2)}deg) translate(${(curX * MAX_TRANSLATE).toFixed(1)}px, ${(curY * MAX_TRANSLATE).toFixed(1)}px)`;
-        if (Math.abs(targetX - curX) > 0.001 || Math.abs(targetY - curY) > 0.001) {
-          rafId = requestAnimationFrame(applyTilt);
-        } else {
-          rafId = null;
-        }
-      }
-
-      function onMove(e) {
-        const rect = mascotSlot.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = e.clientX - cx;
-        const dy = e.clientY - cy;
-        targetX = Math.max(-1, Math.min(1, dx / RANGE));
-        targetY = Math.max(-1, Math.min(1, dy / RANGE));
-        if (!rafId) rafId = requestAnimationFrame(applyTilt);
-      }
-
-      window.addEventListener('mousemove', onMove, { passive: true });
-      window.addEventListener('mouseleave', () => {
-        targetX = 0; targetY = 0;
-        if (!rafId) rafId = requestAnimationFrame(applyTilt);
-      });
-    }
-  }
 });

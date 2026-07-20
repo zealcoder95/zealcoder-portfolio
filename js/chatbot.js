@@ -90,9 +90,14 @@
   // Same official ZealCat artwork as the hero/loading/404 placements (the
   // face crop), so the assistant reads as the same character everywhere on
   // the site rather than a separate icon.
+  const ZEALCAT_FACE_SRC = "assets/zealcat/zealcat-face.png";
+  // Official "wave" pose (Character Bible, alpha-cut) — used only in the
+  // panel header while the chat is open, as a one-time real greeting
+  // rather than an invented animation.
+  const ZEALCAT_WAVE_SRC = "assets/zealcat/zealcat-wave-face.png";
   const ZEALCAT_FACE_SVG = `
     <span class="zc-art-wrap zc-art-wrap--sm">
-      <img class="zc-art" src="assets/zealcat/zealcat-face.png" alt="" width="320" height="230" loading="lazy" decoding="async">
+      <img class="zc-art" src="${ZEALCAT_FACE_SRC}" alt="" width="320" height="230" loading="lazy" decoding="async">
     </span>`;
 
   function buildWidget() {
@@ -196,21 +201,63 @@
       }
     }
 
+    // Panel header pose swap: face (default) <-> wave (open), a plain
+    // crossfade between two official crops — see css/chatbot.css.
+    const headIcon = wrap.querySelector(".zc-chat-head-icon .zc-art");
+
     function togglePanel(open) {
       const willOpen = typeof open === "boolean" ? open : !panel.classList.contains("is-open");
       panel.classList.toggle("is-open", willOpen);
       launcher.setAttribute("aria-expanded", String(willOpen));
       applyHeaderStrings();
+      if (headIcon) headIcon.src = willOpen ? ZEALCAT_WAVE_SRC : ZEALCAT_FACE_SRC;
       if (willOpen) {
         if (!welcomed) {
           welcomeMsgEl = addMessage("assistant", STRINGS[currentLang()].welcome);
           welcomed = true;
         }
         input.focus();
+        stopIdlePing();
+      } else {
+        startIdlePing();
       }
     }
 
     launcher.addEventListener("click", () => togglePanel());
+
+    // ---- idle ping ---------------------------------------------------------
+    // Every ~25-30s while the launcher is closed, a single soft glow pulse
+    // (see @keyframes zcChatPing) — a quiet "still here" cue, not a loop and
+    // not a badge. Paused while the tab is hidden and skipped entirely under
+    // reduced motion, matching the rest of the site's motion policy.
+    const reduceMotionChat = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let idlePingTimer = null;
+
+    function scheduleIdlePing() {
+      const delay = 25000 + Math.random() * 5000;
+      idlePingTimer = setTimeout(() => {
+        if (!panel.classList.contains("is-open") && document.visibilityState === "visible") {
+          launcher.classList.add("zc-ping");
+          setTimeout(() => launcher.classList.remove("zc-ping"), 1400);
+        }
+        scheduleIdlePing();
+      }, delay);
+    }
+    function startIdlePing() {
+      if (reduceMotionChat || idlePingTimer) return;
+      scheduleIdlePing();
+    }
+    function stopIdlePing() {
+      if (idlePingTimer) {
+        clearTimeout(idlePingTimer);
+        idlePingTimer = null;
+      }
+    }
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") stopIdlePing();
+      else if (!panel.classList.contains("is-open")) startIdlePing();
+    });
+    startIdlePing();
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && panel.classList.contains("is-open")) {

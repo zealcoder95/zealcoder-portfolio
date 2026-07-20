@@ -25,6 +25,21 @@
 .zc-chat-icon-open{ pointer-events:none; }
 .zc-chat-icon-open .zc-art-wrap{ position:relative; z-index:1; width:80%; height:80%; }
 .zc-chat-icon-open .zc-slot-glow{ opacity:0.8; }
+
+/* Idle "ping" — once every ~25–30s while the panel is closed (js/chatbot.js
+   toggles this class briefly), a single soft glow pulse on the launcher.
+   Meant to read as "still here" the way the Character Bible's own Chatbot
+   section describes (a single subtle action, never a loop), not as a
+   notification badge or anything that demands a click. */
+@keyframes zcChatPing{
+  0%,100%{ filter:drop-shadow(0 0 0 rgba(139,62,240,0)); }
+  50%{ filter:drop-shadow(0 0 10px var(--zc-glow-purple-strong)); }
+}
+.zc-chat-launcher.zc-ping .zc-chat-icon-open{ animation:zcChatPing 1.4s ease-in-out; }
+
+/* Header icon pose swap (face ↔ wave) when the panel opens/closes —
+   a plain crossfade between two official art crops, not a transform. */
+.zc-chat-head-icon .zc-art{ transition:opacity 0.25s ease; }
 .zc-chat-launcher svg.zc-chat-icon-close{ width:22px; height:22px; }
 .zc-chat-launcher .zc-chat-icon-close{ display:none; }
 .zc-chat-launcher[aria-expanded="true"] .zc-chat-icon-open{ display:none; }
@@ -120,6 +135,7 @@
   .zc-chat-panel, .zc-chat-launcher, .zc-quick-btn{ transition:none; }
   .zc-chat-typing span{ animation:none; }
   .zc-chat-icon-open.zc-anim-idle{ animation:none; }
+  .zc-chat-launcher.zc-ping .zc-chat-icon-open{ animation:none; }
 }
 
 @media (max-width:480px){
