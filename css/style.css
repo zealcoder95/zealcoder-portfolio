@@ -293,6 +293,19 @@ nav{
 .zc-anim-blink{ animation:zcBlink var(--zc-anim-blink) ease-in-out infinite; transform-origin:center; }
 .zc-anim-hover:hover{ animation:zcHoverGlow var(--zc-anim-hover) ease-in-out; }
 
+/* Hero-only motion: zcIdleFloat's 6px/4.5s drift reads fine on a 34-56px
+   footer/chat icon but is nearly invisible on the 760px hero mascot —
+   at a glance it looks completely still. This is a bigger, faster,
+   two-axis loop (float + gentle sway + breathing scale) sized for the
+   large hero placement specifically. */
+@keyframes zcAliveFloat{
+  0%,100%{ transform:translateY(0) rotate(0deg) scale(1); }
+  25%{ transform:translateY(-9px) rotate(-1.3deg) scale(1.015); }
+  50%{ transform:translateY(-16px) rotate(0deg) scale(1.03); }
+  75%{ transform:translateY(-9px) rotate(1.3deg) scale(1.015); }
+}
+.zc-anim-alive{ animation:zcAliveFloat 3.2s ease-in-out infinite; transform-origin:center bottom; }
+
 /* Loader-only motion: the boot screen is on screen for as little as
    350ms (js/loading.js), far shorter than one cycle of zcIdleFloat
    (4.5s) — so on a fast page load the mascot never visibly moves at
