@@ -11,9 +11,22 @@
   var hidden = false;
   var cleaned = false;
 
+  // ---- ring speed reflects real elapsed load time, not a fake cycle ----
+  // No new artwork, no invented motion — just the existing ring genuinely
+  // spinning faster the longer the real load actually takes.
+  var speedTimers = [
+    setTimeout(function () { loader.style.setProperty('--zc-ring-dur', '0.75s'); }, 900),
+    setTimeout(function () { loader.style.setProperty('--zc-ring-dur', '0.45s'); }, 2000)
+  ];
+
+  function clearSpeedTimers() {
+    speedTimers.forEach(clearTimeout);
+  }
+
   function cleanup() {
     if (cleaned) return; // transitionend + the fallback timer can both fire
     cleaned = true;
+    clearSpeedTimers();
     if (loader.parentNode) loader.parentNode.removeChild(loader);
     // Announce that the boot screen is truly gone, so anything timed to
     // play right after it (e.g. the hero's first-visit greeting) can wait

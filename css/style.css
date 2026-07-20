@@ -389,7 +389,7 @@ nav{
   background:conic-gradient(from 0deg, var(--purple), var(--cyan), var(--magenta), var(--purple));
   -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
   mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
-  animation:zcRingSpin 1.1s linear infinite;
+  animation:zcRingSpin var(--zc-ring-dur, 1.1s) linear infinite;
   opacity:0.9; pointer-events:none;
 }
 @keyframes zcRingSpin{ to{ transform:rotate(360deg); } }
