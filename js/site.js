@@ -178,7 +178,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       // ---- hero: once-per-session greeting, real pose change -------------
-      if (wrap.closest('.hero-visual')) {
+      // PAUSED: zealcat-wave.png is not framed identically to
+      // zealcat-full.png (small margins vs. zero — see project notes), so
+      // crossfading to it shifts/rescales the character. Re-enable once an
+      // aligned Wave export exists; until then the hero stays on Standing
+      // only, matching its original position exactly.
+      if (false && wrap.closest('.hero-visual')) {
         let firstThisSession = false;
         try {
           firstThisSession = !sessionStorage.getItem('zcGreeted');

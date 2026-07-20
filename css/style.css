@@ -360,19 +360,20 @@ nav{
 }
 
 /* Loader-only motion: the boot screen is on screen for as little as
-   350ms (js/loading.js), far shorter than one cycle of zcIdleFloat
-   (4.5s) — so on a fast page load the mascot never visibly moves at
-   all before it's removed. This is a dedicated, much quicker loop
-   (~0.9s) so at least one full pulse reads even on the shortest visit,
-   instead of reusing the slow idle-float token meant for
-   persistently-visible placements (hero/footer/chat). */
+   350ms (js/loading.js), far shorter than one cycle of the hero's breathing
+   loop — so on a fast page load the mascot never visibly moves at all
+   before it's removed. This is a dedicated, quicker pulse (~0.9s) so at
+   least one full cycle reads even on the shortest visit. Scale only —
+   no rotation: a rotating icon on a ~0.9s repeat reads as rocking
+   side-to-side rather than a calm pulse. Revisit once real walking/run
+   artwork exists instead of animating the static crop harder. */
 @keyframes zcLoaderPulse{
-  0%,100%{ transform:scale(1) rotate(0deg); }
-  50%{ transform:scale(1.1) rotate(-4deg); }
+  0%,100%{ transform:scale(1); }
+  50%{ transform:scale(1.08); }
 }
 @keyframes zcLoaderGlow{
   0%,100%{ opacity:0.55; transform:scale(1); }
-  50%{ opacity:1; transform:scale(1.15); }
+  50%{ opacity:1; transform:scale(1.1); }
 }
 .zc-anim-loader{ animation:zcLoaderPulse 0.9s ease-in-out infinite; }
 .zc-anim-loader .zc-slot-glow{ animation:zcLoaderGlow 0.9s ease-in-out infinite; }
