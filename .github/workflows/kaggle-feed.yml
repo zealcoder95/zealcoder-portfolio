@@ -1,0 +1,32 @@
+name: Update Kaggle feed
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # her gün 03:00 UTC (TR saatiyle 06:00) çalışır
+  workflow_dispatch: {}     # Actions sekmesinden elle de tetiklenebilir
+
+jobs:
+  update-kaggle-feed:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch latest Kaggle kernels
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: python scripts/fetch_kaggle_feed.py
+
+      - name: Commit updated feed (if changed)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/kaggle-feed.json
+          git diff --cached --quiet && echo "No changes" || git commit -m "chore: refresh kaggle-feed.json"
+          git push
