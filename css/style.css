@@ -902,3 +902,15 @@ footer .foot-brand img{ width:22px;height:22px;border-radius:6px; }
 .footer-bottom{border-top:1px solid var(--line);padding:1.45rem 6vw;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 @media (max-width:980px){.knowledge-grid{grid-template-columns:1fr 1fr}.knowledge-card:last-child{grid-column:1/-1}.home-links{grid-template-columns:1fr 1fr}}
 @media (max-width:700px){.knowledge-grid{grid-template-columns:1fr}.knowledge-card:last-child{grid-column:auto}.knowledge-card{min-height:245px}.footer-cta{align-items:flex-start;flex-direction:column;padding-top:2.6rem;padding-bottom:2.6rem}.footer-cta .btn{width:100%;justify-content:center}.footer-bottom{justify-content:center;text-align:center}}
+
+/* V5 — evidence-led portfolio summary and clearer content value */
+.impact-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;padding-top:0;padding-bottom:2rem;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative;z-index:3}
+.impact-stat{min-height:118px;padding:1.25rem 1.35rem;background:rgba(7,8,20,.96);display:flex;flex-direction:column;justify-content:center;text-decoration:none;transition:background .25s ease,transform .25s ease}
+.impact-stat:hover{background:linear-gradient(145deg,rgba(139,62,240,.12),rgba(7,8,20,.98));transform:translateY(-2px)}
+.impact-stat strong{font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1;color:var(--text);margin-bottom:.55rem;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.impact-stat span{font-size:.76rem;line-height:1.5;color:var(--text-faint)}
+.project-outcome{margin:-.1rem 0 .8rem;padding-left:.7rem;border-left:2px solid rgba(34,211,245,.55);font-size:.72rem;line-height:1.55;color:#b8c3d9}
+.knowledge-kicker{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.knowledge-kicker b{font-size:.56rem;font-weight:500;letter-spacing:.03em;text-transform:none;color:var(--text-faint);padding:.28rem .45rem;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+@media(max-width:880px){.impact-stats{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.impact-stats{grid-template-columns:1fr 1fr;margin-left:5.5vw;margin-right:5.5vw;padding-left:0;padding-right:0}.impact-stat{min-height:105px;padding:1rem}.impact-stat strong{font-size:1.7rem}.impact-stat span{font-size:.69rem}.knowledge-kicker{align-items:flex-start;flex-direction:column}.knowledge-kicker b{white-space:normal}}

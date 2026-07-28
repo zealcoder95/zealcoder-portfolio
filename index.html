@@ -170,6 +170,20 @@
   </div>
   <div class="scroll-cue" aria-hidden="true"></div>
 </section>
+<section class="container impact-stats" aria-label="Portföy özeti">
+  <a class="impact-stat" href="projeler.html">
+    <strong>4</strong><span data-i18n="home.stats.projects">yayınlanmış veri projesi</span>
+  </a>
+  <a class="impact-stat" href="kaynaklar.html#books">
+    <strong>15</strong><span data-i18n="home.stats.books">seçilmiş kitap ve okuma notu</span>
+  </a>
+  <a class="impact-stat" href="kaynaklar.html">
+    <strong>4</strong><span data-i18n="home.stats.courses">tamamlanan eğitim ve gelişim kaydı</span>
+  </a>
+  <a class="impact-stat" href="yetenekler.html">
+    <strong>5</strong><span data-i18n="home.stats.skills">teknik yetkinlik grubu</span>
+  </a>
+</section>
 
 <section class="container value-strip" aria-label="Çalışma yaklaşımım">
   <article class="value-item">
@@ -201,6 +215,7 @@
       </a>
       <div class="featured-project-body">
         <div class="featured-project-meta"><span>Python</span><span>Pandas</span><span>EDA</span></div>
+        <div class="project-outcome" data-i18n="home.featured.adana.outcome">Odak: enerji dönüşümünü zaman serisi üzerinden görünür kılmak</div>
         <h3 data-i18n="home.featured.adana.title">Adana'da İklim Değişikliği ve Yenilenebilir Enerji</h3>
         <p data-i18n="home.featured.adana.desc">Yerel enerji üretim verilerini birleştirerek fosil ve yenilenebilir kaynakların zaman içindeki değişimini görünür hâle getirdim.</p>
         <a class="featured-project-link" href="https://www.kaggle.com/code/gizemglc/global-climate-change-renewable-energy-in-adana" target="_blank" rel="noopener" data-i18n="home.featured.case">Çalışmayı incele →</a>
@@ -212,6 +227,7 @@
       </a>
       <div class="featured-project-body">
         <div class="featured-project-meta"><span>Python</span><span>Data Merge</span><span>Correlation</span></div>
+        <div class="project-outcome" data-i18n="home.featured.nyc.outcome">Odak: çok kaynaklı veride başarıyla ilişkili örüntüleri bulmak</div>
         <h3 data-i18n="home.featured.nyc.title">NYC Lise Verileri Analizi</h3>
         <p data-i18n="home.featured.nyc.desc">SAT sonuçlarını anket ve sosyoekonomik verilerle birleştirerek başarıyla ilişkili örüntüleri analiz ettim.</p>
         <a class="featured-project-link" href="https://github.com/zealcoder95/Analyzing-NYC-High-School-Data" target="_blank" rel="noopener" data-i18n="home.featured.case">Çalışmayı incele →</a>
@@ -223,6 +239,7 @@
       </a>
       <div class="featured-project-body">
         <div class="featured-project-meta"><span>Data Cleaning</span><span>Survey Analysis</span><span>Insights</span></div>
+        <div class="project-outcome" data-i18n="home.featured.exit.outcome">Odak: farklı anket yapılarını karşılaştırılabilir hâle getirmek</div>
         <h3 data-i18n="home.featured.exit.title">Çalışan Çıkış Anketleri Analizi</h3>
         <p data-i18n="home.featured.exit.desc">İki farklı kurumun anketlerini ortak bir yapıda temizleyip çalışan memnuniyetsizliği ve ayrılma nedenlerini karşılaştırdım.</p>
         <a class="featured-project-link" href="https://www.kaggle.com/code/gizemglc/clean-and-analyze-employee-exit-surveys-1-0" target="_blank" rel="noopener" data-i18n="home.featured.case">Çalışmayı incele →</a>
@@ -241,19 +258,19 @@
   </div>
   <div class="knowledge-grid">
     <a class="knowledge-card knowledge-card--writing" href="yazilar.html">
-      <span class="knowledge-kicker" data-i18n="home.knowledge.writing.kicker">teknik anlatım</span>
+      <span class="knowledge-kicker"><span data-i18n="home.knowledge.writing.kicker">teknik anlatım</span><b data-i18n="home.knowledge.writing.count">öğrenme notları</b></span>
       <h3 data-i18n="home.knowledge.writing.title">Yazılar</h3>
       <p data-i18n="home.knowledge.writing.desc">Python, veri analizi, makine öğrenmesi ve kariyer yolculuğumdan anlaşılır notlar.</p>
       <span class="knowledge-cta" data-i18n="home.knowledge.writing.cta">Yazıları oku →</span>
     </a>
     <a class="knowledge-card knowledge-card--resources" href="kaynaklar.html">
-      <span class="knowledge-kicker" data-i18n="home.knowledge.resources.kicker">seçilmiş kütüphane</span>
+      <span class="knowledge-kicker"><span data-i18n="home.knowledge.resources.kicker">seçilmiş kütüphane</span><b data-i18n="home.knowledge.resources.count">15 kitap + eğitimler</b></span>
       <h3 data-i18n="home.knowledge.resources.title">Kitaplar &amp; Kaynaklar</h3>
       <p data-i18n="home.knowledge.resources.desc">Seviye, konu ve kullanım amacına göre sınıflandırdığım kitaplar, kurslar ve araçlar.</p>
       <span class="knowledge-cta" data-i18n="home.knowledge.resources.cta">Kütüphaneyi keşfet →</span>
     </a>
     <a class="knowledge-card knowledge-card--journal" href="gunluk.html">
-      <span class="knowledge-kicker" data-i18n="home.knowledge.journal.kicker">sürecin içinden</span>
+      <span class="knowledge-kicker"><span data-i18n="home.knowledge.journal.kicker">sürecin içinden</span><b data-i18n="home.knowledge.journal.count">kararlar + dersler</b></span>
       <h3 data-i18n="home.knowledge.journal.title">Mühendislik Günlüğü</h3>
       <p data-i18n="home.knowledge.journal.desc">Kararlar, hatalar, çözüm yolları ve projelerin perde arkasından gerçek öğrenme kayıtları.</p>
       <span class="knowledge-cta" data-i18n="home.knowledge.journal.cta">Günlüğü takip et →</span>
