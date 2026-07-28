@@ -860,3 +860,19 @@ footer .foot-brand img{ width:22px;height:22px;border-radius:6px; }
 .featured-project-link:hover{color:var(--text)}
 @media (max-width:980px){.featured-project-grid{grid-template-columns:1fr 1fr}.featured-project-card:last-child{grid-column:1/-1}}
 @media (max-width:640px){.featured-project-grid{grid-template-columns:1fr}.featured-project-card:last-child{grid-column:auto}.section-link{display:none}.featured-project-body{padding:1.2rem}}
+
+/* Portfolio refinement — clearer hierarchy and recruiter-focused value */
+.hero-socials{display:flex;align-items:center;gap:1.2rem;margin-top:1.05rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-faint)}
+.hero-socials a{display:inline-flex;align-items:center;gap:.3rem;transition:color .2s ease,transform .2s ease}
+.hero-socials a:hover{color:var(--cyan);transform:translateY(-1px)}
+.value-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding-top:0;padding-bottom:2.5rem;position:relative;z-index:2}
+.value-item{display:grid;grid-template-columns:auto 1fr;gap:1rem;padding:1.35rem 1.4rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(150,150,200,.025),rgba(5,6,17,.1))}
+.value-item+.value-item{border-left:1px solid var(--line)}
+.value-index{padding-top:.15rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--cyan)}
+.value-item h2{margin:0 0 .35rem;font-size:.9rem;line-height:1.3}
+.value-item p{margin:0;color:var(--text-faint);font-size:.78rem;line-height:1.65}
+.featured-project-card{display:flex;flex-direction:column}
+.featured-project-body{display:flex;flex:1;flex-direction:column}
+.featured-project-link{margin-top:auto;padding-top:.15rem}
+@media (max-width:880px){.hero-socials{justify-content:center}.value-strip{grid-template-columns:1fr}.value-item+.value-item{border-left:0;border-top:0}}
+@media (max-width:520px){.hero-socials{justify-content:center;gap:.85rem;flex-wrap:wrap}.value-strip{padding-left:5.5vw;padding-right:5.5vw}.value-item{padding:1.2rem 1rem}}
