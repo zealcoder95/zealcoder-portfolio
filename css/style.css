@@ -876,3 +876,29 @@ footer .foot-brand img{ width:22px;height:22px;border-radius:6px; }
 .featured-project-link{margin-top:auto;padding-top:.15rem}
 @media (max-width:880px){.hero-socials{justify-content:center}.value-strip{grid-template-columns:1fr}.value-item+.value-item{border-left:0;border-top:0}}
 @media (max-width:520px){.hero-socials{justify-content:center;gap:.85rem;flex-wrap:wrap}.value-strip{padding-left:5.5vw;padding-right:5.5vw}.value-item{padding:1.2rem 1rem}}
+
+/* Knowledge hub — useful for visitors, credible for recruiters */
+.section-intro{max-width:700px;margin-top:.75rem;color:var(--text-muted);font-size:.95rem;line-height:1.75}
+.knowledge-hub{padding-top:2rem}
+.knowledge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem}
+.knowledge-card{position:relative;min-height:290px;padding:1.7rem;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:linear-gradient(145deg,rgba(14,16,35,.94),rgba(7,8,20,.88));display:flex;flex-direction:column;transition:transform .28s var(--zc-ease),border-color .28s ease,box-shadow .28s ease}
+.knowledge-card::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:var(--gradient);opacity:.75}
+.knowledge-card::after{content:"";position:absolute;width:170px;height:170px;right:-75px;bottom:-85px;border-radius:50%;background:radial-gradient(circle,rgba(139,62,240,.2),transparent 68%);transition:transform .35s ease}
+.knowledge-card--resources::after{background:radial-gradient(circle,rgba(34,211,245,.17),transparent 68%)}
+.knowledge-card--journal::after{background:radial-gradient(circle,rgba(193,68,247,.18),transparent 68%)}
+.knowledge-card:hover{transform:translateY(-7px);border-color:rgba(34,211,245,.34);box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.knowledge-card:hover::after{transform:scale(1.18)}
+.knowledge-kicker{position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:2.4rem}
+.knowledge-card h3{position:relative;z-index:1;font-size:1.4rem;margin-bottom:.8rem}
+.knowledge-card p{position:relative;z-index:1;color:var(--text-muted);font-size:.9rem;line-height:1.75;margin-bottom:1.5rem}
+.knowledge-cta{position:relative;z-index:1;margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cyan)}
+.home-links{grid-template-columns:repeat(4,minmax(0,1fr))}
+.site-footer{display:block;padding:0;border-top:1px solid var(--line)}
+.footer-cta{max-width:1140px;margin:0 auto;padding:3.2rem 6vw;display:flex;align-items:center;justify-content:space-between;gap:2.5rem}
+.footer-kicker{display:block;margin-bottom:.7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.11em;text-transform:uppercase;color:var(--cyan)}
+.footer-cta h2{max-width:720px;margin-bottom:.7rem;font-size:clamp(1.45rem,3vw,2.25rem);line-height:1.18;color:var(--text)}
+.footer-cta p{max-width:700px;color:var(--text-muted);font-family:'Inter',sans-serif;font-size:.92rem;line-height:1.7}
+.footer-cta .btn{flex-shrink:0}
+.footer-bottom{border-top:1px solid var(--line);padding:1.45rem 6vw;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+@media (max-width:980px){.knowledge-grid{grid-template-columns:1fr 1fr}.knowledge-card:last-child{grid-column:1/-1}.home-links{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.knowledge-grid{grid-template-columns:1fr}.knowledge-card:last-child{grid-column:auto}.knowledge-card{min-height:245px}.footer-cta{align-items:flex-start;flex-direction:column;padding-top:2.6rem;padding-bottom:2.6rem}.footer-cta .btn{width:100%;justify-content:center}.footer-bottom{justify-content:center;text-align:center}}

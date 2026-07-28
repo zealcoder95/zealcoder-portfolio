@@ -231,11 +231,41 @@
   </div>
 </section>
 
+<section class="container knowledge-hub" aria-labelledby="knowledge-heading">
+  <div class="section-head">
+    <div>
+      <div class="section-num" data-i18n="home.knowledge.eyebrow">keşfet ve öğren</div>
+      <h2 id="knowledge-heading" data-i18n="home.knowledge.title">Deneyimden faydaya dönüşen içerikler</h2>
+      <p class="section-intro" data-i18n="home.knowledge.sub">Projelerde öğrendiklerimi; uygulanabilir yazılar, seçilmiş kaynaklar ve gerçek mühendislik notları olarak paylaşıyorum.</p>
+    </div>
+  </div>
+  <div class="knowledge-grid">
+    <a class="knowledge-card knowledge-card--writing" href="yazilar.html">
+      <span class="knowledge-kicker" data-i18n="home.knowledge.writing.kicker">teknik anlatım</span>
+      <h3 data-i18n="home.knowledge.writing.title">Yazılar</h3>
+      <p data-i18n="home.knowledge.writing.desc">Python, veri analizi, makine öğrenmesi ve kariyer yolculuğumdan anlaşılır notlar.</p>
+      <span class="knowledge-cta" data-i18n="home.knowledge.writing.cta">Yazıları oku →</span>
+    </a>
+    <a class="knowledge-card knowledge-card--resources" href="kaynaklar.html">
+      <span class="knowledge-kicker" data-i18n="home.knowledge.resources.kicker">seçilmiş kütüphane</span>
+      <h3 data-i18n="home.knowledge.resources.title">Kitaplar &amp; Kaynaklar</h3>
+      <p data-i18n="home.knowledge.resources.desc">Seviye, konu ve kullanım amacına göre sınıflandırdığım kitaplar, kurslar ve araçlar.</p>
+      <span class="knowledge-cta" data-i18n="home.knowledge.resources.cta">Kütüphaneyi keşfet →</span>
+    </a>
+    <a class="knowledge-card knowledge-card--journal" href="gunluk.html">
+      <span class="knowledge-kicker" data-i18n="home.knowledge.journal.kicker">sürecin içinden</span>
+      <h3 data-i18n="home.knowledge.journal.title">Mühendislik Günlüğü</h3>
+      <p data-i18n="home.knowledge.journal.desc">Kararlar, hatalar, çözüm yolları ve projelerin perde arkasından gerçek öğrenme kayıtları.</p>
+      <span class="knowledge-cta" data-i18n="home.knowledge.journal.cta">Günlüğü takip et →</span>
+    </a>
+  </div>
+</section>
+
 <section class="container">
   <div class="section-head">
     <div>
-      <div class="section-num" data-i18n="home.sitemap.eyebrow">site haritası</div>
-      <h2 data-i18n="home.sitemap.title">Beni daha yakından tanı</h2>
+      <div class="section-num" data-i18n="home.sitemap.eyebrow">profesyonel profil</div>
+      <h2 data-i18n="home.sitemap.title">Yetkinliklerimi ve çalışma biçimimi incele</h2>
     </div>
   </div>
   <div class="home-links">
@@ -256,24 +286,6 @@
       <h3 data-i18n="home.card.projects.title">Projeler</h3>
       <p data-i18n="home.card.projects.desc">Kaggle ve GitHub'da yayınladığım veri analizi ve makine öğrenmesi çalışmalarım.</p>
       <span class="go" data-i18n="home.card.projects.cta">Projeleri gör →</span>
-    </a>
-    <a class="home-link-card" href="yazilar.html">
-      <span class="section-num">04</span>
-      <h3 data-i18n="home.card.writing.title">Yazılar</h3>
-      <p data-i18n="home.card.writing.desc">Medium'da paylaştığım veri bilimi ve mühendislik yazılarımın durumu.</p>
-      <span class="go" data-i18n="home.card.writing.cta">Yazılara git →</span>
-    </a>
-    <a class="home-link-card" href="kaynaklar.html">
-      <span class="section-num">05</span>
-      <h3 data-i18n="home.card.resources.title">Kaynaklar</h3>
-      <p data-i18n="home.card.resources.desc">Okuduğum kitaplar, takip ettiğim kaynaklar ve kullandığım araçların derlendiği bölüm.</p>
-      <span class="go" data-i18n="home.card.resources.cta">Kaynaklara git →</span>
-    </a>
-    <a class="home-link-card" href="gunluk.html">
-      <span class="section-num">06</span>
-      <h3 data-i18n="home.card.journal.title">Mühendislik Günlüğü</h3>
-      <p data-i18n="home.card.journal.desc">Projelerin arkasındaki kararları, zorlukları ve dersleri kaydettiğim bölüm.</p>
-      <span class="go" data-i18n="home.card.journal.cta">Günlüğe git →</span>
     </a>
     <a class="home-link-card" href="iletisim.html">
       <span class="section-num">07</span>
@@ -315,11 +327,19 @@
 </section>
 
 </main>
-<footer>
-  <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu" width="22" height="22" loading="lazy" decoding="async">zealcoder — Gizem Gülcü</span>
-  <span class="foot-loc-group">
-    <span data-i18n="footer.location">Adana, Türkiye</span>
-  </span>
+<footer class="site-footer">
+  <div class="footer-cta">
+    <div>
+      <span class="footer-kicker" data-i18n="home.footer.kicker">iş birliği &amp; paylaşım</span>
+      <h2 data-i18n="home.footer.title">Veriden değer üretelim, bilgiyi birlikte büyütelim.</h2>
+      <p data-i18n="home.footer.desc">Junior veri bilimi ve ML fırsatları, proje iş birlikleri ve teknik içerik paylaşımları için iletişime geçebilirsiniz.</p>
+    </div>
+    <a class="btn btn-primary" href="iletisim.html" data-i18n="home.footer.cta">İletişime geç</a>
+  </div>
+  <div class="footer-bottom">
+    <span class="foot-brand"><img src="assets/zealcoder-logo.png" alt="zealcoder logosu" width="22" height="22" loading="lazy" decoding="async">zealcoder — Gizem Gülcü</span>
+    <span class="foot-loc-group"><span data-i18n="footer.location">Adana, Türkiye</span></span>
+  </div>
 </footer>
 <script src="js/loading.js" defer></script>
 <script src="js/site.js" defer></script>
