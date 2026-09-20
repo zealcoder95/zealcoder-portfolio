@@ -93,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // isn't already mid-reaction; fn must call release() when it's done.
     const locked = new WeakMap();
     function withLock(wrap, fn) {
-      // If js/zealcat-rive.js has mounted a real rig on this wrap, it owns
+      // If js/zealcat-pet.js has mounted the atlas player, it owns
       // all reactions from here on — drop PNG-based triggers so the two
       // systems never fire on top of each other.
-      if (wrap.classList.contains('zc-rive-active')) return;
+      if (wrap.classList.contains('zc-pet-active')) return;
       if (locked.get(wrap)) return; // already reacting — drop this trigger
       locked.set(wrap, true);
       fn(() => locked.set(wrap, false));
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // ---- 404: one-shot "looking around for the missing page" -----------
-      if (wrap.closest('.notfound-visual') && !wrap.classList.contains('zc-rive-active')) {
+      if (wrap.closest('.notfound-visual') && !wrap.classList.contains('zc-pet-active')) {
         wrap.classList.remove('zc-anim-breathe');
         wrap.classList.add('zc-anim-search-once');
         wrap.addEventListener('animationend', function onEnd(e) {
