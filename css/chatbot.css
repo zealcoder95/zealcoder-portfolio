@@ -11,20 +11,27 @@
 
 .zc-chat-launcher{
   position:fixed; right:1.4rem; bottom:1.4rem; z-index:80;
-  width:56px; height:56px; border-radius:50%;
-  background:var(--bg-elevated); border:1px solid var(--line); cursor:pointer;
+  width:104px; height:112px; border-radius:28px;
+  background:transparent; border:0; cursor:pointer;
   padding:0;
   display:flex; align-items:center; justify-content:center;
-  box-shadow:0 0 0 1px rgba(139,62,240,0.25), 0 8px 24px rgba(90,31,201,0.35);
-  transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  filter:drop-shadow(0 13px 20px rgba(0,0,0,.48));
+  transition:transform 0.25s ease, filter 0.25s ease, width .2s ease, height .2s ease;
 }
-.zc-chat-launcher:hover{ transform:translateY(-2px); border-color:var(--cyan); box-shadow:0 0 0 1px rgba(34,211,245,0.35), 0 12px 28px rgba(90,31,201,0.45); }
+.zc-chat-launcher:hover{ transform:translateY(-4px); filter:drop-shadow(0 17px 25px rgba(90,31,201,.48)); }
+.zc-chat-launcher:focus-visible{ outline:2px solid var(--cyan); outline-offset:4px; }
+.zc-chat-launcher::after{
+  content:""; position:absolute; right:9px; bottom:10px; width:10px; height:10px;
+  border:2px solid var(--bg); border-radius:50%; background:#55e6a5;
+  box-shadow:0 0 12px rgba(85,230,165,.8);
+}
 
 /* Launcher icon: a small ZealCat glass slot (same tokens as the hero/loading
    placeholders) instead of the flat logo image. */
-.zc-chat-icon-open{ pointer-events:none; }
-.zc-chat-icon-open .zc-art-wrap{ position:relative; z-index:1; width:80%; height:80%; }
-.zc-chat-icon-open .zc-slot-glow{ opacity:0.8; }
+.zc-chat-icon-open{ width:100%; height:100%; pointer-events:none; border:0; background:transparent; box-shadow:none; overflow:visible; }
+.zc-chat-icon-open .zc-slot-grid,
+.zc-chat-icon-open .zc-slot-glow{ display:none; }
+.zc-chat-icon-open .zc-art-wrap{ position:relative; z-index:1; width:100%; height:100%; }
 
 /* Header icon pose swap (face ↔ wave) when the panel opens/closes —
    a plain crossfade between two official art crops, not a transform. */
@@ -33,13 +40,17 @@
 .zc-chat-launcher .zc-chat-icon-close{ display:none; }
 .zc-chat-launcher[aria-expanded="true"] .zc-chat-icon-open{ display:none; }
 .zc-chat-launcher[aria-expanded="true"] .zc-chat-icon-close{ display:block; }
-.zc-chat-launcher[aria-expanded="true"]{ background:var(--gradient); border-color:transparent; }
+.zc-chat-launcher[aria-expanded="true"]{
+  width:52px; height:52px; border-radius:50%; background:var(--gradient);
+  box-shadow:0 10px 30px rgba(90,31,201,.4); filter:none;
+}
+.zc-chat-launcher[aria-expanded="true"]::after{ display:none; }
 
 /* Premium glass panel — built from the same --zc-glass-* tokens as the
    hero's ZealCat slot, so it feels like part of one system rather than a
    generic chat-widget template. */
 .zc-chat-panel{
-  position:fixed; right:1.4rem; bottom:5.2rem; z-index:80;
+  position:fixed; right:1.4rem; bottom:8.6rem; z-index:80;
   width:min(376px, calc(100vw - 2.8rem)); height:min(560px, calc(100vh - 8rem));
   background:
     var(--zc-glass-bg),
@@ -51,6 +62,7 @@
   opacity:0; transform:translateY(14px) scale(0.97); pointer-events:none;
   transition:opacity 0.25s var(--zc-ease), transform 0.25s var(--zc-ease);
 }
+.zc-chat-launcher[aria-expanded="true"] + .zc-chat-panel{ bottom:5.3rem; }
 .zc-chat-panel::before{
   content:""; position:absolute; top:0; left:0; right:0; height:2px;
   background:var(--gradient);
@@ -63,11 +75,11 @@
   border-bottom:1px solid var(--line);
 }
 .zc-chat-head-icon{
-  width:34px; height:34px; flex-shrink:0; border-radius:var(--zc-radius-sm);
+  width:52px; height:56px; flex-shrink:0; border-radius:var(--zc-radius-sm);
   display:flex; align-items:center; justify-content:center;
   background:var(--zc-glass-bg); border:var(--zc-glass-border);
 }
-.zc-chat-head-icon .zc-art-wrap{ width:84%; height:84%; }
+.zc-chat-head-icon .zc-art-wrap{ width:100%; height:100%; }
 .zc-chat-head .zc-chat-title{ font-family:'JetBrains Mono',monospace; font-size:0.9rem; letter-spacing:0.02em; color:var(--text); }
 .zc-chat-head .zc-chat-subtitle{ font-size:0.74rem; color:var(--text-muted); margin-top:0.15rem; }
 
@@ -127,6 +139,8 @@
 }
 
 @media (max-width:480px){
-  .zc-chat-panel{ right:0.7rem; left:0.7rem; width:auto; bottom:4.8rem; }
-  .zc-chat-launcher{ right:1rem; bottom:1rem; }
+  .zc-chat-panel{ right:0.7rem; left:0.7rem; width:auto; bottom:7.5rem; height:min(540px, calc(100vh - 9rem)); }
+  .zc-chat-launcher{ right:1rem; bottom:1rem; width:90px; height:98px; }
+  .zc-chat-launcher[aria-expanded="true"]{ width:48px; height:48px; }
+  .zc-chat-launcher[aria-expanded="true"] + .zc-chat-panel{ bottom:4.8rem; }
 }
