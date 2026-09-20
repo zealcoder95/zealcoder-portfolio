@@ -137,6 +137,7 @@
     const quick = wrap.querySelector("#zcChatQuick");
     const form = wrap.querySelector("#zcChatForm");
     const input = wrap.querySelector("#zcChatInput");
+    const sendButton = wrap.querySelector(".zc-chat-send");
     const titleEl = wrap.querySelector("[data-zc-title]");
     const subtitleEl = wrap.querySelector("[data-zc-subtitle]");
 
@@ -211,12 +212,11 @@
     // (see css/style.css), never a transform. Off under reduced motion.
     const reduceMotionChat = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     function ackReplyGlow() {
-      // Always announce the event — js/zealcat-rive.js listens for this
-      // to fire its own chatReplyArrived input once a real rig is mounted.
+      // Always announce the event so the animated ZealCat renderer can
+      // switch from its working state to a short review reaction.
       document.dispatchEvent(new CustomEvent("zc:chatreplyarrived"));
-      // If Rive owns this icon now, it handles the visual — skip the
-      // PNG glow so the two systems never render on top of each other.
-      if (headIconWrap && headIconWrap.classList.contains("zc-rive-active")) return;
+      // If the sprite player owns this icon now, it handles the visual.
+      if (headIconWrap && headIconWrap.classList.contains("zc-pet-active")) return;
       if (reduceMotionChat || !headIcon) return;
       headIcon.classList.remove("zc-ack-glow");
       void headIcon.offsetWidth; // restart if a previous glow just finished
@@ -229,9 +229,10 @@
       panel.classList.toggle("is-open", willOpen);
       launcher.setAttribute("aria-expanded", String(willOpen));
       applyHeaderStrings();
-      if (headIcon && !(headIconWrap && headIconWrap.classList.contains("zc-rive-active"))) {
+      if (headIcon && !(headIconWrap && headIconWrap.classList.contains("zc-pet-active"))) {
         headIcon.src = willOpen ? ZEALCAT_WAVE_SRC : ZEALCAT_FACE_SRC;
       }
+      document.dispatchEvent(new CustomEvent(willOpen ? "zc:chatopen" : "zc:chatclose"));
       if (willOpen) {
         if (!welcomed) {
           welcomeMsgEl = addMessage("assistant", STRINGS[currentLang()].welcome);
@@ -259,6 +260,9 @@
       addMessage("user", text);
       history.push({ role: "user", text });
       showTyping();
+      sendButton.disabled = true;
+      form.setAttribute("aria-busy", "true");
+      document.dispatchEvent(new CustomEvent("zc:chatsending"));
 
       try {
         const res = await fetch("/api/chat", {
@@ -268,15 +272,21 @@
         });
         const data = await res.json().catch(() => ({}));
         hideTyping();
-        const reply = data && data.reply ? data.reply : STRINGS[currentLang()].error;
+        if (!res.ok || !(data && data.reply)) {
+          throw new Error("Assistant response unavailable");
+        }
+        const reply = data.reply;
         addMessage("assistant", reply);
         history.push({ role: "assistant", text: reply });
         ackReplyGlow();
       } catch (err) {
         hideTyping();
         addMessage("assistant", STRINGS[currentLang()].error);
+        document.dispatchEvent(new CustomEvent("zc:chaterror"));
       } finally {
         sending = false;
+        sendButton.disabled = false;
+        form.removeAttribute("aria-busy");
       }
     });
 
@@ -289,6 +299,7 @@
 
     document.addEventListener("zc:langchange", applyHeaderStrings);
     applyHeaderStrings();
+    document.dispatchEvent(new CustomEvent("zc:chatready", { detail: { root: wrap } }));
   }
 
   if (document.readyState === "loading") {
