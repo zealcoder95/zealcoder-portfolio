@@ -7,8 +7,14 @@ kullanır.
 
 ## Nasıl çalışır
 
-- `js/chatbot.js` — sağ altta görünen sohbet balonu ve paneli. Statik
-  sitenin geri kalanı gibi düz JS, hiçbir kurulum gerektirmez.
+- `js/chatbot.js` — sağ altta görünen sohbet paneli, hızlı bağlantılar ve
+  asistan olayları. Statik sitenin geri kalanı gibi düz JS kullanır.
+- `js/zealcat-pet.js` — doğrulanmış v2 sprite atlasını oynatır. Sohbet
+  açıldığında selamlama, yanıt beklerken çalışma, yanıt geldiğinde kontrol
+  ve hata durumunda tepki animasyonlarını yönetir. İmleç takibi için on altı
+  bakış yönünü kullanır ve azaltılmış hareket tercihini destekler.
+- `assets/zealcat/zealcat-spritesheet-v2.png` — ZealCat'in 73 karelik,
+  şeffaf arka planlı web animasyon atlası.
 - `api/chat.js` — Vercel'in otomatik tanıdığı bir **serverless
   function**. Ziyaretçinin mesajını alır, Gemini'ye sizin adınıza
   gönderir, cevabı geri döner. API key'iniz her zaman sunucu
