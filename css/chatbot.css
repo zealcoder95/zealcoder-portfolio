@@ -109,13 +109,11 @@
    stays scoped to the widget and can't be affected by chip styling used
    elsewhere on the site (Kaynaklar filters, İletişim, etc.). */
 .zc-chat-quick{
-  display:flex; gap:0.45rem; padding:0.75rem 1rem;
-  overflow-x:auto; scrollbar-width:none;
+  display:flex; flex-wrap:wrap; gap:0.45rem; padding:0.75rem 1rem;
   border-bottom:1px solid var(--line);
 }
-.zc-chat-quick::-webkit-scrollbar{ display:none; }
 .zc-quick-btn{
-  flex-shrink:0; white-space:nowrap;
+  flex:0 0 auto; white-space:nowrap;
   font-family:'JetBrains Mono',monospace; font-size:0.72rem; letter-spacing:0.01em;
   color:var(--text-muted); text-decoration:none;
   padding:0.4rem 0.75rem; border-radius:20px;
@@ -128,12 +126,11 @@
 }
 
 .zc-chat-prompts{
-  display:flex; gap:.42rem; padding:.65rem 1rem; overflow-x:auto; scrollbar-width:none;
+  display:grid; grid-template-columns:1fr; gap:.42rem; padding:.65rem 1rem;
   border-bottom:1px solid var(--line); background:rgba(9,11,27,.38);
 }
-.zc-chat-prompts::-webkit-scrollbar{ display:none; }
 .zc-prompt-btn{
-  flex-shrink:0; max-width:220px; border:1px solid rgba(34,211,245,.2); border-radius:9px;
+  width:100%; max-width:none; border:1px solid rgba(34,211,245,.2); border-radius:9px;
   padding:.42rem .65rem; background:rgba(34,211,245,.045); color:var(--text-muted);
   font:500 .68rem/1.35 'Inter',sans-serif; text-align:left; cursor:pointer;
   transition:border-color .2s ease, color .2s ease, background .2s ease;
