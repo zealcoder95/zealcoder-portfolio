@@ -106,10 +106,28 @@
       <div><span class="fact-label" data-i18n="contact.fact.location.label">Konum</span><span class="fact-value" data-i18n="contact.fact.location.value">Adana, Türkiye</span></div>
     </div>
     <div class="contact-linkedin">
-      <p data-i18n="contact.linkedin.desc">Bu kart doğrudan LinkedIn tarafından besleniyor; profil fotoğrafım ve unvanım orada güncellendikçe burada da güncellenir.</p>
-      <div class="badge-base LI-profile-badge" data-locale="tr_TR" data-size="medium" data-theme="dark" data-type="VERTICAL" data-vanity="gizemgulcu" data-version="v1">
-        <a class="badge-base__link LI-simple-link" href="https://tr.linkedin.com/in/gizemgulcu?trk=profile-badge">Gizem Gülcü</a>
-      </div>
+      <p data-i18n="contact.linkedin.desc">Profesyonel deneyimimi, projelerimi ve güncel çalışmalarımı LinkedIn profilimde inceleyebilirsiniz.</p>
+      <article class="linkedin-card" aria-labelledby="linkedin-profile-name">
+        <div class="linkedin-card-topline" aria-hidden="true"></div>
+        <div class="linkedin-card-brand">
+          <span>Linked</span><span class="linkedin-in">in</span>
+          <span class="linkedin-card-status"><span aria-hidden="true"></span><span data-i18n="contact.linkedin.status">Bağlantıya açık</span></span>
+        </div>
+        <div class="linkedin-card-profile">
+          <span class="linkedin-card-avatar" aria-hidden="true">
+            <img src="assets/zealcoder-logo.png" alt="" width="64" height="64" loading="lazy" decoding="async">
+          </span>
+          <div class="linkedin-card-copy">
+            <h2 id="linkedin-profile-name">Gizem Gülcü</h2>
+            <p data-i18n="contact.linkedin.role">Veri Bilimci · Elektrik-Elektronik Mühendisi</p>
+            <span class="linkedin-card-location" data-i18n="contact.fact.location.value">Adana, Türkiye</span>
+          </div>
+        </div>
+        <a class="linkedin-card-action" href="https://www.linkedin.com/in/gizemgulcu" target="_blank" rel="noopener noreferrer">
+          <span data-i18n="contact.btn.linkedin">LinkedIn'i gör</span>
+          <span aria-hidden="true">&#8599;</span>
+        </a>
+      </article>
     </div>
   </div>
 </section>
@@ -126,7 +144,6 @@
 <script src="js/zealcat-pet.js" defer></script>
 <script src="js/zealcoder-feeds.js" defer></script>
 <script src="js/i18n.js" defer></script>
-<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
 <script src="js/chatbot.js" defer></script>
 </body>
 </html>

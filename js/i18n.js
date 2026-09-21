@@ -279,7 +279,9 @@ const ZC_I18N = {
     'contact.fact.location.label': 'Konum',
     'contact.fact.location.value': 'Adana, Türkiye',
     'contact.linkedin.eyebrow': 'LinkedIn',
-    'contact.linkedin.desc': 'Bu kart doğrudan LinkedIn tarafından besleniyor; profil fotoğrafım ve unvanım orada güncellendikçe burada da güncellenir.',
+    'contact.linkedin.desc': 'Profesyonel deneyimimi, projelerimi ve güncel çalışmalarımı LinkedIn profilimde inceleyebilirsiniz.',
+    'contact.linkedin.role': 'Veri Bilimci · Elektrik-Elektronik Mühendisi',
+    'contact.linkedin.status': 'Bağlantıya açık',
 
     'notfound.meta.title': 'Sayfa bulunamadı — zealcoder',
     'notfound.meta.desc': 'Aradığınız sayfa bulunamadı.',
@@ -594,7 +596,9 @@ const ZC_I18N = {
     'contact.fact.location.label': 'Location',
     'contact.fact.location.value': 'Adana, Turkey',
     'contact.linkedin.eyebrow': 'LinkedIn',
-    'contact.linkedin.desc': 'This card is fed directly by LinkedIn, so it updates here whenever my photo or title changes there.',
+    'contact.linkedin.desc': 'Explore my professional experience, projects and latest work on my LinkedIn profile.',
+    'contact.linkedin.role': 'Data Scientist · Electrical-Electronics Engineer',
+    'contact.linkedin.status': 'Open to connect',
 
     'notfound.meta.title': 'Page not found — zealcoder',
     'notfound.meta.desc': 'The page you are looking for could not be found.',
