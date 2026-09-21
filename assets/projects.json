@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-18",
+  "updatedAt": "2026-09-21",
   "items": [
     {
       "id": "p1",
@@ -9,6 +9,11 @@
       "title": { "tr": "Çalışan Çıkış Anketleri Analizi", "en": "Employee Exit Survey Analysis" },
       "desc": { "tr": "Queensland (Avustralya) eğitim kurumlarından iki farklı çıkış anketini (DETE ve TAFE) birleştirip temizleyerek işten ayrılma nedenlerine dair anlamlı içgörüler çıkardığım bir proje.",
                  "en": "A project combining and cleaning two separate exit surveys (DETE and TAFE) from Queensland, Australia education institutions to extract meaningful insights about reasons for leaving." },
+      "tools": ["Python", "Pandas", "NumPy", "Matplotlib"],
+      "method": { "tr": "İki farklı anket şemasını temizleme, birleştirme ve ortak kategoriler altında uyumlama.",
+                  "en": "Cleaned, merged and harmonized two different survey schemas under shared categories." },
+      "result": { "tr": "DETE ve TAFE yanıtlarını karşılaştırılabilir tek bir analiz yapısına dönüştürdüm.",
+                  "en": "Turned DETE and TAFE responses into one comparable analysis structure." },
       "chart": { "img": "assets/projects/exit-survey-reasons.png",
                  "alt": { "tr": "Çıkış anketi veri setinde eksik değer dağılımı ısı haritası", "en": "Heatmap of missing-value distribution in the exit survey dataset" } }
     },
@@ -20,6 +25,11 @@
       "title": { "tr": "NYC Lise Verileri Analizi", "en": "Analyzing NYC High School Data" },
       "desc": { "tr": "New York liselerinde SAT puanları ile sosyoekonomik ve gayrimenkul verileri arasındaki ilişkiyi incelediğim analiz çalışması.",
                  "en": "An analysis exploring the relationship between SAT scores and socioeconomic and real-estate data across New York City high schools." },
+      "tools": ["Python", "Pandas", "Seaborn", "Statsmodels"],
+      "method": { "tr": "Korelasyon analizi, görsel keşif ve çok değişkenli OLS regresyonu.",
+                  "en": "Correlation analysis, visual exploration and multivariable OLS regression." },
+      "result": { "tr": "Okul güvenliği ve AP katılımının SAT performansıyla pozitif ilişkisini görünür kıldım.",
+                  "en": "Surfaced the positive association of school safety and AP participation with SAT performance." },
       "chart": { "img": "assets/projects/nyc-sat-scatter.png",
                  "alt": { "tr": "Emlak fiyatları ile SAT puanları arasındaki ilişkiyi gösteren dağılım grafiği", "en": "Scatter plot showing the relationship between property prices and SAT scores" } }
     },
@@ -31,6 +41,11 @@
       "title": { "tr": "Adana'da İklim Değişikliği & Yenilenebilir Enerji", "en": "Climate Change & Renewable Energy in Adana" },
       "desc": { "tr": "İklim değişikliğinin Adana özelinde etkilerini ve yenilenebilir enerji potansiyelini ele aldığım bir veri analizi projesi.",
                  "en": "A data analysis project looking at the local effects of climate change in Adana and its renewable energy potential." },
+      "tools": ["Python", "Pandas", "Statsmodels", "Holt-Winters"],
+      "method": { "tr": "Mevsimsel ayrıştırma ve 12 aylık periyotla 24 aylık Holt-Winters tahmini.",
+                  "en": "Seasonal decomposition and a 24-month Holt-Winters forecast using a 12-month period." },
+      "result": { "tr": "Yaz tüketim zirvelerini, fosil bağımlılığını ve artan yenilenebilir payını ortaya koydum.",
+                  "en": "Identified summer demand peaks, fossil dependence and the rising renewable share." },
       "chart": { "img": "assets/projects/adana-energy-trend.png",
                  "alt": { "tr": "Adana'da 2018-2022 arası fosil ve yenilenebilir elektrik üretimini karşılaştıran çizgi grafiği", "en": "Line chart comparing fossil vs renewable electricity generation in Adana from 2018-2022" } }
     },
@@ -42,6 +57,11 @@
       "title": { "tr": "Adidas ABD Satış Analizi", "en": "Adidas US Sales Analysis" },
       "desc": { "tr": "Adidas'ın ABD'deki satış verilerini analiz ederek öne çıkan trendleri ve içgörüleri ortaya koyduğum çalışma.",
                  "en": "A study analyzing Adidas's US sales data to surface the key trends and insights behind it." },
+      "tools": ["Python", "Pandas", "Matplotlib", "Seaborn"],
+      "method": { "tr": "Bölge, ürün, perakendeci ve satış kanalı bazında karşılaştırmalı trend analizi.",
+                  "en": "Comparative trend analysis by region, product, retailer and sales channel." },
+      "result": { "tr": "Aylık ve bölgesel satış örüntülerini karar vermeyi kolaylaştıran grafiklerle özetledim.",
+                  "en": "Summarized monthly and regional sales patterns in decision-ready visualizations." },
       "chart": { "img": "assets/projects/adidas-sales-trend.png",
                  "alt": { "tr": "Bölgelere göre aylık toplam satış trendini gösteren çizgi grafiği", "en": "Line chart showing monthly total sales trend by region" } }
     }
