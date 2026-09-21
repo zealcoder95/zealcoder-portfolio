@@ -17,10 +17,12 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install Kaggle client
+        run: python -m pip install --disable-pip-version-check --quiet "kaggle>=1.8,<2"
+
       - name: Fetch latest Kaggle kernels
         env:
-          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
         run: python scripts/fetch_kaggle_feed.py
 
       - name: Commit updated feed (if changed)
