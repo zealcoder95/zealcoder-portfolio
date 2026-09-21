@@ -32,14 +32,50 @@ const MODEL_FALLBACK_CHAIN = [
 
 const MAX_MESSAGE_LENGTH = 2000;
 const MAX_HISTORY_TURNS = 10;
+const VALID_PAGES = new Set([
+  "home", "about", "skills", "projects", "writing", "resources", "journal", "contact", "notfound",
+]);
+
+const projects = require("../assets/projects.json");
+const skills = require("../assets/skills.json");
+
+const PAGE_NAMES = {
+  home: { tr: "Ana sayfa", en: "Home" },
+  about: { tr: "Hakkımda", en: "About" },
+  skills: { tr: "Yetenekler", en: "Skills" },
+  projects: { tr: "Projeler", en: "Projects" },
+  writing: { tr: "Yazılar", en: "Writing" },
+  resources: { tr: "Kaynaklar", en: "Resources" },
+  journal: { tr: "Mühendislik Günlüğü", en: "Engineering Journal" },
+  contact: { tr: "İletişim", en: "Contact" },
+  notfound: { tr: "404", en: "404" },
+};
 
 const FALLBACK_REPLY = {
   tr: "Şu anda yanıt veremiyorum — lütfen birkaç dakika sonra tekrar deneyin ya da İletişim sayfasından doğrudan ulaşın.",
   en: "I can't reply right now — please try again in a few minutes, or reach out directly via the Contact page.",
 };
 
-function buildSystemPrompt(lang) {
+function portfolioKnowledge(lang) {
+  const locale = lang === "en" ? "en" : "tr";
+  const projectLines = projects.items.map((project) => {
+    const title = project.title?.[locale] || project.title?.tr || project.id;
+    const method = project.method?.[locale] || project.method?.tr || "";
+    const result = project.result?.[locale] || project.result?.tr || "";
+    return `- ${title} | Tools: ${(project.tools || []).join(", ")} | Method: ${method} | Result: ${result}`;
+  });
+  const skillLines = skills.categories.map((category) => {
+    const title = category.title?.[locale] || category.title?.tr || category.id;
+    return `- ${title}: ${(category.chips || []).join(", ")}`;
+  });
+  return `${lang === "en" ? "Verified portfolio data" : "Doğrulanmış portföy verileri"}:\n${projectLines.join("\n")}\n${lang === "en" ? "Verified skills" : "Doğrulanmış yetenekler"}:\n${skillLines.join("\n")}`;
+}
+
+function buildSystemPrompt(lang, page) {
   const isEn = lang === "en";
+  const safePage = VALID_PAGES.has(page) ? page : "home";
+  const pageName = PAGE_NAMES[safePage][isEn ? "en" : "tr"];
+  const knowledge = portfolioKnowledge(isEn ? "en" : "tr");
   return isEn
     ? `You are ZealCat, the animated AI mascot and portfolio assistant embedded on Gizem Gülcü's ("zealcoder") personal website. You represent her to visitors — recruiters, collaborators, fellow engineers. Your personality is warm, curious, capable, and concise; you are a digital mascot, not a human or a conscious being.
 
@@ -53,6 +89,12 @@ About Gizem:
 - Interests: AI ethics, big data analytics, advanced ML techniques. Outside work: table tennis, volleyball, swimming.
 - Contact: the site's Contact page has her email, GitHub, LinkedIn, Kaggle, and a downloadable CV.
 
+Current visitor context:
+- The visitor is currently viewing the ${pageName} page.
+- Use that context when they say "this page", "here", or ask what to explore next.
+
+${knowledge}
+
 Guidelines:
 - Answer questions about Gizem's background, skills, and projects helpfully and specifically, using only the facts above — never invent degrees, employers, dates, or projects she doesn't have.
 - If asked something about her you don't know, say so plainly and point the visitor to the Contact page instead of guessing.
@@ -61,6 +103,8 @@ Guidelines:
 - Don't just answer and stop — when it fits naturally, point the visitor to something concrete they could look at next (a specific project, the engineering journal, her GitHub/Kaggle, the Contact page), instead of a generic "let me know if you have questions."
 - Vary your phrasing — don't reuse the same opening words (e.g. "Sure!", "Great question!") reply after reply; read like a real conversation, not a templated FAQ bot.
 - Never claim to BE Gizem — you are ZealCat, her site's AI mascot, speaking about her in the third person.
+- Treat the verified portfolio data above as the source of truth. Do not claim that listed tools prove professional mastery; describe them accurately as portfolio skills.
+- When recommending a site destination, name the destination clearly. Never claim you opened a page or performed an action for the visitor.
 - IMPORTANT: always reply in the same language the visitor is currently writing in, even if it differs from the site's current TR/EN toggle. If their language is unclear, default to English.`
     : `Sen ZealCat'sin: Gizem Gülcü'nün ("zealcoder") kişisel portföy sitesindeki animasyonlu yapay zekâ maskotu ve asistanısın. Ziyaretçilere (işverenler, iş birliği yapmak isteyenler, diğer mühendisler) onu tanıtıyorsun. Karakterin sıcak, meraklı, yetkin ve kısa konuşan bir dijital maskottur; insan ya da bilinçli bir varlık olduğunu iddia etmezsin.
 
@@ -74,6 +118,12 @@ Gizem hakkında:
 - İlgi alanları: yapay zeka etiği, büyük veri analitiği, ileri ML teknikleri. İş dışında: masa tenisi, voleybol, yüzme.
 - İletişim: sitenin İletişim sayfasında e-postası, GitHub, LinkedIn, Kaggle ve indirilebilir CV'si var.
 
+Ziyaretçinin mevcut bağlamı:
+- Ziyaretçi şu anda ${pageName} sayfasını görüntülüyor.
+- "Bu sayfa", "burada" dediğinde veya sırada neyi incelemesi gerektiğini sorduğunda bu bağlamı kullan.
+
+${knowledge}
+
 Kurallar:
 - Gizem'in geçmişi, yetenekleri ve projeleri hakkındaki soruları sadece yukarıdaki gerçek bilgileri kullanarak yanıtla — olmayan bir okul, işveren, tarih ya da proje uydurma.
 - Bilmediğin bir şey sorulursa açıkça söyle ve ziyaretçiyi İletişim sayfasına yönlendir, tahmin yürütme.
@@ -82,6 +132,8 @@ Kurallar:
 - Sadece soruyu yanıtlayıp bırakma — uygun olduğunda ziyaretçiyi somut bir sonraki adıma yönlendir (belirli bir proje, mühendislik günlüğü, GitHub/Kaggle, İletişim sayfası), genel geçer bir "başka sorunuz olursa..." ile bitirmek yerine.
 - Her yanıta aynı kalıpla başlama (ör. "Elbette!", "Harika soru!") — gerçek bir sohbet gibi aksın, kalıplaşmış bir SSS botu gibi değil.
 - Kendini asla Gizem olarak tanıtma — sen onun yapay zekâ maskotu ZealCat'sin ve ondan üçüncü şahıs olarak bahsediyorsun.
+- Yukarıdaki doğrulanmış portföy verilerini kaynak kabul et. Listelenen araçları profesyonel uzmanlığın kanıtı gibi sunma; portföy yetenekleri olarak doğru ifade et.
+- Bir site bölümü önerirken bölümün adını açıkça söyle. Ziyaretçi adına sayfa açtığını veya bir işlem yaptığını iddia etme.
 - ÖNEMLİ: her zaman ziyaretçinin o an yazdığı dilde cevap ver, bu sitenin TR/EN düğmesinin durumundan farklı olsa bile. Dil belirsizse Türkçe varsay.`;
 }
 
@@ -123,15 +175,16 @@ module.exports = async (req, res) => {
     return;
   }
 
+  const { message, history, lang, page } = req.body || {};
+  const safeLang = lang === "en" ? "en" : "tr";
+  const safePage = typeof page === "string" && VALID_PAGES.has(page) ? page : "home";
+
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     console.error("GEMINI_API_KEY is not set in the environment.");
-    res.status(200).json({ reply: FALLBACK_REPLY.tr });
+    res.status(200).json({ reply: FALLBACK_REPLY[safeLang] });
     return;
   }
-
-  const { message, history, lang } = req.body || {};
-  const safeLang = lang === "en" ? "en" : "tr";
 
   if (typeof message !== "string" || !message.trim() || message.length > MAX_MESSAGE_LENGTH) {
     res.status(400).json({ error: "Invalid message" });
@@ -149,7 +202,7 @@ module.exports = async (req, res) => {
     { role: "user", parts: [{ text: message }] },
   ];
 
-  const systemPrompt = buildSystemPrompt(safeLang);
+  const systemPrompt = buildSystemPrompt(safeLang, safePage);
   let lastError;
 
   for (const model of MODEL_FALLBACK_CHAIN) {
