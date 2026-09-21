@@ -42,6 +42,7 @@
   });
   atlas.addEventListener("error", () => {
     document.documentElement.classList.add("zc-pet-fallback");
+    document.dispatchEvent(new CustomEvent("zc:peterror"));
   });
 
   function requestAtlas() {
@@ -251,6 +252,14 @@
   function init() {
     mountAll(document);
     bindLauncherJump(document);
+
+    // The boot screen must use the new animated atlas, not the legacy face
+    // fallback. Start this request immediately only on pages with a loader;
+    // other pages keep the lower-priority idle loading behavior.
+    if (document.getElementById("zcLoader")) {
+      requestAtlas();
+      return;
+    }
 
     const scheduleAtlas = () => {
       if ("requestIdleCallback" in window) {

@@ -6,8 +6,12 @@
   var loader = document.getElementById('zcLoader');
   if (!loader) return;
 
-  var MIN_VISIBLE_MS = 350; // keep it on-screen just long enough to read, never longer
+  var MIN_VISIBLE_MS = 450;
+  var PET_VISIBLE_MS = 900; // show at least several real atlas frames
   var shownAt = Date.now();
+  var pageReady = document.readyState === 'complete';
+  var petReady = document.documentElement.classList.contains('zc-pet-ready');
+  var petReadyAt = petReady ? Date.now() : 0;
   var hidden = false;
   var cleaned = false;
 
@@ -44,18 +48,33 @@
     setTimeout(cleanup, 600);
   }
 
-  function hideLoader() {
-    var elapsed = Date.now() - shownAt;
-    var wait = Math.max(0, MIN_VISIBLE_MS - elapsed);
+  function hideLoader(force) {
+    if (!force && (!pageReady || !petReady)) return;
+    var now = Date.now();
+    var wait = Math.max(0, MIN_VISIBLE_MS - (now - shownAt));
+    if (!force && petReadyAt) {
+      wait = Math.max(wait, PET_VISIBLE_MS - (now - petReadyAt));
+    }
     setTimeout(reveal, wait);
   }
 
-  if (document.readyState === 'complete') {
-    hideLoader();
-  } else {
-    window.addEventListener('load', hideLoader, { once: true });
-  }
-  // absolute safety net: never let the loader block the site if something
-  // upstream (a slow feed, a slow font) delays the load event too long
-  setTimeout(hideLoader, 4000);
+  window.addEventListener('load', function () {
+    pageReady = true;
+    hideLoader(false);
+  }, { once: true });
+
+  document.addEventListener('zc:petready', function () {
+    petReady = true;
+    petReadyAt = Date.now();
+    hideLoader(false);
+  }, { once: true });
+
+  document.addEventListener('zc:peterror', function () {
+    hideLoader(true);
+  }, { once: true });
+
+  hideLoader(false);
+  // Absolute safety net: never block access indefinitely on a very slow or
+  // failed sprite request. The old static mascot remains hidden meanwhile.
+  setTimeout(function () { hideLoader(true); }, 7000);
 })();
