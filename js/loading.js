@@ -6,12 +6,14 @@
   var loader = document.getElementById('zcLoader');
   if (!loader) return;
 
-  // Keep the branded boot moment for the first page of a visit, then let
-  // internal navigation feel instant. If storage is unavailable we retain
-  // the safe original behaviour and show the loader normally.
+  // Always keep the branded boot moment on the homepage, including reloads.
+  // Once it has been seen, internal pages skip it so navigation still feels
+  // instant. If storage is unavailable we safely show the loader normally.
   var BOOT_SESSION_KEY = 'zcBootSeen';
+  var cleanPath = window.location.pathname.replace(/\/+$/, '');
+  var isHomepage = cleanPath === '' || /(^|\/)index\.html$/.test(cleanPath);
   try {
-    if (sessionStorage.getItem(BOOT_SESSION_KEY) === '1') {
+    if (!isHomepage && sessionStorage.getItem(BOOT_SESSION_KEY) === '1') {
       loader.parentNode.removeChild(loader);
       document.documentElement.classList.add('zc-loader-skipped');
       document.addEventListener('DOMContentLoaded', function () {
