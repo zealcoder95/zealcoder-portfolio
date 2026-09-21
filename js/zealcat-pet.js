@@ -242,11 +242,10 @@
     const root = event.detail && event.detail.root;
     mountAll(root);
     bindLauncherJump(root);
-    const launcher = root && root.querySelector(".zc-chat-launcher");
-    if (launcher) {
-      launcher.addEventListener("pointerenter", requestAtlas, { once: true });
-      launcher.addEventListener("focus", requestAtlas, { once: true });
-    }
+    // Start loading immediately once the launcher exists. Its static fallback
+    // is the atlas' exact first idle frame, making activation visually seamless
+    // while avoiding a second CSS breathing animation around the sprite.
+    requestAtlas();
   });
   document.addEventListener("zc:chatopen", () => {
     requestAtlas();
