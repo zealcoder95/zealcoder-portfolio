@@ -96,14 +96,17 @@
   // Same official ZealCat artwork as the hero/loading/404 placements (the
   // face crop), so the assistant reads as the same character everywhere on
   // the site rather than a separate icon.
-  const ZEALCAT_FACE_SRC = "assets/zealcat/zealcat-face.png";
+  // Match the animated atlas' first idle cell exactly. When the atlas becomes
+  // ready, the fallback and canvas now have the same crop and proportions, so
+  // the launcher cannot appear to jump or change size between page loads.
+  const ZEALCAT_FACE_SRC = "assets/zealcat/zealcat-idle-frame.png";
   // Official "wave" pose (Character Bible, alpha-cut) — used only in the
   // panel header while the chat is open, as a one-time real greeting
   // rather than an invented animation.
   const ZEALCAT_WAVE_SRC = "assets/zealcat/zealcat-wave-face.png";
   const ZEALCAT_FACE_SVG = `
     <span class="zc-art-wrap zc-art-wrap--sm">
-      <img class="zc-art" src="${ZEALCAT_FACE_SRC}" alt="" width="320" height="230" loading="lazy" decoding="async">
+      <img class="zc-art" src="${ZEALCAT_FACE_SRC}" alt="" width="192" height="208" loading="eager" decoding="async">
     </span>`;
 
   function buildWidget() {
@@ -112,7 +115,7 @@
     wrap.innerHTML = `
       <span class="zc-chat-hint" data-zc-hint aria-hidden="true"></span>
       <button type="button" class="zc-chat-launcher zc-anim-hover" aria-expanded="false" aria-controls="zcChatPanel">
-        <span class="zc-chat-icon-open zc-slot zc-slot--sm zc-anim-idle">
+        <span class="zc-chat-icon-open zc-slot zc-slot--sm">
           <span class="zc-slot-grid"></span>
           <span class="zc-slot-glow"></span>
           ${ZEALCAT_FACE_SVG}
