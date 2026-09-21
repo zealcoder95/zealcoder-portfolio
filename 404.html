@@ -26,7 +26,7 @@
 </head>
 <body>
 <a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
-<canvas id="circuit-bg"></canvas>
+<canvas id="circuit-bg" aria-hidden="true"></canvas>
 <nav>
   <a class="brand" href="index.html">
     <img src="assets/zealcoder-logo.png" alt="zealcoder logosu" width="34" height="34" decoding="async">
@@ -39,10 +39,10 @@
     <div class="lang-toggle" role="group" aria-label="Dil seçimi / Language">
       <button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button>
     </div>
-    <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false" aria-controls="mobilePanel"><span></span><span></span><span></span></button>
   </div>
 </nav>
-<div class="mobile-panel" id="mobilePanel">
+<div class="mobile-panel" id="mobilePanel" aria-hidden="true" inert>
   <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a>
   <a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a>
   <a href="projeler.html" data-i18n="nav.projects">Projeler</a>

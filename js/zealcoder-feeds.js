@@ -167,6 +167,7 @@ const ZC_FEED_STRINGS = {
     viewOnKaggle: "Kaggle'da incele →",
     viewOnGithub: "GitHub'da incele →",
     viewProject: 'İncele →',
+    chartZoom: 'Grafiği büyük görüntüle',
     events: {
       push: n => `reposuna ${n} commit gönderdi`,
       createRepo: 'reposunu oluşturdu',
@@ -215,6 +216,7 @@ const ZC_FEED_STRINGS = {
     viewOnKaggle: 'View on Kaggle →',
     viewOnGithub: 'View on GitHub →',
     viewProject: 'View →',
+    chartZoom: 'View chart at full size',
     events: {
       push: n => `pushed ${n} commit${n === 1 ? '' : 's'} to`,
       createRepo: 'created the repo',
@@ -690,7 +692,7 @@ async function zcLoadProjects(elId) {
       const chartAlt = (p.chart && p.chart.alt && (p.chart.alt[lang] || p.chart.alt.tr)) || '';
       return `
       <div class="project-card">
-        ${p.chart ? `<button type="button" class="project-chart-trigger" data-chart-full="${p.chart.img}" data-chart-alt="${zcEscape(chartAlt)}">
+        ${p.chart ? `<button type="button" class="project-chart-trigger" aria-label="${zcEscape(S.chartZoom)}" data-chart-full="${p.chart.img}" data-chart-alt="${zcEscape(chartAlt)}">
           <span class="project-media">
             <img src="${p.chart.img}" alt="${zcEscape(chartAlt)}" loading="lazy">
             <span class="project-media-zoom" aria-hidden="true">

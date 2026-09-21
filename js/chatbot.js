@@ -27,6 +27,9 @@
       send: "Gönder",
       open: "Sohbeti aç",
       close: "Sohbeti kapat",
+      inputLabel: "ZealCat'e mesaj yaz",
+      typing: "ZealCat yanıt hazırlıyor",
+      hint: "ZealCat'e sor",
       error: "Şu anda yanıt veremiyorum, birazdan tekrar deneyin.",
       quickLabel: "Hızlı gezinme",
       quick: {
@@ -48,6 +51,9 @@
       send: "Send",
       open: "Open chat",
       close: "Close chat",
+      inputLabel: "Write a message to ZealCat",
+      typing: "ZealCat is preparing a reply",
+      hint: "Ask ZealCat",
       error: "I can't reply right now, please try again shortly.",
       quickLabel: "Quick navigation",
       quick: {
@@ -102,7 +108,9 @@
 
   function buildWidget() {
     const wrap = document.createElement("div");
+    wrap.className = "zc-chat-widget";
     wrap.innerHTML = `
+      <span class="zc-chat-hint" data-zc-hint aria-hidden="true"></span>
       <button type="button" class="zc-chat-launcher zc-anim-hover" aria-expanded="false" aria-controls="zcChatPanel">
         <span class="zc-chat-icon-open zc-slot zc-slot--sm zc-anim-idle">
           <span class="zc-slot-grid"></span>
@@ -111,19 +119,22 @@
         </span>
         <svg class="zc-chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="#eceeff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
-      <div class="zc-chat-panel" id="zcChatPanel" role="dialog" aria-label="ZealCat">
+      <div class="zc-chat-panel" id="zcChatPanel" role="dialog" aria-labelledby="zcChatTitle" aria-hidden="true" hidden inert>
         <div class="zc-chat-head">
           <span class="zc-chat-head-icon">${ZEALCAT_FACE_SVG}</span>
-          <div>
-            <div class="zc-chat-title" data-zc-title></div>
+          <div class="zc-chat-head-copy">
+            <div class="zc-chat-title" id="zcChatTitle" data-zc-title></div>
             <div class="zc-chat-subtitle" data-zc-subtitle></div>
           </div>
+          <button type="button" class="zc-chat-close" data-zc-close>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
         </div>
         <div class="zc-chat-quick" id="zcChatQuick" role="navigation"></div>
-        <div class="zc-chat-body" id="zcChatBody"></div>
+        <div class="zc-chat-body" id="zcChatBody" role="log" aria-live="polite" aria-relevant="additions"></div>
         <form class="zc-chat-form" id="zcChatForm">
-          <textarea class="zc-chat-input" id="zcChatInput" rows="1" data-zc-placeholder></textarea>
-          <button type="submit" class="zc-chat-send" aria-label="send">
+          <textarea class="zc-chat-input" id="zcChatInput" rows="1" maxlength="2000" data-zc-placeholder></textarea>
+          <button type="submit" class="zc-chat-send">
             <svg viewBox="0 0 24 24" fill="none" stroke="#08090f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
           </button>
         </form>
@@ -132,7 +143,9 @@
     document.body.appendChild(wrap);
 
     const launcher = wrap.querySelector(".zc-chat-launcher");
+    const hint = wrap.querySelector("[data-zc-hint]");
     const panel = wrap.querySelector("#zcChatPanel");
+    const closeButton = wrap.querySelector("[data-zc-close]");
     const body = wrap.querySelector("#zcChatBody");
     const quick = wrap.querySelector("#zcChatQuick");
     const form = wrap.querySelector("#zcChatForm");
@@ -159,6 +172,7 @@
     let welcomed = false;
     let welcomeMsgEl = null;
     let sending = false;
+    let closeTimer = null;
 
     function addMessage(role, text) {
       const div = document.createElement("div");
@@ -173,7 +187,8 @@
       const div = document.createElement("div");
       div.className = "zc-chat-typing";
       div.id = "zcChatTyping";
-      div.innerHTML = "<span></span><span></span><span></span>";
+      div.setAttribute("role", "status");
+      div.innerHTML = `<span class="sr-only">${escapeHtml(STRINGS[currentLang()].typing)}</span><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>`;
       body.appendChild(div);
       body.scrollTop = body.scrollHeight;
     }
@@ -188,7 +203,11 @@
       titleEl.textContent = s.title;
       subtitleEl.textContent = s.subtitle;
       input.setAttribute("placeholder", s.placeholder);
-      launcher.setAttribute("aria-label", panel.classList.contains("is-open") ? s.close : s.open);
+      input.setAttribute("aria-label", s.inputLabel);
+      sendButton.setAttribute("aria-label", s.send);
+      launcher.setAttribute("aria-label", launcher.getAttribute("aria-expanded") === "true" ? s.close : s.open);
+      closeButton.setAttribute("aria-label", s.close);
+      hint.textContent = s.hint;
       quick.setAttribute("aria-label", s.quickLabel);
       quick.querySelectorAll("[data-zc-quick]").forEach((el) => {
         el.textContent = s.quick[el.dataset.zcQuick];
@@ -225,9 +244,27 @@
     }
 
     function togglePanel(open) {
-      const willOpen = typeof open === "boolean" ? open : !panel.classList.contains("is-open");
-      panel.classList.toggle("is-open", willOpen);
+      const willOpen = typeof open === "boolean" ? open : launcher.getAttribute("aria-expanded") !== "true";
+      if (closeTimer) {
+        window.clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+      if (willOpen) {
+        panel.hidden = false;
+        panel.inert = false;
+        panel.setAttribute("aria-hidden", "false");
+        window.requestAnimationFrame(() => panel.classList.add("is-open"));
+      } else {
+        panel.classList.remove("is-open");
+        panel.inert = true;
+        panel.setAttribute("aria-hidden", "true");
+        closeTimer = window.setTimeout(() => {
+          panel.hidden = true;
+          closeTimer = null;
+        }, 260);
+      }
       launcher.setAttribute("aria-expanded", String(willOpen));
+      hint.classList.remove("is-visible");
       applyHeaderStrings();
       if (headIcon && !(headIconWrap && headIconWrap.classList.contains("zc-pet-active"))) {
         headIcon.src = willOpen ? ZEALCAT_WAVE_SRC : ZEALCAT_FACE_SRC;
@@ -243,6 +280,10 @@
     }
 
     launcher.addEventListener("click", () => togglePanel());
+    closeButton.addEventListener("click", () => {
+      togglePanel(false);
+      launcher.focus();
+    });
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && panel.classList.contains("is-open")) {
@@ -257,6 +298,7 @@
       if (!text || sending) return;
       sending = true;
       input.value = "";
+      const requestHistory = history.slice(-10);
       addMessage("user", text);
       history.push({ role: "user", text });
       showTyping();
@@ -268,7 +310,7 @@
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text, history, lang: currentLang() }),
+          body: JSON.stringify({ message: text, history: requestHistory, lang: currentLang() }),
         });
         const data = await res.json().catch(() => ({}));
         hideTyping();
@@ -300,6 +342,19 @@
     document.addEventListener("zc:langchange", applyHeaderStrings);
     applyHeaderStrings();
     document.dispatchEvent(new CustomEvent("zc:chatready", { detail: { root: wrap } }));
+
+    // Briefly explains the mascot's purpose once per browser session.
+    try {
+      if (!sessionStorage.getItem("zcChatHintSeen")) {
+        sessionStorage.setItem("zcChatHintSeen", "1");
+        window.setTimeout(() => {
+          if (launcher.getAttribute("aria-expanded") !== "true") hint.classList.add("is-visible");
+        }, 1400);
+        window.setTimeout(() => hint.classList.remove("is-visible"), 7400);
+      }
+    } catch (err) {
+      // Storage can be blocked; the assistant still works without the hint.
+    }
   }
 
   if (document.readyState === "loading") {
