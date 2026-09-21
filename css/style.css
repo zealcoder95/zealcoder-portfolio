@@ -601,6 +601,8 @@ button.chip{ cursor:pointer; }
   display:flex; flex-direction:column; gap:0.9rem; transition:transform 0.25s ease, border-color 0.25s ease;
 }
 .project-card:hover{ transform:translateY(-4px); border-color:var(--purple); }
+.project-card-body{ display:flex; flex:1; flex-direction:column; gap:0.9rem; }
+.project-card-head{ display:flex; align-items:center; justify-content:space-between; gap:0.8rem; }
 .project-icon{
   width:38px;height:38px; border-radius:8px; display:flex;align-items:center;justify-content:center;
   background:var(--gradient); font-family:'JetBrains Mono',monospace; font-weight:600; color:#08090f; font-size:0.85rem;
@@ -608,6 +610,24 @@ button.chip{ cursor:pointer; }
 .project-icon svg{ width:20px;height:20px; }
 .project-card h3{ font-size:1.08rem; }
 .project-card p{ color:var(--text-muted); font-size:0.92rem; flex-grow:1; }
+.project-evidence{
+  display:grid; gap:0.7rem; margin-top:0.1rem; padding:0.9rem;
+  border:1px solid rgba(139,62,240,.2); border-radius:9px;
+  background:linear-gradient(135deg,rgba(139,62,240,.07),rgba(34,211,245,.035));
+}
+.project-evidence-row{ display:grid; gap:0.28rem; }
+.project-evidence-row>span{
+  color:var(--text-faint); font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem; letter-spacing:.08em; text-transform:uppercase;
+}
+.project-evidence-row>strong{ color:var(--text-muted); font-size:0.78rem; line-height:1.55; font-weight:500; }
+.project-evidence-tools>div{ display:flex; flex-wrap:wrap; gap:0.35rem; }
+.project-evidence-tools b{
+  padding:0.22rem 0.42rem; border:1px solid var(--line); border-radius:5px;
+  color:var(--cyan); font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:500;
+}
+.project-evidence-result{ padding-top:0.65rem; border-top:1px solid rgba(255,255,255,.06); }
+.project-evidence-result>strong{ color:var(--text); }
 .project-link{ font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--cyan); display:inline-flex; align-items:center; gap:0.35rem; }
 .project-link:hover{ text-decoration:underline; }
 .project-tag{ font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; }
@@ -776,6 +796,7 @@ main section:has(> #journalFeed){ counter-reset:journalLog; }
   background:var(--bg);
   transition:opacity 0.45s ease;
 }
+.zc-loader-skipped .zc-loader{ display:none !important; }
 .zc-loader .zc-slot--md{
   width:132px; height:143px; border-radius:30px;
   border-color:rgba(139,62,240,.32);

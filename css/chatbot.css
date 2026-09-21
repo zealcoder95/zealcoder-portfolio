@@ -165,8 +165,8 @@
 
 @media (max-width:480px){
   .zc-chat-panel{ right:0.7rem; left:0.7rem; width:auto; bottom:7.5rem; height:min(540px, calc(100vh - 9rem)); }
-  .zc-chat-launcher{ right:1rem; bottom:1rem; width:90px; height:98px; }
-  .zc-chat-hint{ right:6.6rem; bottom:2.85rem; }
+  .zc-chat-launcher{ right:1rem; bottom:1rem; width:72px; height:78px; }
+  .zc-chat-hint{ right:5.5rem; bottom:2.3rem; }
   .zc-chat-launcher[aria-expanded="true"]{ width:48px; height:48px; }
   .zc-chat-launcher[aria-expanded="true"] + .zc-chat-panel{ bottom:4.8rem; }
 }
