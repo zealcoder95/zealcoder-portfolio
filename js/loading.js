@@ -6,6 +6,22 @@
   var loader = document.getElementById('zcLoader');
   if (!loader) return;
 
+  // Keep the branded boot moment for the first page of a visit, then let
+  // internal navigation feel instant. If storage is unavailable we retain
+  // the safe original behaviour and show the loader normally.
+  var BOOT_SESSION_KEY = 'zcBootSeen';
+  try {
+    if (sessionStorage.getItem(BOOT_SESSION_KEY) === '1') {
+      loader.parentNode.removeChild(loader);
+      document.documentElement.classList.add('zc-loader-skipped');
+      document.addEventListener('DOMContentLoaded', function () {
+        document.dispatchEvent(new CustomEvent('zc:loaderhidden'));
+      }, { once: true });
+      return;
+    }
+    sessionStorage.setItem(BOOT_SESSION_KEY, '1');
+  } catch (err) { /* storage disabled: show the loader as usual */ }
+
   var MIN_VISIBLE_MS = 450;
   var PET_VISIBLE_MS = 900; // show at least several real atlas frames
   var shownAt = Date.now();

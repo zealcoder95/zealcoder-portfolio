@@ -8,7 +8,10 @@
 (function () {
   "use strict";
 
-  const ATLAS_SRC = "assets/zealcat/zealcat-spritesheet-v2.png";
+  const ATLAS_SOURCES = [
+    "assets/zealcat/zealcat-spritesheet-v2.webp",
+    "assets/zealcat/zealcat-spritesheet-v2.png",
+  ];
   const CELL_WIDTH = 192;
   const CELL_HEIGHT = 208;
   const RENDER_SCALE = 2;
@@ -30,6 +33,7 @@
   const players = new Set();
   let atlasReady = false;
   let atlasRequested = false;
+  let atlasSourceIndex = 0;
   let lastPointer = null;
   let pointerFrame = null;
 
@@ -41,6 +45,11 @@
     document.dispatchEvent(new CustomEvent("zc:petready"));
   });
   atlas.addEventListener("error", () => {
+    if (atlasSourceIndex < ATLAS_SOURCES.length - 1) {
+      atlasSourceIndex += 1;
+      atlas.src = ATLAS_SOURCES[atlasSourceIndex];
+      return;
+    }
     document.documentElement.classList.add("zc-pet-fallback");
     document.dispatchEvent(new CustomEvent("zc:peterror"));
   });
@@ -48,7 +57,7 @@
   function requestAtlas() {
     if (atlasRequested) return;
     atlasRequested = true;
-    atlas.src = ATLAS_SRC;
+    atlas.src = ATLAS_SOURCES[atlasSourceIndex];
   }
 
   class ZealCatPlayer {
