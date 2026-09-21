@@ -31,7 +31,14 @@
       typing: "ZealCat yanıt hazırlıyor",
       hint: "ZealCat'e sor",
       error: "Şu anda yanıt veremiyorum, birazdan tekrar deneyin.",
+      reset: "Sohbeti sıfırla",
       quickLabel: "Hızlı gezinme",
+      promptLabel: "Önerilen sorular",
+      prompts: {
+        page: "Bu sayfada neleri incelemeliyim?",
+        projects: "Gizem'in en güçlü projesi hangisi?",
+        fit: "Gizem hangi rollere uygun?",
+      },
       quick: {
         projects: "Projeler",
         about: "Hakkımda",
@@ -55,7 +62,14 @@
       typing: "ZealCat is preparing a reply",
       hint: "Ask ZealCat",
       error: "I can't reply right now, please try again shortly.",
+      reset: "Reset conversation",
       quickLabel: "Quick navigation",
+      promptLabel: "Suggested questions",
+      prompts: {
+        page: "What should I explore on this page?",
+        projects: "Which of Gizem's projects is strongest?",
+        fit: "Which roles fit Gizem's profile?",
+      },
       quick: {
         projects: "Projects",
         about: "About",
@@ -81,6 +95,46 @@
     { key: "kaggle", href: "https://www.kaggle.com/gizemglc", external: true },
     { key: "contact", href: "iletisim.html", external: false },
   ];
+
+  const CHAT_STORAGE_KEY = "zcChatHistoryV1";
+  const MAX_STORED_MESSAGES = 20;
+  const PAGE_BY_FILE = {
+    "index.html": "home",
+    "hakkimda.html": "about",
+    "yetenekler.html": "skills",
+    "projeler.html": "projects",
+    "yazilar.html": "writing",
+    "kaynaklar.html": "resources",
+    "gunluk.html": "journal",
+    "iletisim.html": "contact",
+    "404.html": "notfound",
+  };
+
+  function currentPage() {
+    const file = window.location.pathname.split("/").pop() || "index.html";
+    return PAGE_BY_FILE[file] || "home";
+  }
+
+  function readStoredHistory() {
+    try {
+      const parsed = JSON.parse(sessionStorage.getItem(CHAT_STORAGE_KEY) || "[]");
+      if (!Array.isArray(parsed)) return [];
+      return parsed
+        .filter((item) => item && (item.role === "user" || item.role === "assistant") && typeof item.text === "string")
+        .slice(-MAX_STORED_MESSAGES)
+        .map((item) => ({ role: item.role, text: item.text.slice(0, 2000) }));
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function storeHistory(history) {
+    try {
+      sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(history.slice(-MAX_STORED_MESSAGES)));
+    } catch (err) {
+      // Storage can be blocked; chat still works for the current page.
+    }
+  }
 
   function currentLang() {
     const l = document.documentElement.lang;
@@ -129,11 +183,15 @@
             <div class="zc-chat-title" id="zcChatTitle" data-zc-title></div>
             <div class="zc-chat-subtitle" data-zc-subtitle></div>
           </div>
+          <button type="button" class="zc-chat-reset" data-zc-reset>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          </button>
           <button type="button" class="zc-chat-close" data-zc-close>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
           </button>
         </div>
         <div class="zc-chat-quick" id="zcChatQuick" role="navigation"></div>
+        <div class="zc-chat-prompts" id="zcChatPrompts" role="group"></div>
         <div class="zc-chat-body" id="zcChatBody" role="log" aria-live="polite" aria-relevant="additions"></div>
         <form class="zc-chat-form" id="zcChatForm">
           <textarea class="zc-chat-input" id="zcChatInput" rows="1" maxlength="2000" data-zc-placeholder></textarea>
@@ -149,8 +207,10 @@
     const hint = wrap.querySelector("[data-zc-hint]");
     const panel = wrap.querySelector("#zcChatPanel");
     const closeButton = wrap.querySelector("[data-zc-close]");
+    const resetButton = wrap.querySelector("[data-zc-reset]");
     const body = wrap.querySelector("#zcChatBody");
     const quick = wrap.querySelector("#zcChatQuick");
+    const prompts = wrap.querySelector("#zcChatPrompts");
     const form = wrap.querySelector("#zcChatForm");
     const input = wrap.querySelector("#zcChatInput");
     const sendButton = wrap.querySelector(".zc-chat-send");
@@ -171,11 +231,21 @@
       quick.appendChild(el);
     });
 
-    let history = []; // [{role:'user'|'assistant', text}]
-    let welcomed = false;
+    let history = readStoredHistory(); // [{role:'user'|'assistant', text}]
+    let welcomed = history.length > 0;
     let welcomeMsgEl = null;
     let sending = false;
     let closeTimer = null;
+
+    history.forEach((item) => addMessage(item.role, item.text));
+
+    ["page", "projects", "fit"].forEach((key) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "zc-prompt-btn";
+      button.dataset.zcPrompt = key;
+      prompts.appendChild(button);
+    });
 
     function addMessage(role, text) {
       const div = document.createElement("div");
@@ -210,10 +280,16 @@
       sendButton.setAttribute("aria-label", s.send);
       launcher.setAttribute("aria-label", launcher.getAttribute("aria-expanded") === "true" ? s.close : s.open);
       closeButton.setAttribute("aria-label", s.close);
+      resetButton.setAttribute("aria-label", s.reset);
+      resetButton.setAttribute("title", s.reset);
       hint.textContent = s.hint;
       quick.setAttribute("aria-label", s.quickLabel);
+      prompts.setAttribute("aria-label", s.promptLabel);
       quick.querySelectorAll("[data-zc-quick]").forEach((el) => {
         el.textContent = s.quick[el.dataset.zcQuick];
+      });
+      prompts.querySelectorAll("[data-zc-prompt]").forEach((el) => {
+        el.textContent = s.prompts[el.dataset.zcPrompt];
       });
       // If the visitor hasn't actually said anything yet, the welcome
       // bubble isn't "history" — keep it in sync with the language
@@ -288,6 +364,22 @@
       launcher.focus();
     });
 
+    resetButton.addEventListener("click", () => {
+      history = [];
+      storeHistory(history);
+      body.innerHTML = "";
+      welcomeMsgEl = addMessage("assistant", STRINGS[currentLang()].welcome);
+      welcomed = true;
+      input.focus();
+    });
+
+    prompts.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-zc-prompt]");
+      if (!button || sending) return;
+      input.value = STRINGS[currentLang()].prompts[button.dataset.zcPrompt];
+      form.requestSubmit();
+    });
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && panel.classList.contains("is-open")) {
         togglePanel(false);
@@ -304,6 +396,7 @@
       const requestHistory = history.slice(-10);
       addMessage("user", text);
       history.push({ role: "user", text });
+      storeHistory(history);
       showTyping();
       sendButton.disabled = true;
       form.setAttribute("aria-busy", "true");
@@ -313,7 +406,7 @@
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text, history: requestHistory, lang: currentLang() }),
+          body: JSON.stringify({ message: text, history: requestHistory, lang: currentLang(), page: currentPage() }),
         });
         const data = await res.json().catch(() => ({}));
         hideTyping();
@@ -323,6 +416,7 @@
         const reply = data.reply;
         addMessage("assistant", reply);
         history.push({ role: "assistant", text: reply });
+        storeHistory(history);
         ackReplyGlow();
       } catch (err) {
         hideTyping();
