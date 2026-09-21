@@ -168,6 +168,9 @@ const ZC_FEED_STRINGS = {
     viewOnGithub: "GitHub'da incele →",
     viewProject: 'İncele →',
     chartZoom: 'Grafiği büyük görüntüle',
+    projectTools: 'Araçlar',
+    projectMethod: 'Yöntem',
+    projectResult: 'Öne çıkan sonuç',
     events: {
       push: n => `reposuna ${n} commit gönderdi`,
       createRepo: 'reposunu oluşturdu',
@@ -217,6 +220,9 @@ const ZC_FEED_STRINGS = {
     viewOnGithub: 'View on GitHub →',
     viewProject: 'View →',
     chartZoom: 'View chart at full size',
+    projectTools: 'Tools',
+    projectMethod: 'Method',
+    projectResult: 'Key outcome',
     events: {
       push: n => `pushed ${n} commit${n === 1 ? '' : 's'} to`,
       createRepo: 'created the repo',
@@ -678,7 +684,7 @@ async function zcLoadProjects(elId) {
   if (!el) return;
   const S = ZC_FEED_STRINGS[zcLang()];
   const lang = zcLang();
-  const cacheKey = `zc_cache_projects_${lang}`;
+  const cacheKey = `zc_cache_projects_v2_${lang}`;
   const cached = zcCacheGet(cacheKey);
   if (cached) { el.innerHTML = cached.html; zcInitProjectsShowMore(); }
   if (cached && (Date.now() - cached.ts < ZC_CACHE_TTL_MS)) return;
@@ -690,6 +696,9 @@ async function zcLoadProjects(elId) {
     const html = data.items.map(p => {
       const tagStr = (p.tag && (p.tag[lang] || p.tag.tr)) || '';
       const chartAlt = (p.chart && p.chart.alt && (p.chart.alt[lang] || p.chart.alt.tr)) || '';
+      const method = (p.method && (p.method[lang] || p.method.tr)) || '';
+      const result = (p.result && (p.result[lang] || p.result.tr)) || '';
+      const tools = Array.isArray(p.tools) ? p.tools : [];
       return `
       <div class="project-card">
         ${p.chart ? `<button type="button" class="project-chart-trigger" aria-label="${zcEscape(S.chartZoom)}" data-chart-full="${p.chart.img}" data-chart-alt="${zcEscape(chartAlt)}">
@@ -707,6 +716,11 @@ async function zcLoadProjects(elId) {
           </div>
           <h3>${zcEscape((p.title && (p.title[lang] || p.title.tr)) || '')}</h3>
           <p>${zcEscape((p.desc && (p.desc[lang] || p.desc.tr)) || '')}</p>
+          ${(tools.length || method || result) ? `<div class="project-evidence">
+            ${tools.length ? `<div class="project-evidence-row project-evidence-tools"><span>${zcEscape(S.projectTools)}</span><div>${tools.map(tool => `<b>${zcEscape(tool)}</b>`).join('')}</div></div>` : ''}
+            ${method ? `<div class="project-evidence-row"><span>${zcEscape(S.projectMethod)}</span><strong>${zcEscape(method)}</strong></div>` : ''}
+            ${result ? `<div class="project-evidence-row project-evidence-result"><span>${zcEscape(S.projectResult)}</span><strong>${zcEscape(result)}</strong></div>` : ''}
+          </div>` : ''}
           ${p.link ? `<a class="project-link" href="${p.link}" target="_blank" rel="noopener">
             <span class="project-link-icon">${zcProjectPlatformIconSvg(p.link)}</span>
             <span>${zcProjectLinkLabel(p.link, S)}</span>
