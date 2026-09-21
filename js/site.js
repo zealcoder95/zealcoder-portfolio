@@ -8,8 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobilePanel = document.getElementById('mobilePanel');
 
   function closeMobilePanel() {
-    if (!mobilePanel || !mobilePanel.classList.contains('open')) return;
+    if (!mobilePanel) return;
     mobilePanel.classList.remove('open');
+    mobilePanel.setAttribute('aria-hidden', 'true');
+    mobilePanel.inert = true;
     document.body.classList.remove('menu-open');
     if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
   }
@@ -19,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const open = mobilePanel.classList.toggle('open');
       document.body.classList.toggle('menu-open', open);
       navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      mobilePanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+      mobilePanel.inert = !open;
+      if (open) mobilePanel.querySelector('a')?.focus();
     });
     mobilePanel.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', closeMobilePanel);
@@ -31,7 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // close on Escape
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeMobilePanel();
+      if (e.key === 'Escape' && mobilePanel.classList.contains('open')) {
+        closeMobilePanel();
+        navToggle.focus();
+      }
     });
   }
 
@@ -80,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // playing is simply dropped, never queued or stacked. Nothing here is a
   // body transform — reactions are either a real pose swap (Standing/Wave,
   // the only two official art crops we have) or a soft glow.
-  //   - session greet   (hero only, once per browser session)
   //   - hover-dwell      (~600ms rest, not continuous tracking)
   //   - click/tap
   //   - chat reply beat  (see js/chatbot.js)
@@ -141,25 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => { art.classList.remove('zc-ack-glow'); release(); }, 820);
     }
 
-    // ---- wait for the boot loader to actually be gone --------------------
-    // A one-shot reaction timed to start on DOMContentLoaded races the
-    // #zcLoader boot screen (up to ~4s) — on a fast load it can finish
-    // entirely hidden behind it. Pages with no loader (404.html) resolve
-    // immediately.
-    function whenLoaderGone(cb) {
-      if (!document.getElementById('zcLoader')) { cb(); return; }
-      let done = false;
-      function fire() {
-        if (done) return;
-        done = true;
-        cb();
-      }
-      document.addEventListener('zc:loaderhidden', fire, { once: true });
-      setTimeout(fire, 4700); // safety net if loading.js never fires
-    }
-
     // ---- set up hover-dwell + click on every large ZealCat instance ------
-    // (hero + 404 — the small footer/loader/chat crops opt out via
+    // (404 — the small footer/loader/chat crops opt out via
     // .zc-art-wrap--sm and don't get eyelids or these reactions.)
     document.querySelectorAll('.zc-art-wrap:not(.zc-art-wrap--sm)').forEach((wrap) => {
       const blinkOnce = armIdleBlink(wrap);
@@ -180,32 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
       wrap.addEventListener('click', () => {
         withLock(wrap, (release) => glowReaction(art, release));
       });
-
-      // ---- hero: once-per-session greeting, real pose change -------------
-      // RE-ENABLED: zealcat-wave.png / zealcat-wave-face.png have been
-      // re-exported to the exact 0-margin canvas standard as zealcat-full.png
-      // / zealcat-face.png (see assets/zealcat/), so the crossfade no longer
-      // shifts or rescales the character.
-      if (wrap.closest('.hero-visual')) {
-        let firstThisSession = false;
-        try {
-          firstThisSession = !sessionStorage.getItem('zcGreeted');
-          if (firstThisSession) sessionStorage.setItem('zcGreeted', '1');
-        } catch (e) {
-          firstThisSession = false; // storage blocked (private mode etc.)
-        }
-        if (firstThisSession) {
-          whenLoaderGone(() => {
-            withLock(wrap, (release) => {
-              wrap.classList.add('zc-greeting');
-              setTimeout(() => {
-                wrap.classList.remove('zc-greeting');
-                setTimeout(release, 700); // let the crossfade back finish first
-              }, 1600);
-            });
-          });
-        }
-      }
 
       // ---- 404: one-shot "looking around for the missing page" -----------
       if (wrap.closest('.notfound-visual') && !wrap.classList.contains('zc-pet-active')) {

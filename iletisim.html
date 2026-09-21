@@ -51,7 +51,7 @@
   <p class="zc-loader-text"><span>Initializing ZealCat</span><span class="zc-loader-dot">.</span><span class="zc-loader-dot">.</span><span class="zc-loader-dot">.</span></p>
 </div>
 <a class="skip-link" href="#main-content" data-i18n="a11y.skip">İçeriğe atla</a>
-<canvas id="circuit-bg"></canvas>
+<canvas id="circuit-bg" aria-hidden="true"></canvas>
 <div class="spine" aria-hidden="true">
   <div class="spine-fill" id="spineFill"></div>
   <div class="spine-node" data-pct="5" style="top:5%"></div>
@@ -72,10 +72,10 @@
     <div class="lang-toggle" role="group" aria-label="Dil seçimi / Language">
       <button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button>
     </div>
-    <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false" aria-controls="mobilePanel"><span></span><span></span><span></span></button>
   </div>
 </nav>
-<div class="mobile-panel" id="mobilePanel">
+<div class="mobile-panel" id="mobilePanel" aria-hidden="true" inert>
   <a href="hakkimda.html" data-i18n="nav.about">Hakkımda</a>
   <a href="yetenekler.html" data-i18n="nav.skills">Yetenekler</a>
   <a href="projeler.html" data-i18n="nav.projects">Projeler</a>

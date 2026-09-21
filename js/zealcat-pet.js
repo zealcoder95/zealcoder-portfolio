@@ -29,17 +29,26 @@
   const atlas = new Image();
   const players = new Set();
   let atlasReady = false;
+  let atlasRequested = false;
   let lastPointer = null;
   let pointerFrame = null;
 
   atlas.decoding = "async";
-  atlas.src = ATLAS_SRC;
   atlas.addEventListener("load", () => {
     atlasReady = true;
     players.forEach((player) => player.activate());
     document.documentElement.classList.add("zc-pet-ready");
     document.dispatchEvent(new CustomEvent("zc:petready"));
   });
+  atlas.addEventListener("error", () => {
+    document.documentElement.classList.add("zc-pet-fallback");
+  });
+
+  function requestAtlas() {
+    if (atlasRequested) return;
+    atlasRequested = true;
+    atlas.src = ATLAS_SRC;
+  }
 
   class ZealCatPlayer {
     constructor(wrap) {
@@ -53,6 +62,7 @@
       this.canvas.setAttribute("aria-hidden", "true");
       this.context = this.canvas.getContext("2d", { alpha: true });
       this.context.imageSmoothingEnabled = true;
+      this.context.imageSmoothingQuality = "high";
       this.state = "idle";
       this.frame = 0;
       this.lookIndex = null;
@@ -143,7 +153,7 @@
     }
 
     lookAt(clientX, clientY) {
-      if (reduceMotion.matches || !this.canvas.isConnected) return;
+      if (!atlasReady || reduceMotion.matches || !this.canvas.isConnected) return;
       if (this.state !== "idle" || this.wrap.closest("#zcLoader")) return;
       const rect = this.canvas.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
@@ -222,8 +232,16 @@
     const root = event.detail && event.detail.root;
     mountAll(root);
     bindLauncherJump(root);
+    const launcher = root && root.querySelector(".zc-chat-launcher");
+    if (launcher) {
+      launcher.addEventListener("pointerenter", requestAtlas, { once: true });
+      launcher.addEventListener("focus", requestAtlas, { once: true });
+    }
   });
-  document.addEventListener("zc:chatopen", () => playChatState("waving", { once: true }));
+  document.addEventListener("zc:chatopen", () => {
+    requestAtlas();
+    playChatState("waving", { once: true });
+  });
   document.addEventListener("zc:chatclose", () => playChatState("idle"));
   document.addEventListener("zc:chatsending", () => playChatState("running"));
   document.addEventListener("zc:chatreplyarrived", () => playChatState("review", { once: true }));
@@ -233,7 +251,21 @@
   function init() {
     mountAll(document);
     bindLauncherJump(document);
+
+    const scheduleAtlas = () => {
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(requestAtlas, { timeout: 2200 });
+      } else {
+        window.setTimeout(requestAtlas, 900);
+      }
+    };
+    if (document.readyState === "complete") scheduleAtlas();
+    else window.addEventListener("load", scheduleAtlas, { once: true });
   }
+
+  reduceMotion.addEventListener?.("change", () => {
+    players.forEach((player) => player.play("idle"));
+  });
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
