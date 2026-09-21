@@ -147,6 +147,14 @@
     return div.innerHTML;
   }
 
+  function formatMessage(str) {
+    // Escape first, then support only two harmless emphasis patterns used by
+    // the model. This keeps replies readable without allowing arbitrary HTML.
+    return escapeHtml(str)
+      .replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*([^*\n]+)\*/g, "<em>$1</em>");
+  }
+
   // Same official ZealCat artwork as the hero/loading/404 placements (the
   // face crop), so the assistant reads as the same character everywhere on
   // the site rather than a separate icon.
@@ -250,7 +258,7 @@
     function addMessage(role, text) {
       const div = document.createElement("div");
       div.className = "zc-chat-msg " + (role === "user" ? "zc-from-user" : "zc-from-bot");
-      div.innerHTML = escapeHtml(text);
+      div.innerHTML = formatMessage(text);
       body.appendChild(div);
       body.scrollTop = body.scrollHeight;
       return div;
