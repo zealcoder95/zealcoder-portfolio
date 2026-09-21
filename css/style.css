@@ -776,6 +776,15 @@ main section:has(> #journalFeed){ counter-reset:journalLog; }
   background:var(--bg);
   transition:opacity 0.45s ease;
 }
+.zc-loader .zc-slot--md{
+  width:132px; height:143px; border-radius:30px;
+  border-color:rgba(139,62,240,.32);
+  box-shadow:0 20px 55px rgba(0,0,0,.42), 0 0 38px rgba(139,62,240,.18);
+}
+/* Never flash the legacy face crop while the animated atlas is loading. */
+.zc-loader .zc-art{ opacity:0; }
+.zc-loader .zc-slot-grid{ background-size:20px 20px; }
+.zc-loader .zc-loader-ring{ border-radius:34px; }
 .zc-loader.is-hidden{ opacity:0; pointer-events:none; }
 .zc-loader-text{
   font-family:'JetBrains Mono',monospace; font-size:0.78rem; letter-spacing:0.1em;
@@ -787,6 +796,10 @@ main section:has(> #journalFeed){ counter-reset:journalLog; }
 @keyframes zcDotPulse{ 0%,100%{ opacity:0.25; } 50%{ opacity:1; } }
 @media (prefers-reduced-motion: reduce){
   .zc-loader{ transition:none; }
+}
+@media (max-width:480px){
+  .zc-loader .zc-slot--md{ width:116px; height:126px; border-radius:27px; }
+  .zc-loader .zc-loader-ring{ border-radius:31px; }
 }
 
 footer{
