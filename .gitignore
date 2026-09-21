@@ -48,3 +48,6 @@ next-env.d.ts
 .env.test.local
 __pycache__/
 *.pyc
+
+# Local Kaggle credentials must never be committed.
+/assets/kaggle.json
